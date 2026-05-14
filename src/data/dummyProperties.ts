@@ -1,82 +1,119 @@
-export const properties = [
+import type { Property } from "@/src/types/propertyTypes"
+
+export const properties: Property[] = [
   {
     id: "1",
-    images: [
-      "https://images.unsplash.com/photo-1",
-      "https://images.unsplash.com/photo-2",
-      "https://images.unsplash.com/photo-3",
-      "https://images.unsplash.com/photo-4",
-      "https://images.unsplash.com/photo-5",
-    ],
-    type: "rent",
+    title: "Modern Apartment in Bole",
+    description:
+      "A modern and spacious apartment located in the heart of Bole. Close to transport, supermarkets, and restaurants. High-quality finishing and ideal for families or professionals.",
+
+    shortDescription: "Modern apartment in prime location",
+
+    city: "Addis Ababa",
+    neighborhood: "Bole",
+
     price: 18000,
-    location: "Addis Ababa, Bole",
-    shortDescription: "Modern apartment in a prime and quiet residential area",
+    status: "rent",
+
+    area: 110,
+    furnished: true,
+
+    images: [
+      "https://images.unsplash.com/photo-1502672260266-1c1ef2d93688",
+      "https://images.unsplash.com/photo-1505693416388-ac5ce068fe85",
+      "https://images.unsplash.com/photo-1568605114967-8130f3a36994",
+      "https://images.unsplash.com/photo-1570129477492-45c003edd2be",
+    ],
+
     details: {
-      surfaceArea: "110m²",
-      rooms: 3,
+      bedrooms: 3,
       bathrooms: 2,
+      surfaceArea: "110m²",
       condition: "New",
       availableFrom: "Feb 2026",
       balcony: true,
       elevator: true,
     },
-    equipment: ["Kitchen", "WiFi", "Parking", "Security", "Water Tank"],
-    description:
-      "This modern apartment is located in one of the most desirable residential areas of Bole, Addis Ababa. The property offers a spacious living room with large windows that allow natural light throughout the day, creating a warm and comfortable atmosphere. The kitchen is fully fitted with modern cabinets and high-quality finishes suitable for daily cooking needs. The bedrooms are well-sized and designed for comfort, with built-in wardrobes and private bathroom access. The building is secured 24/7 with professional security staff and CCTV surveillance. Residents also enjoy access to an elevator, backup water system, and dedicated parking space. This apartment is ideal for families or professionals looking for a peaceful yet central living environment close to schools, supermarkets, and transportation.",
-    googleMapUrl: "",
+
+    equipment: ["Kitchen", "WiFi", "Parking", "Security"],
+
+    googleMapUrl: "https://www.google.com/maps/@39.774769,-74.86084,18z",
   },
 
   {
     id: "2",
-    images: [
-      "https://images.unsplash.com/photo-10",
-      "https://images.unsplash.com/photo-11",
-      "https://images.unsplash.com/photo-12",
-    ],
-    type: "sell",
+    title: "Luxury Villa in Kazanchis",
+    description:
+      "High-end luxury villa with premium finishing, large rooms, and a private garden. Perfect for families seeking comfort and exclusivity in a prime area.",
+
+    shortDescription: "Luxury villa with premium finishing",
+
+    city: "Addis Ababa",
+    neighborhood: "Kazanchis",
+
     price: 4500000,
-    location: "Addis Ababa, Kazanchis",
-    shortDescription: "Luxury house perfect for investment or family living",
+    status: "sell",
+
+    area: 250,
+    furnished: true,
+
+    images: [
+      "https://images.unsplash.com/photo-1613977257363-707ba9348227",
+      "https://images.unsplash.com/photo-1600585154340-be6161a56a0c",
+      "https://images.unsplash.com/photo-1600596542815-ffad4c1539a9",
+      "https://images.unsplash.com/photo-1600607687939-ce8a6c25118c",
+    ],
+
     details: {
-      surfaceArea: "220m²",
-      rooms: 5,
+      bedrooms: 5,
       bathrooms: 4,
+      surfaceArea: "250m²",
       condition: "Excellent",
       availableFrom: "Immediately",
       balcony: true,
       elevator: false,
     },
-    equipment: ["Kitchen", "Garage", "Security", "Garden", "Storage Room"],
-    description:
-      "This luxury house is located in the heart of Kazanchis, offering an exceptional opportunity for both residential living and investment purposes. The property is designed with a modern architectural style that blends elegance and functionality. It features a large living area, multiple bedrooms with en-suite bathrooms, and a fully equipped kitchen with premium materials. The house also includes a private garden space suitable for family gatherings or relaxation. With its strategic location, residents have quick access to business centers, embassies, restaurants, and major road connections. This makes it a highly valuable property for long-term investment or comfortable city living. The structure is built with strong materials ensuring durability and minimal maintenance over the years.",
+
+    equipment: ["Garage", "Garden", "Security", "Storage Room"],
+
     googleMapUrl: "",
   },
 
   {
     id: "3",
-    images: [
-      "https://images.unsplash.com/photo-20",
-      "https://images.unsplash.com/photo-21",
-      "https://images.unsplash.com/photo-22",
-      "https://images.unsplash.com/photo-23",
-    ],
-    type: "rent",
+    title: "Affordable Apartment in CMC",
+    description:
+      "Affordable apartment ideal for small families or individuals. Provides essential amenities, good security, and easy access to transport and shopping centers.",
+
+    shortDescription: "Affordable apartment with essentials",
+
+    city: "Addis Ababa",
+    neighborhood: "CMC",
+
     price: 12000,
-    location: "Addis Ababa, CMC",
-    shortDescription: "Affordable apartment with essential amenities",
+    status: "rent",
+
+    area: 85,
+    furnished: false,
+
+    images: [
+      "https://images.unsplash.com/photo-1522708323590-d24dbb6b0267",
+      "https://images.unsplash.com/photo-1502005229762-cf1b2da7c5d6",
+      "https://images.unsplash.com/photo-1484154218962-a197022b5858",
+    ],
+
     details: {
-      surfaceArea: "85m²",
-      rooms: 2,
+      bedrooms: 2,
       bathrooms: 1,
+      surfaceArea: "85m²",
       condition: "Good",
       availableFrom: "Now",
       balcony: false,
       elevator: true,
     },
+
     equipment: ["Kitchen", "WiFi", "Security"],
-    description:
-      "This affordable apartment is a great option for individuals or small families looking for a comfortable home in the CMC area of Addis Ababa. The apartment offers a practical layout with a cozy living room, two bedrooms, and a functional kitchen space. It is located in a well-maintained building with security services and reliable elevator access. The surrounding area provides easy access to public transportation, local shops, and essential services, making daily life convenient and stress-free. Although it is budget-friendly, the apartment still offers a decent level of comfort and safety, making it ideal for tenants who prioritize location and affordability over luxury features.",
+
     googleMapUrl: "",
   },
 ]

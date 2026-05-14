@@ -1,36 +1,37 @@
-export type PropertyStatus = "rent" | "sale";
+export type PropertyStatus = "rent" | "sell"
 
 export interface Property {
-  id: string;
-  title: string;
-  description: string;
-  city: string;
-  neighborhood?: string;
-  price: number;
-  bedrooms: number;
-  bathrooms: number;
-  area: number;
-  furnished: boolean;
-  status: PropertyStatus;
-  imageUrl?: string;
-  contactName?: string;
-  contactPhone?: string;
-  contactEmail?: string;
-}
+  id: string
+  title: string
+  description: string
+  shortDescription?: string
 
-export interface PropertyFilters {
-  status?: PropertyStatus | "all";
-  city?: string;
-  minPrice?: number;
-  maxPrice?: number;
-  bedrooms?: number;
-  bathrooms?: number;
-  furnished?: boolean | "all";
-  page?: number;
-}
+  city: string
+  neighborhood?: string
 
-export interface PropertyFeedResponse {
-  properties: Property[];
-  page: number;
-  total: number;
+  price: number
+  status: PropertyStatus
+
+  area: number
+  furnished: boolean
+
+  images: string[]
+
+  details: {
+    bedrooms: number
+    bathrooms: number
+    surfaceArea: string
+    condition: string
+    availableFrom: string
+    balcony: boolean
+    elevator: boolean
+  }
+
+  equipment?: string[]
+
+  contactName?: string
+  contactPhone?: string
+  contactEmail?: string
+
+  googleMapUrl?: string
 }

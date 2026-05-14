@@ -1,17 +1,61 @@
-import { dummyProperty } from "@/src/data/dummyProperties"
+import PropertyImageGallery from "./components/PropertyImageGallery"
+import PropertyHeader from "./components/PropertyHeader"
+import PropertyPriceCard from "./components/PropertyPriceCard"
+import PropertyDetailsGrid from "./components/PropertyDetailsGrid"
+import PropertyEquipment from "./components/PropertyEquipment"
+import PropertyDescription from "./components/PropertyDescription"
+import PropertyMap from "./components/PropertyMap"
 
-export default function PropertyDetailPage() {
-  const property = dummyProperty
+import { properties } from "@/src/data/dummyProperties"
+import type { Property } from "@/src/types/propertyTypes"
+
+export default function Page() {
+  const property: Property = properties[0]
 
   return (
-    <div className="p-6 max-w-4xl mx-auto">
-      <h1 className="text-2xl font-bold">{property.title}</h1>
+    <div className="max-w-4xl mx-auto p-6">
 
-      <p className="text-gray-600">{property.city}</p>
+      {/* IMAGE */}
+      <PropertyImageGallery images={property.images} />
 
-      <h2 className="text-xl mt-4">${property.price}</h2>
+      {/* HEADER */}
+      <PropertyHeader
+        location={`${property.city}${property.neighborhood ? ", " + property.neighborhood : ""}`}
+        shortDescription={property.shortDescription ?? property.title}
+      />
 
-      <p className="mt-4">{property.description}</p>
+      {/* PRICE */}
+      <PropertyPriceCard
+        type={property.status}
+        price={property.price}
+      />
+
+      {/* DETAILS */}
+      <PropertyDetailsGrid
+        details={property.details ?? {
+          surfaceArea: `${property.area} m²`,
+          condition: "Unknown",
+          availableFrom: "N/A",
+          balcony: false,
+          elevator: false,
+        }}
+      />
+
+      {/* EQUIPMENT */}
+      <PropertyEquipment
+        equipment={property.equipment ?? []}
+      />
+
+      {/* DESCRIPTION */}
+      <PropertyDescription
+        description={property.description}
+      />
+
+      {/* MAP */}
+      {property.googleMapUrl && (
+        <PropertyMap url={property.googleMapUrl} />
+      )}
+
     </div>
   )
 }

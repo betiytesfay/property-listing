@@ -1,61 +1,53 @@
-import PropertyImageGallery from "./components/PropertyImageGallery"
-import PropertyHeader from "./components/PropertyHeader"
-import PropertyPriceCard from "./components/PropertyPriceCard"
-import PropertyDetailsGrid from "./components/PropertyDetailsGrid"
-import PropertyEquipment from "./components/PropertyEquipment"
-import PropertyDescription from "./components/PropertyDescription"
-import PropertyMap from "./components/PropertyMap"
+import PropertyImageGallery from "./components/PropertyImageGallery";
+import PropertyHeader from "./components/PropertyHeader";
+import PropertySidebar from "./components/PropertySidebar";
+import PropertyDetailsGrid from "./components/PropertyDetailsGrid";
+import PropertyEquipment from "./components/PropertyEquipment";
+import PropertyDescription from "./components/PropertyDescription";
+import PropertyMapWrapper from "./components/PropertyMapWrapper"; // ✅ use wrapper
+import RelatedListings from "./components/RelatedListings";
 
-import { properties } from "@/src/data/dummyProperties"
-import type { Property } from "@/src/types/propertyTypes"
+import { properties } from "@/src/data/dummyProperties";
+import type { Property } from "@/src/types/propertyTypes";
 
 export default function Page() {
-  const property: Property = properties[0]
+  const property: Property = properties[0];
 
   return (
-    <div className="max-w-4xl mx-auto p-6">
+    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+        {/* Left column – main content */}
+        <div className="lg:col-span-2 space-y-8">
+          <PropertyImageGallery images={property.images} />
+          <PropertyHeader
+            title={property.title}
+            location={`${property.city}${property.neighborhood ? ", " + property.neighborhood : ""}`}
+            bedrooms={property.details?.bedrooms ?? 0}
+            bathrooms={property.details?.bathrooms ?? 0}
+            area={property.area}
+          />
+          <PropertyDescription description={property.description} />
+          <PropertyDetailsGrid details={property.details!} />
+          <PropertyEquipment equipment={property.equipment ?? []} />
+          {/* ✅ Use the client wrapper here */}
+          {property.googleMapUrl && <PropertyMapWrapper url={property.googleMapUrl} />}
+        </div>
 
-      {/* IMAGE */}
-      <PropertyImageGallery images={property.images} />
+        {/* Right column – sticky sidebar */}
+        <div className="lg:col-span-1">
+          <PropertySidebar
+            price={property.price}
+            status={property.status}
+            agent={{
+              name: "Abenezer Tadesse",
+              avatar: "/agents/abenezer.jpg",
+              isVerified: true,
+            }}
+          />
+        </div>
+      </div>
 
-      {/* HEADER */}
-      <PropertyHeader
-        location={`${property.city}${property.neighborhood ? ", " + property.neighborhood : ""}`}
-        shortDescription={property.shortDescription ?? property.title}
-      />
-
-      {/* PRICE */}
-      <PropertyPriceCard
-        type={property.status}
-        price={property.price}
-      />
-
-      {/* DETAILS */}
-      <PropertyDetailsGrid
-        details={property.details ?? {
-          surfaceArea: `${property.area} m²`,
-          condition: "Unknown",
-          availableFrom: "N/A",
-          balcony: false,
-          elevator: false,
-        }}
-      />
-
-      {/* EQUIPMENT */}
-      <PropertyEquipment
-        equipment={property.equipment ?? []}
-      />
-
-      {/* DESCRIPTION */}
-      <PropertyDescription
-        description={property.description}
-      />
-
-      {/* MAP */}
-      {property.googleMapUrl && (
-        <PropertyMap url={property.googleMapUrl} />
-      )}
-
+      <RelatedListings currentId={property.id} listings={properties.slice(1, 4)} />
     </div>
-  )
+  );
 }

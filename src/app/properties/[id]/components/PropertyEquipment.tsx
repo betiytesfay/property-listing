@@ -1,26 +1,17 @@
-type Props = {
-  equipment: string[]
-}
+type Props = { equipment: string[] };
 
-export default function PropertyEquipment({
-  equipment,
-}: Props) {
+export default function PropertyEquipment({ equipment }: Props) {
+  if (!equipment.length) return null;
   return (
-    <div className="mt-6">
-      <h3 className="text-sm font-semibold text-slate-900 mb-2">
-        Equipment
-      </h3>
-
+    <div className="space-y-3">
+      <h3 className="text-lg font-semibold text-slate-900">Equipment & features</h3>
       <div className="flex flex-wrap gap-2">
-        {equipment.map((item, i) => (
-          <span
-            key={i}
-            className="rounded-full bg-emerald-50 px-3 py-1 text-xs text-emerald-600"
-          >
+        {equipment.map((item) => (
+          <span key={item} className="rounded-full bg-emerald-50 px-3 py-1 text-xs text-emerald-700">
             {item}
           </span>
         ))}
       </div>
     </div>
-  )
+  );
 }

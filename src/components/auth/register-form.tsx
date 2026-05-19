@@ -1,22 +1,28 @@
 "use client";
 
+import { useState } from "react";
 import Link from "next/link";
 import { Controller, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { AuthCard } from "@/src/components/auth/auth-card";
 import { InputField } from "@/src/components/auth/input-field";
 import { PasswordInput } from "@/src/components/auth/password-input";
 import { PasswordStrengthIndicator } from "@/src/components/auth/password-strength-indicator";
 import { PhoneInput } from "@/src/components/auth/phone-input";
-import { RoleSelector } from "@/src/components/auth/role-selector";
-import { Button } from "@/src/components/ui/Button";
 import { Checkbox } from "@/src/components/ui/checkbox";
 import { Label } from "@/src/components/ui/label";
-import { useFakeSubmit } from "@/src/hooks/use-fake-submit";
-import { mockRegister } from "@/src/lib/auth-mock";
-import { registerSchema, type RegisterFormValues } from "@/src/lib/validations/auth";
+import { AuthFormAlert } from "@/src/features/auth/components/auth-form-alert";
+import { AUTH_ROUTES } from "@/src/features/auth/constants/routes";
+import { useRegister } from "@/src/features/auth/hooks/use-register";
+import { registerSchema, type RegisterFormValues } from "@/src/features/auth/schemas/auth.schemas";
+import {
+  getFirstErrorMessage,
+  scrollToFirstFormError,
+} from "@/src/features/auth/utils/form-errors";
 
 export function RegisterForm() {
+  const { register: submitRegister, isLoading, error, clearError } = useRegister();
+  const [validationMessage, setValidationMessage] = useState<string | null>(null);
+
   const {
     register,
     control,
@@ -32,138 +38,165 @@ export function RegisterForm() {
       phone: "",
       password: "",
       confirmPassword: "",
-      role: "seller",
       acceptTerms: false,
     },
-    mode: "onBlur",
+    mode: "onSubmit",
+    reValidateMode: "onChange",
   });
-
-  const { isLoading, isSuccess, successMessage, handleSubmit: submitMock } = useFakeSubmit(
-    async (data: RegisterFormValues) => mockRegister(data.email)
-  );
 
   const password = watch("password");
   const acceptTerms = watch("acceptTerms");
 
+  const clearMessages = () => {
+    setValidationMessage(null);
+    clearError();
+  };
+
+  const onSubmit = handleSubmit(
+    async (data) => {
+      clearMessages();
+      await submitRegister(data);
+    },
+    (fieldErrors) => {
+      const message =
+        getFirstErrorMessage(fieldErrors) ??
+        "Please fix the highlighted fields before continuing.";
+      setValidationMessage(message);
+      scrollToFirstFormError(fieldErrors);
+    }
+  );
+
   return (
-    <AuthCard
-      title="Seller registration"
-      description="Create your account to start listing properties on Habesha Property Hub."
-      footer={
-        <p className="text-sm text-auth-on-surface-muted">
+    <div className="flex h-full w-full items-center justify-center">
+      <div className="w-full max-w-md">
+        {/* Header - reduced spacing */}
+        <div className="mb-5 text-center">
+          <div className="mb-1 text-xs font-semibold uppercase tracking-wide text-amber-700">
+            Habesha Property Hub
+          </div>
+          <h1 className="text-2xl font-semibold text-gray-900">Create an account</h1>
+          <p className="mt-1 text-sm text-gray-500">List and manage your properties with ease.</p>
+        </div>
+
+        {/* Form */}
+        <form onSubmit={onSubmit} className="space-y-4" noValidate>
+          {/* Alerts */}
+          {(validationMessage || error) && (
+            <AuthFormAlert
+              variant="error"
+              message={validationMessage ?? error ?? ""}
+            />
+          )}
+
+          {/* Fields - more compact */}
+          <div className="space-y-3">
+            <InputField
+              label="Full name"
+              placeholder="Your full name"
+              autoComplete="name"
+              error={errors.fullName?.message}
+              {...register("fullName", { onChange: clearMessages })}
+            />
+            <InputField
+              label="Email"
+              type="email"
+              autoComplete="email"
+              placeholder="name@example.com"
+              error={errors.email?.message}
+              {...register("email", { onChange: clearMessages })}
+            />
+            <Controller
+              name="phone"
+              control={control}
+              render={({ field }) => (
+                <PhoneInput
+                  error={errors.phone?.message}
+                  {...field}
+                  onChange={(e) => {
+                    clearMessages();
+                    field.onChange(e);
+                  }}
+                />
+              )}
+            />
+            <Controller
+              name="password"
+              control={control}
+              render={({ field }) => (
+                <PasswordInput
+                  label="Password"
+                  autoComplete="new-password"
+                  error={errors.password?.message}
+                  {...field}
+                  onChange={(e) => {
+                    clearMessages();
+                    field.onChange(e);
+                  }}
+                />
+              )}
+            />
+            <PasswordStrengthIndicator password={password} />
+            <Controller
+              name="confirmPassword"
+              control={control}
+              render={({ field }) => (
+                <PasswordInput
+                  label="Confirm password"
+                  autoComplete="new-password"
+                  error={errors.confirmPassword?.message}
+                  {...field}
+                  onChange={(e) => {
+                    clearMessages();
+                    field.onChange(e);
+                  }}
+                />
+              )}
+            />
+          </div>
+
+          {/* Terms */}
+          <div className="flex items-start gap-2">
+            <Checkbox
+              id="acceptTerms"
+              checked={acceptTerms}
+              onCheckedChange={(checked) => {
+                setValidationMessage(null);
+                setValue("acceptTerms", checked === true, { shouldValidate: true });
+              }}
+            />
+            <Label htmlFor="acceptTerms" className="text-sm font-normal text-gray-600">
+              I agree to the{" "}
+              <button type="button" className="font-medium text-amber-700 hover:underline">
+                Terms &amp; Conditions
+              </button>{" "}
+              and{" "}
+              <button type="button" className="font-medium text-amber-700 hover:underline">
+                Privacy Policy
+              </button>
+            </Label>
+          </div>
+          {errors.acceptTerms?.message && (
+            <p className="text-xs text-red-600">{errors.acceptTerms.message}</p>
+          )}
+
+          {/* Submit button */}
+          <button
+            type="submit"
+            disabled={isLoading}
+            className="w-full rounded-lg bg-gray-900 py-2.5 text-sm font-semibold text-white transition hover:bg-gray-800 focus:outline-none focus:ring-2 focus:ring-gray-900 focus:ring-offset-2 disabled:opacity-60"
+          >
+            {isLoading ? "Creating account…" : "Create account"}
+          </button>
+        </form>
+
+        {/* Footer */}
+        <div className="mt-6 text-center text-sm text-gray-500">
           Already have an account?{" "}
-          <Link href="/login" className="font-semibold text-auth-primary hover:underline">
+          <Link href={AUTH_ROUTES.login} className="font-medium text-amber-700 hover:underline">
             Sign in
           </Link>
-        </p>
-      }
-    >
-      <form
-        className="space-y-5"
-        onSubmit={handleSubmit((data) => void submitMock(data))}
-        noValidate
-      >
-        {isSuccess && successMessage ? (
-          <p
-            role="status"
-            className="rounded-lg border border-emerald-200 bg-emerald-50 px-4 py-3 text-sm text-emerald-800"
-          >
-            {successMessage}
-          </p>
-        ) : null}
-
-        <InputField
-          label="Full name"
-          placeholder="Enter your full name"
-          autoComplete="name"
-          error={errors.fullName?.message}
-          {...register("fullName")}
-        />
-
-        <InputField
-          label="Email"
-          type="email"
-          autoComplete="email"
-          placeholder="name@example.com"
-          error={errors.email?.message}
-          {...register("email")}
-        />
-
-        <PhoneInput
-          error={errors.phone?.message}
-          {...register("phone")}
-        />
-
-        <Controller
-          name="role"
-          control={control}
-          render={({ field }) => (
-            <RoleSelector
-              value={field.value}
-              onChange={field.onChange}
-              error={errors.role?.message}
-            />
-          )}
-        />
-
-        <Controller
-          name="password"
-          control={control}
-          render={({ field }) => (
-            <PasswordInput
-              label="Password"
-              autoComplete="new-password"
-              error={errors.password?.message}
-              {...field}
-            />
-          )}
-        />
-
-        <PasswordStrengthIndicator password={password} />
-
-        <Controller
-          name="confirmPassword"
-          control={control}
-          render={({ field }) => (
-            <PasswordInput
-              label="Confirm password"
-              autoComplete="new-password"
-              error={errors.confirmPassword?.message}
-              {...field}
-            />
-          )}
-        />
-
-        <section className="flex items-start gap-3">
-          <Checkbox
-            id="acceptTerms"
-            checked={acceptTerms}
-            onCheckedChange={(checked) => setValue("acceptTerms", checked === true, { shouldValidate: true })}
-          />
-          <Label
-            htmlFor="acceptTerms"
-            className="cursor-pointer text-sm font-normal normal-case leading-relaxed tracking-normal text-auth-on-surface-muted"
-          >
-            I agree to the{" "}
-            <Link href="#" className="font-semibold text-auth-primary hover:underline">
-              Terms &amp; Conditions
-            </Link>{" "}
-            and{" "}
-            <Link href="#" className="font-semibold text-auth-primary hover:underline">
-              Privacy Policy
-            </Link>
-          </Label>
-        </section>
-        {errors.acceptTerms?.message ? (
-          <p role="alert" className="-mt-2 text-sm text-auth-error">
-            {errors.acceptTerms.message}
-          </p>
-        ) : null}
-
-        <Button type="submit" size="lg" className="w-full" isLoading={isLoading}>
-          Create account
-        </Button>
-      </form>
-    </AuthCard>
+        </div>
+      </div>
+    </div>
   );
 }

@@ -1,15 +1,16 @@
 import type { Metadata } from "next";
-import { AuthLayout } from "@/src/components/auth/auth-layout";
+import { AuthSplitLayout } from "@/src/components/auth/auth-split-layout";
 import { LoginForm } from "@/src/components/auth/login-form";
 
 export const metadata: Metadata = {
-  title: "Sign in",
+  title: "Sign in | Habesha Property Hub",
+  description: "Sign in to your seller account on Habesha Property Hub.",
 };
 
 export default function LoginPage() {
   return (
-    <AuthLayout variant="login">
+    <AuthSplitLayout variant="login">
       <LoginForm />
-    </AuthLayout>
+    </AuthSplitLayout>
   );
 }

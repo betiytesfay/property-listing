@@ -37,27 +37,35 @@ export function BrandPanel({ variant }: BrandPanelProps) {
   const content = COPY[variant];
 
   return (
-    <aside className="relative hidden overflow-hidden lg:block lg:w-1/2">
+    <aside className="relative hidden overflow-hidden lg:block lg:w-1/2 lg:max-h-[100vh] lg:my-4 lg:shadow-2xl">
       <Image
         src={AUTH_HERO_IMAGE}
         alt="Luxury modern villa in Ethiopia at golden hour"
         fill
         priority
+        unoptimized
         className="object-cover"
         sizes="50vw"
       />
-      <div className="absolute inset-0 bg-auth-primary/30 backdrop-blur-[2px]" />
-      <div className="absolute inset-0 bg-gradient-to-t from-auth-primary/90 via-auth-primary/20 to-transparent" />
-      <div className="absolute bottom-16 left-10 right-10 text-white">
-        <p className="mb-3 text-xs font-semibold uppercase tracking-[0.2em] text-white">{BRAND_NAME}</p>
-        <h2 className="max-w-lg text-3xl font-bold leading-tight tracking-tight text-white xl:text-4xl">
+      {/* Dark overlay for text contrast - no blur, keeps image sharp */}
+      <div className="absolute inset-0 bg-black/50" />
+      <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/30 to-transparent" />
+      
+      {/* Text container - adjusted bottom spacing for reduced height */}
+      <div className="absolute bottom-24 left-10 right-10 !text-white">
+        <p className="mb-3 text-xs font-semibold uppercase tracking-[0.2em] !text-white">
+          {BRAND_NAME}
+        </p>
+        <h2 className="max-w-lg text-3xl font-bold leading-tight tracking-tight !text-white xl:text-4xl">
           {content.headline}
         </h2>
-        <p className="mt-4 max-w-md text-base leading-relaxed text-white">{content.subline}</p>
+        <p className="mt-4 max-w-md text-base leading-relaxed !text-white">
+          {content.subline}
+        </p>
         <ul className="mt-8 space-y-3">
           {content.bullets.map((item) => (
-            <li key={item.text} className="flex items-center gap-3 text-sm text-white">
-              <item.icon className="h-5 w-5 shrink-0 text-auth-accent" aria-hidden />
+            <li key={item.text} className="flex items-center gap-3 text-sm !text-white">
+              <item.icon className="h-5 w-5 shrink-0 !text-white" aria-hidden />
               {item.text}
             </li>
           ))}

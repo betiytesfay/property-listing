@@ -1,5 +1,19 @@
 @import "tailwindcss";
 
+@theme {
+  --color-auth-primary: var(--auth-primary);
+  --color-auth-primary-hover: var(--auth-primary-hover);
+  --color-auth-secondary: var(--auth-secondary);
+  --color-auth-accent: var(--auth-accent);
+  --color-auth-surface: var(--auth-surface);
+  --color-auth-surface-muted: var(--auth-surface-muted);
+  --color-auth-card: var(--auth-card);
+  --color-auth-on-surface: var(--auth-on-surface);
+  --color-auth-on-surface-muted: var(--auth-on-surface-muted);
+  --color-auth-outline: var(--auth-outline);
+  --color-auth-error: var(--auth-error);
+}
+
 :root {
   /* Base Colors */
   --background: #ffffff;
@@ -54,33 +68,6 @@
   color-scheme: light;
 }
 
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-
-  --color-surface: var(--surface);
-  --color-surface-muted: var(--surface-muted);
-  --color-surface-soft: var(--surface-soft);
-
-  --color-border: var(--border);
-
-  --color-primary: var(--primary);
-  --color-primary-hover: var(--primary-hover);
-
-  --color-auth-primary: var(--auth-primary);
-  --color-auth-primary-hover: var(--auth-primary-hover);
-  --color-auth-secondary: var(--auth-secondary);
-  --color-auth-surface: var(--auth-surface);
-  --color-auth-card: var(--auth-card);
-  --color-auth-on-surface: var(--auth-on-surface);
-  --color-auth-on-surface-muted: var(--auth-on-surface-muted);
-  --color-auth-outline: var(--auth-outline);
-  --color-auth-error: var(--auth-error);
-
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
-}
-
 /* Reset */
 *,
 *::before,
@@ -99,7 +86,7 @@ body {
   background: var(--background);
   color: var(--text-primary);
 
-  font-family: var(--font-sans), system-ui, sans-serif;
+  font-family: var(--font-geist-sans), system-ui, sans-serif;
   line-height: 1.6;
 
   text-rendering: optimizeLegibility;
@@ -166,27 +153,14 @@ select:focus {
   box-shadow: 0 0 0 4px rgba(37, 99, 235, 0.12);
 }
 
-/* Buttons */
 button {
-  border: none;
-  border-radius: 12px;
 
-  background: var(--primary);
-  color: white;
-
-  padding: 0.75rem 1.2rem;
-  font-weight: 500;
 
   cursor: pointer;
-
-  transition:
-    transform 0.15s ease,
-    background-color 0.2s ease,
-    box-shadow 0.2s ease;
+  transition: transform 0.15s ease, box-shadow 0.2s ease;
 }
 
 button:hover {
-  background: var(--primary-hover);
   box-shadow: var(--shadow-md);
 }
 
@@ -218,4 +192,3 @@ button:active {
 ::-webkit-scrollbar-thumb:hover {
   background: #94a3b8;
 }
-

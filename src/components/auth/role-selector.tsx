@@ -5,7 +5,7 @@ import { Label } from "@/src/components/ui/label";
 import { FormError } from "@/src/components/auth/form-error";
 import { cn } from "@/src/lib/utils";
 
-export type AccountRole = "buyer" | "seller";
+export type AccountRole = "seller";
 
 interface RoleSelectorProps {
   value: AccountRole;
@@ -15,15 +15,9 @@ interface RoleSelectorProps {
 
 const ROLES: { id: AccountRole; label: string; description: string; icon: typeof UserRound }[] = [
   {
-    id: "buyer",
-    label: "Buyer",
-    description: "Browse and save listings",
-    icon: UserRound,
-  },
-  {
     id: "seller",
-    label: "Seller",
-    description: "List and manage properties",
+    label: "Property Seller",
+    description: "List properties for rent or sale",
     icon: Building2,
   },
 ];
@@ -35,7 +29,7 @@ export function RoleSelector({ value, onChange, error }: RoleSelectorProps) {
       <div
         role="radiogroup"
         aria-labelledby="role-label"
-        className="grid grid-cols-2 gap-3"
+        className="grid gap-3"
       >
         {ROLES.map((role) => {
           const Icon = role.icon;

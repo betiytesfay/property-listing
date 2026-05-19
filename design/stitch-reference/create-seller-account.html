@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        extend: {
+          "colors": {
+                  "tertiary-fixed-dim": "#f2bc82",
+                  "primary-fixed": "#d6e3ff",
+                  "on-secondary": "#ffffff",
+                  "surface-dim": "#d9dadb",
+                  "surface-bright": "#f8f9fa",
+                  "on-error-container": "#93000a",
+                  "error-container": "#ffdad6",
+                  "on-secondary-container": "#745c00",
+                  "on-secondary-fixed-variant": "#574500",
+                  "surface-container-high": "#e7e8e9",
+                  "on-primary-fixed-variant": "#2d476f",
+                  "on-primary-fixed": "#001b3c",
+                  "tertiary-fixed": "#ffddba",
+                  "on-primary": "#ffffff",
+                  "inverse-surface": "#2e3132",
+                  "on-surface": "#191c1d",
+                  "tertiary": "#321b00",
+                  "surface-tint": "#455f88",
+                  "on-secondary-fixed": "#241a00",
+                  "inverse-primary": "#adc7f7",
+                  "on-tertiary-fixed": "#2b1700",
+                  "on-error": "#ffffff",
+                  "background": "#f8f9fa",
+                  "tertiary-container": "#4f2e00",
+                  "surface": "#f8f9fa",
+                  "secondary": "#735c00",
+                  "primary-fixed-dim": "#adc7f7",
+                  "on-primary-container": "#86a0cd",
+                  "secondary-container": "#fed65b",
+                  "on-tertiary": "#ffffff",
+                  "surface-container-low": "#f3f4f5",
+                  "primary": "#002045",
+                  "secondary-fixed": "#ffe088",
+                  "surface-container-lowest": "#ffffff",
+                  "on-tertiary-fixed-variant": "#633f0f",
+                  "on-background": "#191c1d",
+                  "surface-container": "#edeeef",
+                  "inverse-on-surface": "#f0f1f2",
+                  "secondary-fixed-dim": "#e9c349",
+                  "error": "#ba1a1a",
+                  "surface-container-highest": "#e1e3e4",
+                  "outline": "#74777f",
+                  "surface-variant": "#e1e3e4",
+                  "outline-variant": "#c4c6cf",
+                  "primary-container": "#1a365d",
+                  "on-surface-variant": "#43474e",
+                  "on-tertiary-container": "#c6955e"
+          },
+          "borderRadius": {
+                  "DEFAULT": "0.25rem",
+                  "lg": "0.5rem",
+                  "xl": "0.75rem",
+                  "full": "9999px"
+          },
+          "spacing": {
+                  "margin-mobile": "20px",
+                  "gutter-mobile": "16px",
+                  "container-max": "1280px",
+                  "gutter-desktop": "24px",
+                  "margin-desktop": "48px",
+                  "base": "8px"
+          },
+          "fontFamily": {
+                  "label-sm": ["Inter"],
+                  "label-md": ["Inter"],
+                  "headline-xl-mobile": ["Inter"],
+                  "headline-xl": ["Inter"],
+                  "headline-lg": ["Inter"],
+                  "body-lg": ["Inter"],
+                  "body-md": ["Inter"],
+                  "headline-md": ["Inter"]
+          },
+          "fontSize": {
+                  "label-sm": ["12px", {"lineHeight": "16px", "fontWeight": "600"}],
+                  "label-md": ["14px", {"lineHeight": "20px", "letterSpacing": "0.01em", "fontWeight": "500"}],
+                  "headline-xl-mobile": ["32px", {"lineHeight": "40px", "letterSpacing": "-0.01em", "fontWeight": "700"}],
+                  "headline-xl": ["48px", {"lineHeight": "56px", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+                  "headline-lg": ["32px", {"lineHeight": "40px", "fontWeight": "600"}],
+                  "body-lg": ["18px", {"lineHeight": "28px", "fontWeight": "400"}],
+                  "body-md": ["16px", {"lineHeight": "24px", "fontWeight": "400"}],
+                  "headline-md": ["24px", {"lineHeight": "32px", "fontWeight": "600"}]
+          }
+        },
+      },
+    }
+  </script>
+<style>
+    .material-symbols-outlined {
+      font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+    }
+  </style>
+</head>
+<body class="bg-surface text-on-surface min-h-screen flex flex-col font-body-md">
+<!-- TopAppBar - Simplified for Registration (Destination Rule Applied) -->
+<header class="flex justify-between items-center w-full px-margin-desktop h-16 bg-surface shadow-sm z-50">
+<div class="font-headline-md text-headline-md font-bold text-primary">
+      Ethio-Premium
+    </div>
+<div class="hidden md:flex items-center space-x-6">
+<a class="font-label-sm text-label-sm text-on-surface-variant hover:text-primary transition-colors duration-200" href="#">Support</a>
+<a class="font-label-sm text-label-sm text-on-surface-variant hover:text-primary transition-colors duration-200" href="#">Help Center</a>
+</div>
+</header>
+<main class="flex-grow flex items-stretch">
+<!-- Split Layout: Hero Image Side -->
+<div class="hidden lg:block lg:w-1/2 relative overflow-hidden">
+<img alt="Premium Real Estate" class="absolute inset-0 w-full h-full object-cover" data-alt="A cinematic, wide-angle shot of a luxurious modern villa in Ethiopia, featuring floor-to-ceiling glass walls that reflect a soft, golden sunset. The architectural design is minimalist and stately, utilizing clean white concrete and warm wood accents. The surrounding landscape includes manicured gardens with indigenous plants under a clear, vast sky. The overall lighting is warm and high-end, evoking a sense of transparency, reliability, and corporate prestige in the real estate market." src="https://lh3.googleusercontent.com/aida-public/AB6AXuAg1YlcPzRrZ_7QMPISON1hgbuYKtdD7vS18fdtjlsJO-EJsywb-4BlgWuPCM2i5KOwIWyhGGHyHy3onWNKB7Nd71uIzyQiSuVqWJbRlTK9yuNR0E1yFV2HMKOiCjMOPz6hGRpMdVUmSlPFw6EMBWEkZrNs_Yzsl8EeqpEYamQadV809qRIKeSp3_x3hKnQomF5F4dCsFWh3UFy4sQKf9awSzmEwolRLqbx1Ar7kFksFAo2ZRBIvMYoORzYr-8zTdjpWI1WYKau9Is"/>
+<div class="absolute inset-0 bg-primary/20 backdrop-blur-[2px]"></div>
+<div class="absolute bottom-20 left-12 right-12 text-white">
+<h1 class="font-headline-xl text-headline-xl text-white mb-6">Partner with the <br/>best in Ethiopia.</h1>
+<p class="font-body-lg text-body-lg text-white/90 max-w-md">Join Ethio-Premium's verified seller network and reach thousands of diaspora and local high-value buyers today.</p>
+</div>
+</div>
+<!-- Form Side -->
+<div class="w-full lg:w-1/2 flex items-center justify-center bg-surface p-margin-mobile md:p-margin-desktop">
+<div class="w-full max-w-md">
+<div class="mb-10">
+<h2 class="font-headline-lg text-headline-lg text-primary mb-2">Seller Registration</h2>
+<p class="font-body-md text-body-md text-on-surface-variant">Create your account to start listing properties.</p>
+</div>
+<form class="space-y-6">
+<!-- Full Name -->
+<div class="space-y-2">
+<label class="block font-label-sm text-label-sm text-on-surface-variant">Full name</label>
+<input class="w-full h-12 px-4 rounded-lg border border-outline-variant focus:border-2 focus:border-primary focus:ring-0 bg-surface-container-lowest text-on-surface transition-all" placeholder="Enter your full name" type="text"/>
+</div>
+<!-- Email -->
+<div class="space-y-2">
+<label class="block font-label-sm text-label-sm text-on-surface-variant">Email</label>
+<input class="w-full h-12 px-4 rounded-lg border border-outline-variant focus:border-2 focus:border-primary focus:ring-0 bg-surface-container-lowest text-on-surface transition-all" placeholder="name@example.com" type="email"/>
+</div>
+<!-- Phone Number with Ethiopian Flag -->
+<div class="space-y-2">
+<label class="block font-label-sm text-label-sm text-on-surface-variant">Phone number</label>
+<div class="flex">
+<div class="flex items-center px-4 rounded-l-lg border border-r-0 border-outline-variant bg-surface-container-low text-on-surface-variant space-x-2">
+<span class="text-xl">🇪🇹</span>
+<span class="font-body-md text-body-md">+251</span>
+</div>
+<input class="w-full h-12 px-4 rounded-r-lg border border-outline-variant focus:border-2 focus:border-primary focus:ring-0 bg-surface-container-lowest text-on-surface transition-all" placeholder="911 234 567" type="tel"/>
+</div>
+</div>
+<!-- Password -->
+<div class="space-y-2">
+<label class="block font-label-sm text-label-sm text-on-surface-variant">Password</label>
+<div class="relative">
+<input class="w-full h-12 px-4 rounded-lg border border-outline-variant focus:border-2 focus:border-primary focus:ring-0 bg-surface-container-lowest text-on-surface transition-all" placeholder="••••••••" type="password"/>
+<button class="absolute right-4 top-1/2 -translate-y-1/2 text-on-surface-variant" type="button">
+<span class="material-symbols-outlined">visibility</span>
+</button>
+</div>
+</div>
+<!-- Confirm Password -->
+<div class="space-y-2">
+<label class="block font-label-sm text-label-sm text-on-surface-variant">Confirm password</label>
+<input class="w-full h-12 px-4 rounded-lg border border-outline-variant focus:border-2 focus:border-primary focus:ring-0 bg-surface-container-lowest text-on-surface transition-all" placeholder="••••••••" type="password"/>
+</div>
+<!-- Register Button -->
+<button class="w-full h-14 bg-primary text-white rounded-xl font-headline-md text-label-md flex items-center justify-center hover:bg-primary-container transition-colors shadow-sm" type="submit">
+            Register
+          </button>
+</form>
+<!-- Login Link -->
+<div class="mt-8 pt-8 border-t border-outline-variant text-center">
+<p class="font-body-md text-body-md text-on-surface-variant">
+            Already have a seller account? 
+            <a class="text-primary font-bold hover:underline" href="#">Log in</a>
+</p>
+</div>
+</div>
+</div>
+</main>
+<!-- Navigation Shell Suppressed per "The Destination Rule" for Transactional Screens -->
+<!-- No BottomNavBar or SideNav rendered for this registration flow -->
+</body></html>

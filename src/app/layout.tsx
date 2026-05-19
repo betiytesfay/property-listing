@@ -1,12 +1,11 @@
 import type { Metadata } from "next";
 import "./globals.css";
-import { Navbar } from "../components/layout/Navbar";
-import { Footer } from "../components/layout/Footer";
+import { AuthProvider } from "../providers/auth-provider";
 import { QueryProvider } from "../providers/QueryProvider";
 
 export const metadata: Metadata = {
-  title: "Property Marketplace",
-  description: "Digital marketplace for property listings and tenant discovery.",
+  title: "Habesha Property Hub",
+  description: "Ethiopia's premium property marketplace for listings, buyers, and sellers.",
 };
 
 export default function RootLayout({
@@ -15,12 +14,13 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" className="h-full antialiased">
-      <body className="min-h-full flex flex-col bg-slate-50 text-slate-950 font-sans">
+    <html lang="en" className="h-full antialiased" data-scroll-behavior="smooth">
+      <body
+        suppressHydrationWarning
+        className="flex min-h-full flex-col font-sans antialiased"
+      >
         <QueryProvider>
-          <Navbar />
-          <main className="flex-1">{children}</main>
-          <Footer />
+          <AuthProvider>{children}</AuthProvider>
         </QueryProvider>
       </body>
     </html>

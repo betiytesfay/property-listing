@@ -1,7 +1,7 @@
-import { HeroSection } from "../components/home/HeroSection";
-import { FeaturedEstatesSection } from "../components/home/FeaturedEstatesSection";
-import { RecentListingsSection } from "../components/home/RecentListingsSection";
-import { getFeaturedProperties, getRecentProperties } from "../lib/queries";
+import { HeroSection } from "../../components/home/HeroSection";
+import { FeaturedEstatesSection } from "../../components/home/FeaturedEstatesSection";
+import { RecentListingsSection } from "../../components/home/RecentListingsSection";
+import { getFeaturedProperties, getRecentProperties } from "../../lib/queries";
 
 
 export default async function HomePage() {

@@ -1,0 +1,10 @@
+export { useAuth } from "@/src/features/auth/hooks/use-auth";
+export { useCurrentUser } from "@/src/features/auth/hooks/use-current-user";
+export { useLogin } from "@/src/features/auth/hooks/use-login";
+export { useRegister } from "@/src/features/auth/hooks/use-register";
+export { useSession } from "@/src/features/auth/hooks/use-session";
+export { useProtectedRoute } from "@/src/features/auth/hooks/use-protected-route";
+export { AuthGuard } from "@/src/features/auth/components/auth-guard";
+export { GuestOnlyGuard } from "@/src/features/auth/components/guest-only-guard";
+export { authService } from "@/src/features/auth/services/auth.service";
+export type { AuthUser, UserRole } from "@/src/features/auth/types/auth.types";

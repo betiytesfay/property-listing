@@ -10,11 +10,15 @@ import {
 import { AUTH_COOKIE_NAME } from "@/src/features/auth/constants/storage";
 
 function isGuestRoute(pathname: string): boolean {
-  return GUEST_ONLY_ROUTES.some((route) => pathname === route || pathname.startsWith(`${route}/`));
+  return GUEST_ONLY_ROUTES.some(
+    (route) => pathname === route || pathname.startsWith(`${route}/`),
+  );
 }
 
 function isProtectedRoute(pathname: string): boolean {
-  return PROTECTED_ROUTES.some((route) => pathname === route || pathname.startsWith(`${route}/`));
+  return PROTECTED_ROUTES.some(
+    (route) => pathname === route || pathname.startsWith(`${route}/`),
+  );
 }
 
 function hasAuthCookie(request: NextRequest): boolean {
@@ -35,7 +39,10 @@ export function middleware(request: NextRequest) {
   if (!authenticated && isProtectedRoute(pathname)) {
     const loginUrl = request.nextUrl.clone();
     loginUrl.pathname = AUTH_ROUTES.login;
-    loginUrl.searchParams.set(REDIRECT_QUERY_PARAM, `${pathname}${request.nextUrl.search}`);
+    loginUrl.searchParams.set(
+      REDIRECT_QUERY_PARAM,
+      `${pathname}${request.nextUrl.search}`,
+    );
     return NextResponse.redirect(loginUrl);
   }
 
@@ -49,6 +56,6 @@ export const config = {
     "/forgot-password",
     "/reset-password",
     "/dashboard/:path*",
-    "/seller/:path*",
+    // "/seller/:path*",
   ],
 };

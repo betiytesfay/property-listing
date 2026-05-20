@@ -1,4 +1,9 @@
-export function Actions({ onClose }) {
+interface ActionsProps {
+  onClose: () => void;
+  isEditMode: boolean;
+}
+
+export function Actions({ onClose, isEditMode }: ActionsProps) {
   return (
     <div className="flex justify-end gap-2">
       <button
@@ -13,7 +18,7 @@ export function Actions({ onClose }) {
         type="submit"
         className="rounded-md bg-amber-500 px-4 py-2 text-sm text-white"
       >
-        Add Property
+        {isEditMode ? "Edit Property" : "Add Property"}
       </button>
     </div>
   );

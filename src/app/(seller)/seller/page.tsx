@@ -3,8 +3,21 @@ import SellerHeader from "../../../components/seller/SellerHeader";
 import { FaHome, FaWallet } from "react-icons/fa";
 import { MdOutlineRemoveRedEye } from "react-icons/md";
 import { HiOutlineUsers } from "react-icons/hi";
+import ActiveListing from "../../../components/seller/ActiveListing";
 
-const sellerStats = [
+interface StatDescription {
+  text: string;
+  color: string;
+}
+
+interface SellerStat {
+  title: string;
+  icon: React.ReactNode;
+  amount: string;
+  description: StatDescription;
+}
+
+const sellerStats: SellerStat[] = [
   {
     title: "Total Listings",
     icon: <FaHome />,
@@ -31,12 +44,12 @@ const sellerStats = [
   },
 ];
 
-function page() {
+export default function Page() {
   return (
     <div className="flex flex-col gap-12">
       <SellerHeader />
-      <div className="flex items-center gap-8 ">
-        {sellerStats.map((stat) => (
+      <div className="flex items-center gap-8">
+        {sellerStats.map((stat: SellerStat) => (
           <SellerCard
             key={stat.title}
             title={stat.title}
@@ -46,8 +59,7 @@ function page() {
           />
         ))}
       </div>
+      <ActiveListing />
     </div>
   );
 }
-
-export default page;

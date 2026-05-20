@@ -1,4 +1,9 @@
-export function Input({ label, ...props }) {
+import { InputHTMLAttributes } from "react";
+type InputProps = {
+  label: string;
+} & InputHTMLAttributes<HTMLInputElement>;
+
+export function Input({ label, ...props }: InputProps) {
   return (
     <div>
       <label className="mb-3 block text-sm font-medium">{label}</label>

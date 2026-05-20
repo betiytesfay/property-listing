@@ -11,8 +11,15 @@ import {
   CiHeart,
   CiSettings,
 } from "react-icons/ci";
+import React from "react";
 
-const navItems = [
+interface NavItem {
+  href: string;
+  label: string;
+  icon: React.ReactNode;
+}
+
+const navItems: NavItem[] = [
   { href: "/seller", label: "Overview", icon: <CiGrid41 size={20} /> },
   {
     href: "/seller/listings",

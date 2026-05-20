@@ -5,10 +5,15 @@ import { createPortal } from "react-dom";
 import AddNewPropertyModal from "./AddNewPropertyModal";
 
 function SellerHeader() {
-  const [isOpen, setIsOpen] = useState(false);
+  const [isOpen, setIsOpen] = useState<boolean>(false);
 
   function handleClick() {
     setIsOpen(true);
+  }
+
+  function handleSubmit() {
+    // your submit logic here
+    setIsOpen(false);
   }
 
   return (
@@ -32,7 +37,10 @@ function SellerHeader() {
       </button>
       {isOpen &&
         createPortal(
-          <AddNewPropertyModal onClose={() => setIsOpen(false)} />,
+          <AddNewPropertyModal
+            onClose={() => setIsOpen(false)}
+            onSubmit={handleSubmit}
+          />,
           document.body,
         )}
     </div>

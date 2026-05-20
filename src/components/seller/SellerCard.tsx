@@ -1,4 +1,16 @@
-function SellerCard({ title, icon, amount, description }) {
+interface Description {
+  text: string;
+  color: string;
+}
+
+interface SellerCardProps {
+  title: string;
+  icon: React.ReactNode;
+  amount: string | number;
+  description: Description;
+}
+
+function SellerCard({ title, icon, amount, description }: SellerCardProps) {
   return (
     <div className="flex flex-col gap-3 p-5 w-full bg-white border border-amber-100 rounded-xl shadow-md ">
       <div className="flex items-center justify-between">

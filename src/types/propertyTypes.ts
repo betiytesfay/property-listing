@@ -20,6 +20,8 @@ export interface Property {
   bedrooms: number;
   bathrooms: number;
   area: number;
+
+  images?: string[];
   furnished: boolean;
   imageUrl?: string;
 

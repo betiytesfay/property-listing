@@ -24,7 +24,7 @@ export default function RelatedListings({ currentId, listings }: Props) {
             <div className="overflow-hidden rounded-xl border border-slate-200 transition hover:shadow-lg">
               <div className="aspect-[3/2] overflow-hidden bg-slate-100">
                 <img
-                  src={property.images[0]}
+                  src={property.images?.[0]}
                   alt={property.title}
                   className="h-full w-full object-cover transition group-hover:scale-105"
                 />

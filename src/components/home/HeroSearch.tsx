@@ -1,12 +1,12 @@
 "use client";
 
 import { Search } from "lucide-react";
+
 import { useRouter } from "next/navigation";
 import { usePropertyStore } from "../../store/propertyStore";
 
 export function HeroSearch() {
   const router = useRouter();
-
   const { filters } = usePropertyStore();
 
   const handleSearch = () => {
@@ -64,7 +64,8 @@ export function HeroSearch() {
       "
     >
       <Search size={18} />
-      Search
+
+
     </button>
   );
 }

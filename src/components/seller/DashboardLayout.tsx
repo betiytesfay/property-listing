@@ -21,7 +21,7 @@ export default function DashboardLayout({ children }: DashboardLayoutProps) {
             </div>
             <span className="text-sm font-medium">Abebe Kebede</span>
           </div>
-          <button className="w-8 h-8 rounded-md border border-slate-200 flex items-center justify-center text-slate-500 hover:bg-slate-50">
+          <button title="notification" className="w-8 h-8 rounded-md border border-slate-200 flex items-center justify-center text-slate-500 hover:bg-slate-50">
             <IoMdNotificationsOutline size={20} />
           </button>
         </div>

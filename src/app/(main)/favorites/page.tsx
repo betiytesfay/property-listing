@@ -1,8 +1,8 @@
 "use client";
 
-import { useFavorites } from "../../store/favoritesStore";
-import { PropertyCard } from "../../components/property/PropertyCard";
-import { EmptyState } from "../../components/ui/EmptyState";
+import { useFavorites } from "../../../store/favoritesStore";
+import { PropertyCard } from "../../../components/property/PropertyCard";
+import { EmptyState } from "../../../components/ui/EmptyState";
 
 export default function FavoritesPage() {
   const { favorites } = useFavorites();

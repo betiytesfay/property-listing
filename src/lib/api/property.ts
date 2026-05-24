@@ -52,15 +52,7 @@ export async function createProperty(data: CreatePropertyInput): Promise<Propert
     });
   }
 
-  // 4. Send the Request
-  const response = await apiClient.post<PropertyResponse>(`/properties`, formData, {
-    headers: { 
-      // Note: It's often best to let the browser auto-calculate the multipart boundary,
-      // but if your client instances require an explicit Content-Type, keep this header intact.
-      "Content-Type": "multipart/form-data" 
-    },
-  });
-
+  const response = await apiClient.post<PropertyResponse>(`/properties`, formData);
   return response.data;
 }
 /**

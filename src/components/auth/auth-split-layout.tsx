@@ -1,6 +1,5 @@
 import type { ReactNode } from "react";
-import { Footer } from "@/src/components/layout/Footer";
-import { Navbar } from "@/src/components/layout/Navbar";
+// Intentionally no global Navbar/Footer here — auth pages should be chrome-free
 import { BrandPanel, type BrandPanelVariant } from "@/src/components/auth/brand-panel";
 import { DatabaseStatusBanner } from "@/src/features/auth/components/database-status-banner";
 
@@ -31,7 +30,6 @@ export function AuthSplitLayout({ children, variant }: AuthSplitLayoutProps) {
 
   return (
     <div className="flex min-h-screen flex-col bg-auth-surface text-auth-on-surface">
-      <Navbar />
       <DatabaseStatusBanner />
 
       <section className="border-b border-auth-outline/40 bg-auth-primary px-6 py-8 lg:hidden">
@@ -47,7 +45,6 @@ export function AuthSplitLayout({ children, variant }: AuthSplitLayoutProps) {
         </section>
       </main>
 
-      <Footer />
     </div>
   );
 }

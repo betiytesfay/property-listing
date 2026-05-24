@@ -29,6 +29,7 @@ interface PaymentStatusResponse {
 export default function PaymentSuccessPage() {
   const searchParams = useSearchParams();
   const propertyId = searchParams?.get("property_id");
+  const txRef = searchParams?.get("trx_ref") || searchParams?.get("tx_ref");
 
   const [paymentData, setPaymentData] = useState<PaymentStatusResponse | null>(null);
   const [isLoading, setIsLoading] = useState(true);
@@ -37,8 +38,8 @@ export default function PaymentSuccessPage() {
 
   useEffect(() => {
     async function verifyPaymentOnMount() {
-      if (!propertyId) {
-        setError("Missing valid property reference identifier.");
+      if (!propertyId && !txRef) {
+        setError("Missing valid property reference identifier or transaction reference.");
         setIsLoading(false);
         setAnimate(true);
         return;
@@ -46,11 +47,11 @@ export default function PaymentSuccessPage() {
 
       try {
         setIsLoading(true);
-        // Consuming your explicit endpoint signature
-        const response = await apiClient.get<PaymentStatusResponse>(
-          `/api/v1/payments/properties/${propertyId}/payment-status`
-        );
-        
+        const endpoint = propertyId
+          ? `/api/v1/payments/properties/${propertyId}/payment-status`
+          : `/api/v1/payments/tx-ref/${txRef}/payment-status`;
+
+        const response = await apiClient.get<PaymentStatusResponse>(endpoint);
         setPaymentData(response.data);
       } catch (err: any) {
         console.error(err);
@@ -62,11 +63,10 @@ export default function PaymentSuccessPage() {
     }
 
     verifyPaymentOnMount();
-  }, [propertyId]);
+  }, [propertyId, txRef]);
 
-  // ===============================
+
   // Loading State
-  // ===============================
   if (isLoading) {
     return (
       <div className="min-h-screen bg-slate-50/50 flex flex-col items-center justify-center p-4">
@@ -100,9 +100,7 @@ export default function PaymentSuccessPage() {
     );
   }
 
-  // ===============================
   // Main Verified UI Render
-  // ===============================
   return (
     <div className="min-h-screen bg-slate-50/50 flex items-center justify-center p-4 antialiased text-slate-800">
       <div className="absolute inset-0 bg-[radial-gradient(#e2e8f0_1px,transparent_1px)] [background-size:16px_16px] opacity-70 pointer-events-none" />

@@ -24,17 +24,13 @@ export function DatabaseStatusBanner() {
         }
 
         if (data.database !== "connected") {
-          setMessage(
-            "The API is running but the database is not connected."
-          );
+          
         } else {
           setMessage(null);
         }
       } catch {
         if (!cancelled) {
-          setMessage(
-            "Cannot reach the API. Please ensure the backend services are running."
-          );
+          setMessage("Service temporarily unavailable. Please try again later.");
         }
       }
     }

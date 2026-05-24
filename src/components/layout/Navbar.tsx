@@ -2,49 +2,91 @@
 
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import {
-  Bell,
-  ChevronDown,
-  Heart,
-  Loader2,
-  LogOut,
-  Menu,
-  User,
-} from "lucide-react";
+import { ChevronDown, Heart, LogOut, Menu, User } from "lucide-react";
 import { useEffect, useState } from "react";
 import { Button } from "@/src/components/ui/Button";
-import { AUTH_ROUTES, DEFAULT_LOGIN_REDIRECT } from "@/src/features/auth/constants/routes";
+import {
+  AUTH_ROUTES,
+  DEFAULT_LOGIN_REDIRECT,
+} from "@/src/features/auth/constants/routes";
 import { useAuth } from "@/src/features/auth/hooks/use-auth";
+import { SearchModal } from "@/src/components/ui/SearchModal";
 
 const navigation = [
   {
     label: "Buy",
     href: "/buy",
     submenu: [
-      { label: "Apartments", href: "/buy/apartments" },
-      { label: "Houses", href: "/buy/houses" },
-      { label: "Villas", href: "/buy/villas" },
-      { label: "Commercial", href: "/buy/commercial" },
+      {
+        label: "🏠 Property",
+        href: "/buy/property",
+        subSubmenu: [
+          { label: "Apartments", href: "/buy/property/apartments" },
+          { label: "Houses", href: "/buy/property/houses" },
+          { label: "Villas", href: "/buy/property/villas" },
+          { label: "Commercial", href: "/buy/property/commercial" },
+        ],
+      },
+      {
+        label: "🚗 Vehicles",
+        href: "/buy/vehicles",
+        subSubmenu: [
+          { label: "Cars", href: "/buy/vehicles/cars" },
+          { label: "SUVs", href: "/buy/vehicles/suvs" },
+          { label: "Trucks", href: "/buy/vehicles/trucks" },
+        ],
+      },
     ],
   },
+
   {
     label: "Rent",
     href: "/rent",
     submenu: [
-      { label: "Apartments", href: "/rent/apartments" },
-      { label: "Houses", href: "/rent/houses" },
-      { label: "Studios", href: "/rent/studios" },
+      {
+        label: "🏠 Property",
+        href: "/rent/property",
+        subSubmenu: [
+          { label: "Apartments", href: "/rent/property/apartments" },
+          { label: "Houses", href: "/rent/property/houses" },
+          { label: "Villas", href: "/rent/property/villas" },
+        ],
+      },
+      {
+        label: "🚗 Vehicles",
+        href: "/rent/vehicles",
+        subSubmenu: [
+          { label: "Cars", href: "/rent/vehicles/cars" },
+          { label: "SUVs", href: "/rent/vehicles/suvs" },
+        ],
+      },
     ],
   },
+
   {
-    label: "Commercial",
-    href: "/commercial",
+    label: "Sell",
+    href: "/sell",
     submenu: [
-      { label: "Offices", href: "/commercial/offices" },
-      { label: "Shops", href: "/commercial/shops" },
-      { label: "Warehouses", href: "/commercial/warehouses" },
+      {
+        label: "🏠 Property",
+        href: "/sell/property",
+        subSubmenu: [
+          { label: "Apartments", href: "/sell/property/apartments" },
+          { label: "Houses", href: "/sell/property/houses" },
+          { label: "Villas", href: "/sell/property/villas" },
+        ],
+      },
+      {
+        label: "🚗 Vehicles",
+        href: "/sell/vehicles",
+        subSubmenu: [
+          { label: "Cars", href: "/sell/vehicles/cars" },
+          { label: "SUVs", href: "/sell/vehicles/suvs" },
+        ],
+      },
     ],
   },
+
   {
     label: "Agents",
     href: "/agents",
@@ -56,11 +98,17 @@ const navigation = [
   },
 ];
 
+
+
+
 export function Navbar() {
   const router = useRouter();
   const { user, isAuthenticated, isHydrated, logout, isLoading } = useAuth();
+
   const [isLoggingOut, setIsLoggingOut] = useState(false);
   const [hasMounted, setHasMounted] = useState(false);
+
+  const [isSearchModalOpen, setIsSearchModalOpen] = useState(false);
 
   useEffect(() => {
     setHasMounted(true);
@@ -79,17 +127,23 @@ export function Navbar() {
 
   return (
     <header className="sticky top-0 z-50 border-b border-slate-200 bg-white/80 backdrop-blur-xl">
-      <div className="mx-auto flex h-20 max-w-7xl items-center justify-between px-4 sm:px-6 lg:px-8">
-        <div className="flex items-center">
-          <Link
-            href="/"
-            className="text-2xl font-black tracking-tight text-slate-900 sm:text-3xl"
-          >
-            Habesha<span className="text-amber-400">Hub</span>
-          </Link>
-        </div>
 
-        <nav className="hidden items-center gap-10 lg:flex">
+      <div className="mx-auto flex h-20 max-w-7xl items-center justify-between px-4 sm:px-6 lg:px-8">
+
+        {/* LEFT: LOGO */}
+        <Link
+          href="/"
+          className="text-2xl font-black tracking-tight text-slate-900 sm:text-3xl"
+        >
+          Habesha<span className="text-amber-400">Hub</span>
+        </Link>
+
+
+
+
+
+        {/* NAVIGATION */}
+        <nav className="hidden items-center gap-8 lg:flex">
           {navigation.map((item) => (
             <div key={item.label} className="group relative">
               <Link
@@ -103,6 +157,7 @@ export function Navbar() {
                 />
               </Link>
 
+              {/* DROPDOWN */}
               <div className="invisible absolute left-1/2 top-10 z-50 w-56 -translate-x-1/2 rounded-2xl border border-slate-200 bg-white p-3 opacity-0 shadow-xl transition-all duration-200 group-hover:visible group-hover:top-12 group-hover:opacity-100">
                 <div className="flex flex-col gap-1">
                   {item.submenu.map((subItem) => (
@@ -120,29 +175,32 @@ export function Navbar() {
           ))}
         </nav>
 
+        {/* RIGHT SIDE */}
         <div className="hidden items-center gap-3 lg:flex">
+
+          {/* Favorites */}
           <Link
             href="/favorites"
-            aria-label="Favorites"
-            className="relative flex h-11 w-11 items-center justify-center rounded-full border border-slate-200 bg-white text-slate-700 transition hover:border-slate-300 hover:bg-slate-50"
+            className="flex h-11 w-11 items-center justify-center rounded-full border border-slate-200 text-slate-700 hover:bg-slate-50"
           >
             <Heart size={18} />
           </Link>
 
+          {/* AUTH */}
           {!hasMounted || !isHydrated ? (
-            <span
-              className="inline-flex h-11 w-[220px] items-center justify-center"
-              aria-hidden
-            />
+            <span className="h-11 w-40" />
           ) : isAuthenticated && user ? (
             <>
               <Link
                 href={DEFAULT_LOGIN_REDIRECT}
-                className="inline-flex items-center gap-2 rounded-full border border-slate-200 bg-white px-4 py-2.5 text-sm font-semibold text-slate-700 transition hover:bg-slate-50"
+                className="flex items-center gap-2 rounded-full border border-slate-200 bg-white px-4 py-2.5 text-sm font-semibold text-slate-700 hover:bg-slate-50"
               >
-                <User size={16} aria-hidden />
-                <span className="max-w-[120px] truncate">{user.email.split("@")[0]}</span>
+                <User size={16} />
+                <span className="max-w-[120px] truncate">
+                  {user.email.split("@")[0]}
+                </span>
               </Link>
+
               <Button
                 type="button"
                 variant="outline"
@@ -158,27 +216,29 @@ export function Navbar() {
             <>
               <Link
                 href={AUTH_ROUTES.login}
-                className="rounded-full border border-slate-300 px-5 py-3 text-sm font-semibold text-slate-700 transition hover:border-slate-400 hover:bg-slate-50"
+                className="rounded-full border border-slate-300 px-5 py-3 text-sm font-semibold text-slate-700 hover:bg-slate-50"
               >
                 Login
               </Link>
+
               <Link
                 href={AUTH_ROUTES.register}
-                className="rounded-full bg-amber-500 px-5 py-3 text-sm font-semibold text-white transition hover:bg-amber-600"
+                className="rounded-full bg-amber-500 px-5 py-3 text-sm font-semibold text-white hover:bg-amber-600"
               >
-                Sell property
+                Get Started
               </Link>
             </>
           )}
         </div>
 
+        {/* MOBILE MENU */}
         <button
           type="button"
-          title="Open Menu"
-          className="inline-flex h-11 w-11 items-center justify-center rounded-full border border-slate-200 text-slate-700 transition hover:bg-slate-100 lg:hidden"
+          className="inline-flex h-11 w-11 items-center justify-center rounded-full border border-slate-200 lg:hidden"
         >
           <Menu size={20} />
         </button>
+
       </div>
     </header>
   );

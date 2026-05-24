@@ -25,7 +25,7 @@ export function DatabaseStatusBanner() {
 
         if (data.database !== "connected") {
           setMessage(
-            "The API is running but PostgreSQL is not connected. Start Docker Desktop, then run: cd property-management-be && docker compose up -d && uv run python -m alembic upgrade head"
+            "The API is running but the database is not connected."
           );
         } else {
           setMessage(null);
@@ -33,7 +33,7 @@ export function DatabaseStatusBanner() {
       } catch {
         if (!cancelled) {
           setMessage(
-            "Cannot reach the API. Start the backend (uv run python main.py) and PostgreSQL (docker compose up -d in property-management-be)."
+            "Cannot reach the API. Please ensure the backend services are running."
           );
         }
       }

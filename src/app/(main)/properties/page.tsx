@@ -1,6 +1,6 @@
-import { PropertyFilters } from "../../components/property/PropertyFilters";
-import { PropertyFeed } from "../../components/property/PropertyFeed";
-import { ListFilters } from "../../components/property/ListFilters";
+import { PropertyFilters } from "../../../components/property/PropertyFilters";
+import { PropertyFeed } from "../../../components/property/PropertyFeed";
+import { ListFilters } from "../../../components/property/ListFilters";
 
 export default function PropertiesPage() {
   return (

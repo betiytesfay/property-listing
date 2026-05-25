@@ -5,7 +5,7 @@ import { InputField } from "@/src/components/auth/input-field";
 import { PasswordInput } from "@/src/components/auth/password-input";
 import { PasswordStrengthIndicator } from "@/src/components/auth/password-strength-indicator";
 import { PhoneInput } from "@/src/components/auth/phone-input";
-import type { AdminRegisterFormValues, RegisterFormValues } from "@/src/features/auth/schemas/auth.schemas";
+import type { RegisterFormValues } from "@/src/features/auth/schemas/auth.schemas";
 
 /** Shared field set for seller and admin registration forms */
 export type RegistrationFieldValues = Pick<

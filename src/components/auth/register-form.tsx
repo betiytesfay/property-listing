@@ -4,11 +4,8 @@ import { useState } from "react";
 import Link from "next/link";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import {
-  RegistrationFormFields,
-  type RegistrationFieldValues,
-} from "@/src/features/auth/components/registration-form-fields";
-import type { Control, UseFormRegister } from "react-hook-form";
+import { RegistrationFormFields } from "@/src/features/auth/components/registration-form-fields";
+import { toRegistrationFieldHandlers } from "@/src/features/auth/utils/registration-form-bridge";
 import { Checkbox } from "@/src/components/ui/checkbox";
 import { Label } from "@/src/components/ui/label";
 import { AuthFormAlert } from "@/src/features/auth/components/auth-form-alert";
@@ -90,9 +87,7 @@ export function RegisterForm() {
           )}
 
           <RegistrationFormFields
-            register={register as UseFormRegister<RegistrationFieldValues>}
-            control={control as Control<RegistrationFieldValues>}
-            errors={errors}
+            {...toRegistrationFieldHandlers(register, control, errors)}
             password={password}
             onFieldChange={clearMessages}
           />

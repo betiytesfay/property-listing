@@ -6,6 +6,7 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { AuthFormAlert } from "@/src/features/auth/components/auth-form-alert";
 import { RegistrationFormFields } from "@/src/features/auth/components/registration-form-fields";
+import { toRegistrationFieldHandlers } from "@/src/features/auth/utils/registration-form-bridge";
 import { ADMIN_ROUTES } from "@/src/features/auth/constants/routes";
 import { useRegisterAdmin } from "@/src/features/auth/hooks/use-register-admin";
 import {
@@ -89,9 +90,7 @@ export function AdminRegisterForm() {
         {successMessage ? <AuthFormAlert variant="success" message={successMessage} /> : null}
 
         <RegistrationFormFields
-          register={register}
-          control={control}
-          errors={errors}
+          {...toRegistrationFieldHandlers(register, control, errors)}
           password={password}
           onFieldChange={clearMessages}
         />

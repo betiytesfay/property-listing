@@ -24,6 +24,10 @@ const MOBILE_COPY: Record<AuthPageVariant, { headline: string; subline: string }
     headline: "Account recovery made simple.",
     subline: "We'll help you regain access to your seller dashboard securely.",
   },
+  adminRegister: {
+    headline: "Build a trusted admin team.",
+    subline: "Invite administrators to manage the platform securely and at scale.",
+  },
 };
 
 export function AuthSplitLayout({ children, variant }: AuthSplitLayoutProps) {
@@ -41,7 +45,11 @@ export function AuthSplitLayout({ children, variant }: AuthSplitLayoutProps) {
       </section>
 
       <main className="flex flex-1 flex-col lg:flex-row">
-        <BrandPanel variant={variant === "forgotPassword" ? "login" : variant} />
+        <BrandPanel
+          variant={
+            variant === "forgotPassword" ? "login" : variant === "adminRegister" ? "adminRegister" : variant
+          }
+        />
         <section className="flex w-full flex-1 items-center justify-center bg-slate-50 px-6 py-10 lg:w-1/2 lg:px-12 lg:py-16">
           {children}
         </section>

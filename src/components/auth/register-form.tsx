@@ -2,12 +2,10 @@
 
 import { useState } from "react";
 import Link from "next/link";
-import { Controller, useForm } from "react-hook-form";
+import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { InputField } from "@/src/components/auth/input-field";
-import { PasswordInput } from "@/src/components/auth/password-input";
-import { PasswordStrengthIndicator } from "@/src/components/auth/password-strength-indicator";
-import { PhoneInput } from "@/src/components/auth/phone-input";
+import { RegistrationFormFields } from "@/src/features/auth/components/registration-form-fields";
+import { toRegistrationFieldHandlers } from "@/src/features/auth/utils/registration-form-bridge";
 import { Checkbox } from "@/src/components/ui/checkbox";
 import { Label } from "@/src/components/ui/label";
 import { AuthFormAlert } from "@/src/features/auth/components/auth-form-alert";
@@ -88,71 +86,11 @@ export function RegisterForm() {
             />
           )}
 
-          {/* Fields - more compact */}
-          <div className="space-y-3">
-            <InputField
-              label="Full name"
-              placeholder="Your full name"
-              autoComplete="name"
-              error={errors.fullName?.message}
-              {...register("fullName", { onChange: clearMessages })}
-            />
-            <InputField
-              label="Email"
-              type="email"
-              autoComplete="email"
-              placeholder="name@example.com"
-              error={errors.email?.message}
-              {...register("email", { onChange: clearMessages })}
-            />
-            <Controller
-              name="phone"
-              control={control}
-              render={({ field }) => (
-                <PhoneInput
-                  error={errors.phone?.message}
-                  {...field}
-                  onChange={(e) => {
-                    clearMessages();
-                    field.onChange(e);
-                  }}
-                />
-              )}
-            />
-            <Controller
-              name="password"
-              control={control}
-              render={({ field }) => (
-                <PasswordInput
-                  label="Password"
-                  autoComplete="new-password"
-                  error={errors.password?.message}
-                  {...field}
-                  onChange={(e) => {
-                    clearMessages();
-                    field.onChange(e);
-                  }}
-                />
-              )}
-            />
-            <PasswordStrengthIndicator password={password} />
-            <Controller
-              name="confirmPassword"
-              control={control}
-              render={({ field }) => (
-                <PasswordInput
-                  label="Confirm password"
-                  autoComplete="new-password"
-                  error={errors.confirmPassword?.message}
-                  {...field}
-                  onChange={(e) => {
-                    clearMessages();
-                    field.onChange(e);
-                  }}
-                />
-              )}
-            />
-          </div>
+          <RegistrationFormFields
+            {...toRegistrationFieldHandlers(register, control, errors)}
+            password={password}
+            onFieldChange={clearMessages}
+          />
 
           {/* Terms */}
           <div className="flex items-start gap-2">

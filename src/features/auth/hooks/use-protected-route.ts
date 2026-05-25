@@ -7,10 +7,12 @@ import {
   REDIRECT_QUERY_PARAM,
 } from "@/src/features/auth/constants/routes";
 import { useAuth } from "@/src/features/auth/hooks/use-auth";
+import { getUnauthorizedRedirectPath } from "@/src/features/auth/utils/redirect";
+import type { UserRole } from "@/src/features/auth/types/auth.types";
 
 interface UseProtectedRouteOptions {
   /** Required roles; omit to allow any authenticated user */
-  roles?: Array<"OWNER" | "ADMIN">;
+  roles?: UserRole[];
   redirectTo?: string;
 }
 
@@ -42,7 +44,7 @@ export function useProtectedRoute(options: UseProtectedRouteOptions = {}) {
     }
 
     if (!hasRequiredRole) {
-      router.replace("/");
+      router.replace(getUnauthorizedRedirectPath(user?.role));
     }
   }, [
     hasRequiredRole,
@@ -52,6 +54,7 @@ export function useProtectedRoute(options: UseProtectedRouteOptions = {}) {
     redirectTo,
     router,
     searchParams,
+    user?.role,
   ]);
 
   return {

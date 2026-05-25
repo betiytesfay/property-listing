@@ -5,3 +5,4 @@ export const STORAGE_KEYS = {
 } as const;
 
 export const AUTH_COOKIE_NAME = "hp_auth";
+export const ROLE_COOKIE_NAME = "hp_role";

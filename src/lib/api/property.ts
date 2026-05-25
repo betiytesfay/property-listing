@@ -48,7 +48,7 @@ export async function createProperty(data: CreatePropertyInput): Promise<Propert
   // 3. Image Binary Arrays
   if (data.images && data.images.length > 0) {
     data.images.forEach((file) => {
-      formData.append("images", file);
+      formData.append("images[]", file);
     });
   }
 

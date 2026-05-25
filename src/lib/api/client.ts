@@ -4,9 +4,6 @@ import { getApiBaseUrl } from "@/src/lib/api/get-api-base-url";
 
 export const apiClient = axios.create({
   baseURL: getApiBaseUrl(),
-  headers: {
-    "Content-Type": "application/json",
-  },
   timeout: 30000,
 });
 

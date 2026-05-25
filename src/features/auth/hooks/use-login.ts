@@ -8,7 +8,7 @@ import type { LoginFormValues } from "@/src/features/auth/schemas/auth.schemas";
 import { useAuthStore } from "@/src/features/auth/store/auth-store";
 import { resolvePostAuthRedirect } from "@/src/features/auth/utils/redirect";
 import { userFromAccessToken } from "@/src/features/auth/utils/jwt";
-import { getErrorMessage } from "@/src/lib/api/errors";
+import { getLoginErrorMessage } from "@/src/features/auth/utils/login-errors";
 
 export function useLogin() {
   const router = useRouter();
@@ -51,7 +51,7 @@ export function useLogin() {
         router.refresh();
         return true;
       } catch (err) {
-        setError(getErrorMessage(err, "Unable to sign in. Check your credentials."));
+        setError(getLoginErrorMessage(err));
         return false;
       } finally {
         setIsLoading(false);

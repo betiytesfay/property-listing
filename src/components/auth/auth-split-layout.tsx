@@ -1,6 +1,5 @@
 import type { ReactNode } from "react";
-import { Footer } from "@/src/components/layout/Footer";
-import { Navbar } from "@/src/components/layout/Navbar";
+// Intentionally no global Navbar/Footer here — auth pages should be chrome-free
 import { BrandPanel, type BrandPanelVariant } from "@/src/components/auth/brand-panel";
 import { DatabaseStatusBanner } from "@/src/features/auth/components/database-status-banner";
 
@@ -24,10 +23,6 @@ const MOBILE_COPY: Record<AuthPageVariant, { headline: string; subline: string }
     headline: "Account recovery made simple.",
     subline: "We'll help you regain access to your seller dashboard securely.",
   },
-  adminRegister: {
-    headline: "Build a trusted admin team.",
-    subline: "Invite administrators to manage the platform securely and at scale.",
-  },
 };
 
 export function AuthSplitLayout({ children, variant }: AuthSplitLayoutProps) {
@@ -35,7 +30,6 @@ export function AuthSplitLayout({ children, variant }: AuthSplitLayoutProps) {
 
   return (
     <div className="flex min-h-screen flex-col bg-auth-surface text-auth-on-surface">
-      <Navbar />
       <DatabaseStatusBanner />
 
       <section className="border-b border-auth-outline/40 bg-auth-primary px-6 py-8 lg:hidden">
@@ -45,17 +39,12 @@ export function AuthSplitLayout({ children, variant }: AuthSplitLayoutProps) {
       </section>
 
       <main className="flex flex-1 flex-col lg:flex-row">
-        <BrandPanel
-          variant={
-            variant === "forgotPassword" ? "login" : variant === "adminRegister" ? "adminRegister" : variant
-          }
-        />
+        <BrandPanel variant={variant === "forgotPassword" ? "login" : variant} />
         <section className="flex w-full flex-1 items-center justify-center bg-slate-50 px-6 py-10 lg:w-1/2 lg:px-12 lg:py-16">
           {children}
         </section>
       </main>
 
-      <Footer />
     </div>
   );
 }

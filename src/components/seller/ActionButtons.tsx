@@ -11,7 +11,8 @@ export default function ActionButtons({
 }: ActionButtonsProps) {
   return (
     <div className="flex items-center gap-2">
-      <button
+      <button 
+      title="edit"
         onClick={onEdit}
         className="flex h-8 w-8 items-center justify-center rounded-lg border border-slate-200 bg-white text-slate-500 transition hover:border-blue-300 hover:bg-blue-50 hover:text-blue-500"
       >
@@ -19,6 +20,7 @@ export default function ActionButtons({
       </button>
 
       <button
+      title="trash"
         onClick={onDelete}
         className="flex h-8 w-8 items-center justify-center rounded-lg border border-slate-200 bg-white text-slate-500 transition hover:border-red-300 hover:bg-red-50 hover:text-red-500"
       >

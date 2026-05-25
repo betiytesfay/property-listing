@@ -1,11 +1,11 @@
-import PropertyImageGallery from "./components/PropertyImageGallery";
-import PropertyHeader from "./components/PropertyHeader";
-import PropertySidebar from "./components/PropertySidebar";
-import PropertyDetailsGrid from "./components/PropertyDetailsGrid";
-import PropertyEquipment from "./components/PropertyEquipment";
-import PropertyDescription from "./components/PropertyDescription";
-import PropertyMapWrapper from "./components/PropertyMapWrapper"; // ✅ use wrapper
-import RelatedListings from "./components/RelatedListings";
+import PropertyImageGallery from "../../(main)/properties/[id]/components/PropertyImageGallery";
+import PropertyHeader from "../../(main)/properties/[id]/components/PropertyHeader";
+import PropertySidebar from "../../(main)/properties/[id]/components/PropertySidebar";
+import PropertyDetailsGrid from "../../(main)/properties/[id]/components/PropertyDetailsGrid";
+import PropertyEquipment from "../../(main)/properties/[id]/components/PropertyEquipment";
+import PropertyDescription from "../../(main)/properties/[id]/components/PropertyDescription";
+import PropertyMapWrapper from "../../(main)/properties/[id]/components/PropertyMapWrapper"; // ✅ use wrapper
+import RelatedListings from "../../(main)/properties/[id]/components/RelatedListings";
 
 import { properties } from "@/src/data/dummyProperties";
 import type { Property } from "@/src/types/propertyTypes";

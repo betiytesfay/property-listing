@@ -3,12 +3,15 @@
 import { useCallback, useState } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { authService } from "@/src/features/auth/services/auth.service";
-import { AUTH_ROUTES, REDIRECT_QUERY_PARAM } from "@/src/features/auth/constants/routes";
+import {
+  AUTH_ROUTES,
+  DEFAULT_LOGIN_REDIRECT,
+  REDIRECT_QUERY_PARAM,
+} from "@/src/features/auth/constants/routes";
 import type { LoginFormValues } from "@/src/features/auth/schemas/auth.schemas";
 import { useAuthStore } from "@/src/features/auth/store/auth-store";
-import { resolvePostAuthRedirect } from "@/src/features/auth/utils/redirect";
 import { userFromAccessToken } from "@/src/features/auth/utils/jwt";
-import { getLoginErrorMessage } from "@/src/features/auth/utils/login-errors";
+import { getErrorMessage } from "@/src/lib/api/errors";
 
 export function useLogin() {
   const router = useRouter();
@@ -42,16 +45,14 @@ export function useLogin() {
           Boolean(values.rememberMe)
         );
 
-        const redirectTo = resolvePostAuthRedirect(
-          user.role,
-          searchParams.get(REDIRECT_QUERY_PARAM)
-        );
+        const redirectTo =
+          searchParams.get(REDIRECT_QUERY_PARAM) ?? DEFAULT_LOGIN_REDIRECT;
 
         router.replace(redirectTo);
         router.refresh();
         return true;
       } catch (err) {
-        setError(getLoginErrorMessage(err));
+        setError(getErrorMessage(err, "Unable to sign in. Check your credentials."));
         return false;
       } finally {
         setIsLoading(false);

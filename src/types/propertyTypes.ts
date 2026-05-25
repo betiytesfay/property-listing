@@ -20,8 +20,22 @@ export interface Property {
   bedrooms: number;
   bathrooms: number;
   area: number;
+
+  images?: string[];
   furnished: boolean;
   imageUrl?: string;
+
+  address?: string;
+  category?: string;
+  listing_type?: string;
+  listing_fee_paid?: boolean;
+  is_active?: boolean;
+  latitude?: string | number | null;
+  longitude?: string | number | null;
+  media_urls?: string[];
+  owner_id?: string;
+  created_at?: string;
+  updated_at?: string;
 
   details?: {
     bedrooms: number;

@@ -38,10 +38,10 @@ export function PropertyDetailClient({ id }: PropertyDetailClientProps) {
           <div className="flex items-start justify-between gap-4">
             <div>
               <h1 className="text-3xl font-semibold text-slate-900">{property.title}</h1>
-              <p className="mt-2 text-sm text-slate-600">{property.city} • {property.neighborhood ?? "Neighborhood"}</p>
+              <p className="mt-2 text-sm text-slate-600">{property.address ?? property.city ?? "Location not provided"}</p>
             </div>
             <Badge variant={property.status === "rent" ? "accent" : "success"}>
-              {property.status === "rent" ? "Rent" : "Sale"}
+              {property.status === "rent" ? "For Rent" : "For Sale"}
             </Badge>
           </div>
           <div className="grid gap-3 sm:grid-cols-2">
@@ -72,27 +72,53 @@ export function PropertyDetailClient({ id }: PropertyDetailClientProps) {
         <Card className="space-y-6 p-6">
           <div>
             <h2 className="text-xl font-semibold text-slate-900">Property details</h2>
-            <p className="mt-3 leading-7 text-slate-600">{property.description}</p>
+            <p className="mt-3 leading-7 text-slate-600">{property.description || "No description provided."}</p>
           </div>
           <div className="grid gap-3 sm:grid-cols-3">
             <div className="rounded-3xl bg-slate-50 p-4">
               <p className="text-sm text-slate-500">Bedrooms</p>
-              <p className="mt-2 font-semibold text-slate-900">{property.bedrooms}</p>
+              <p className="mt-2 font-semibold text-slate-900">{property.details?.bedrooms ?? 0}</p>
             </div>
             <div className="rounded-3xl bg-slate-50 p-4">
               <p className="text-sm text-slate-500">Bathrooms</p>
-              <p className="mt-2 font-semibold text-slate-900">{property.bathrooms}</p>
+              <p className="mt-2 font-semibold text-slate-900">{property.details?.bathrooms ?? 0}</p>
             </div>
             <div className="rounded-3xl bg-slate-50 p-4">
               <p className="text-sm text-slate-500">Status</p>
               <p className="mt-2 font-semibold text-slate-900">{property.status}</p>
             </div>
           </div>
+          <div className="grid gap-3 sm:grid-cols-2">
+            <div className="rounded-3xl bg-slate-50 p-4">
+              <p className="text-sm text-slate-500">Category</p>
+              <p className="mt-2 font-semibold text-slate-900">{property.category ?? "N/A"}</p>
+            </div>
+            <div className="rounded-3xl bg-slate-50 p-4">
+              <p className="text-sm text-slate-500">Payment status</p>
+              <p className="mt-2 font-semibold text-slate-900">
+                {property.listing_fee_paid ? "Fee paid" : "Fee not paid"}
+              </p>
+            </div>
+          </div>
         </Card>
         <Card className="rounded-3xl border border-slate-200 bg-white p-6">
           <h2 className="text-lg font-semibold text-slate-900">Location</h2>
-          <div className="mt-4 h-72 rounded-3xl bg-slate-100 text-slate-500 flex items-center justify-center">
-            Map placeholder
+          <div className="mt-4">
+            <p className="text-sm text-slate-500">{property.address ?? "Address not available."}</p>
+          </div>
+          <div className="mt-6 h-72 rounded-3xl bg-slate-100 text-slate-500 flex items-center justify-center">
+            {property.latitude && property.longitude ? (
+              <a
+                href={`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(`${property.latitude},${property.longitude}`)}`}
+                target="_blank"
+                rel="noreferrer"
+                className="text-sm font-semibold text-slate-900 underline"
+              >
+                Open in maps
+              </a>
+            ) : (
+              <span>Map placeholder</span>
+            )}
           </div>
         </Card>
       </div>

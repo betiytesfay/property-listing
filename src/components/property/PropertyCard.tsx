@@ -87,7 +87,7 @@ export function PropertyCard({ property }: PropertyCardProps) {
               <span>📍</span>
               {property.subCity ? `${property.subCity}, ` : ""}{property.city}
             </p>
-            <h3 className="mt-0.5 truncate text-base font-bold text-secondary group-hover:text-amber-600 transition-colors">
+            <h3 className="mt-0.5 truncate text-base font-bold text-white group-hover:text-amber-600 transition-colors">
               {property.title}
             </h3>
           </div>
@@ -95,11 +95,11 @@ export function PropertyCard({ property }: PropertyCardProps) {
           <p className="text-sm leading-5 text-slate-500 line-clamp-2">{property.description}</p>
 
           {/* Stats row */}
-          <div className="flex flex-wrap gap-3 border-t border-slate-100 pt-3">
+          {/* <div className="flex flex-wrap gap-3 border-t border-slate-100 pt-3">
             <StatChip icon="🛏" value={property.bedrooms} label="Beds" />
             <StatChip icon="🚿" value={property.bathrooms} label="Baths" />
             <StatChip icon="📐" value={`${property.area} m²`} label="" />
-          </div>
+          </div> */}
 
           {/* Price row */}
           <div className="flex items-center justify-between">
@@ -167,11 +167,11 @@ export function FeaturedPropertyCard({ property }: PropertyCardProps) {
                 <span>📍</span>
                 {property.subCity ? `${property.subCity}, ` : ""}{property.city}
               </p>
-              <div className="mt-3 flex gap-4">
+              {/* <div className="mt-3 flex gap-4">
                 <StatChip icon="🛏" value={property.bedrooms} label="Beds" />
                 <StatChip icon="🚿" value={property.bathrooms} label="Baths" />
                 <StatChip icon="📐" value={`${property.area} m²`} label="" />
-              </div>
+              </div> */}
             </div>
             <div className="flex-shrink-0 text-right">
               <p className="text-2xl font-black text-white">

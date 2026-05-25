@@ -79,7 +79,7 @@ function SellCTACard() {
           ))}
         </ul>
 
-        <Link href="/list-property">
+        <Link href="/register">
           <Button variant="gold" size="lg" fullWidth>
             Get Started
           </Button>

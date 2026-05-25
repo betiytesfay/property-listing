@@ -41,39 +41,6 @@ export const registerSchema = z
     path: ["confirmPassword"],
   });
 
-/** Admin-created accounts (no public terms checkbox on admin-only page) */
-export const adminRegisterSchema = z
-  .object({
-    fullName: z
-      .string()
-      .min(1, "Full name is required")
-      .min(2, "Name must be at least 2 characters"),
-    email: z.string().min(1, "Email is required").email("Enter a valid email address"),
-    phone: z
-      .string()
-      .min(1, "Phone number is required")
-      .transform((value) => value.replace(/\D/g, ""))
-      .pipe(
-        z
-          .string()
-          .min(9, "Enter at least 9 digits (e.g. 911 234 567)")
-          .max(10, "Phone number is too long")
-          .regex(/^(?:0)?9\d{8}$/, "Use a valid Ethiopian mobile number (e.g. 911 234 567)")
-      ),
-    password: z
-      .string()
-      .min(1, "Password is required")
-      .min(8, "Password must be at least 8 characters")
-      .regex(/[A-Z]/, "Include at least one uppercase letter")
-      .regex(/[a-z]/, "Include at least one lowercase letter")
-      .regex(/[0-9]/, "Include at least one number"),
-    confirmPassword: z.string().min(1, "Please confirm your password"),
-  })
-  .refine((data) => data.password === data.confirmPassword, {
-    message: "Passwords do not match",
-    path: ["confirmPassword"],
-  });
-
 export const forgotPasswordSchema = z.object({
   email: z.string().min(1, "Email is required").email("Enter a valid email address"),
 });
@@ -97,7 +64,6 @@ export const resetPasswordSchema = z
 
 export type LoginFormValues = z.infer<typeof loginSchema>;
 export type RegisterFormValues = z.infer<typeof registerSchema>;
-export type AdminRegisterFormValues = z.infer<typeof adminRegisterSchema>;
 export type ForgotPasswordFormValues = z.infer<typeof forgotPasswordSchema>;
 export type ResetPasswordFormValues = z.infer<typeof resetPasswordSchema>;
 

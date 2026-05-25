@@ -20,29 +20,24 @@ interface NavItem {
 }
 
 const navItems: NavItem[] = [
-  { href: "/seller", label: "Overview", icon: <CiGrid41 size={20} /> },
+  { href: "/dashboard", label: "Overview", icon: <CiGrid41 size={20} /> },
   {
-    href: "/seller/listings",
+    href: "/dashboard/listings",
     label: "My listings",
     icon: <CiBoxList size={20} />,
   },
   {
-    href: "/seller/payments",
-    label: "Payments",
-    icon: <CiCreditCard1 size={20} />,
-  },
-  {
-    href: "/seller/saved",
-    label: "Saved homes",
+    href: "/dashboard/saved",
+    label: "Saved ",
     icon: <CiHeart size={20} />,
   },
   {
-    href: "/seller/settings",
+    href: "/dashboard/settings",
     label: "Settings",
     icon: <CiSettings size={18} />,
   },
   {
-    href: "/seller/support",
+    href: "/dashboard/support",
     label: "Support",
     icon: <CgSupport size={20} />,
   },

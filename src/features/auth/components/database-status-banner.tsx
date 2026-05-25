@@ -24,13 +24,17 @@ export function DatabaseStatusBanner() {
         }
 
         if (data.database !== "connected") {
-          
+          setMessage(
+            "The API is running but PostgreSQL is not connected. Start Docker Desktop, then run: cd property-management-be && docker compose up -d && uv run python -m alembic upgrade head"
+          );
         } else {
           setMessage(null);
         }
       } catch {
         if (!cancelled) {
-          setMessage("Service temporarily unavailable. Please try again later.");
+          setMessage(
+            "Cannot reach the API. Start the backend (uv run python main.py) and PostgreSQL (docker compose up -d in property-management-be)."
+          );
         }
       }
     }

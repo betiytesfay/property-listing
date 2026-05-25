@@ -4,8 +4,8 @@ import type { ReactNode } from "react";
 import { useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { Loader2 } from "lucide-react";
+import { DEFAULT_LOGIN_REDIRECT } from "@/src/features/auth/constants/routes";
 import { useAuth } from "@/src/features/auth/hooks/use-auth";
-import { getDashboardPathForRole } from "@/src/features/auth/utils/redirect";
 
 interface GuestOnlyGuardProps {
   children: ReactNode;
@@ -16,14 +16,14 @@ interface GuestOnlyGuardProps {
  * Redirect runs in useEffect after session restore (middleware also guards guest routes).
  */
 export function GuestOnlyGuard({ children }: GuestOnlyGuardProps) {
-  const { user, isAuthenticated, isHydrated } = useAuth();
+  const { isAuthenticated, isHydrated } = useAuth();
   const router = useRouter();
 
   useEffect(() => {
-    if (isHydrated && isAuthenticated && user?.role) {
-      router.replace(getDashboardPathForRole(user.role));
+    if (isHydrated && isAuthenticated) {
+      router.replace(DEFAULT_LOGIN_REDIRECT);
     }
-  }, [isAuthenticated, isHydrated, router, user?.role]);
+  }, [isAuthenticated, isHydrated, router]);
 
   if (isHydrated && isAuthenticated) {
     return (

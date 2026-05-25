@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { AuthSplitLayout } from "@/src/components/auth/auth-split-layout";
 import { AdminRegisterForm } from "@/src/features/auth/components/admin-register-form";
 
 export const metadata: Metadata = {
@@ -8,8 +9,8 @@ export const metadata: Metadata = {
 
 export default function RegisterAdminPage() {
   return (
-    <div className="px-4 py-10 sm:px-6 lg:px-8">
+    <AuthSplitLayout variant="adminRegister">
       <AdminRegisterForm />
-    </div>
+    </AuthSplitLayout>
   );
 }

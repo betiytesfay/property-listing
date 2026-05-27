@@ -5,13 +5,10 @@ import { useRouter } from "next/navigation";
 import { ChevronDown, Heart, LogOut, Menu, User } from "lucide-react";
 import { useEffect, useState } from "react";
 import { Button } from "@/src/components/ui/Button";
-import {
-  AUTH_ROUTES,
-  DEFAULT_LOGIN_REDIRECT,
-} from "@/src/features/auth/constants/routes";
+import { AUTH_ROUTES } from "@/src/features/auth/constants/routes";
 import { useAuth } from "@/src/features/auth/hooks/use-auth";
+import { getDashboardPathForRole } from "@/src/features/auth/utils/redirect";
 import { SearchModal } from "@/src/components/ui/SearchModal";
-
 const navigation = [
   {
     label: "Buy",
@@ -192,7 +189,7 @@ export function Navbar() {
           ) : isAuthenticated && user ? (
             <>
               <Link
-                href={DEFAULT_LOGIN_REDIRECT}
+                href={getDashboardPathForRole(user.role)}
                 className="flex items-center gap-2 rounded-full border border-slate-200 bg-white px-4 py-2.5 text-sm font-semibold text-slate-700 hover:bg-slate-50"
               >
                 <User size={16} />
@@ -233,6 +230,7 @@ export function Navbar() {
 
         {/* MOBILE MENU */}
         <button
+        title="Open menu"
           type="button"
           className="inline-flex h-11 w-11 items-center justify-center rounded-full border border-slate-200 lg:hidden"
         >

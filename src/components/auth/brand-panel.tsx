@@ -2,7 +2,7 @@ import Image from "next/image";
 import { AUTH_HERO_IMAGE, BRAND_NAME } from "@/src/lib/auth-constants";
 import { ShieldCheck, TrendingUp, Users } from "lucide-react";
 
-export type BrandPanelVariant = "login" | "register";
+export type BrandPanelVariant = "login" | "register" | "adminRegister";
 
 interface BrandPanelProps {
   variant: BrandPanelVariant;
@@ -29,6 +29,16 @@ const COPY: Record<
       { icon: ShieldCheck, text: "List villas, apartments, and land" },
       { icon: Users, text: "Connect with qualified buyers" },
       { icon: TrendingUp, text: "Grow with premium marketplace tools" },
+    ],
+  },
+  adminRegister: {
+    headline: "Build a trusted admin team.",
+    subline:
+      "Invite administrators to help manage listings, sellers, and platform operations across Habesha Property Hub.",
+    bullets: [
+      { icon: ShieldCheck, text: "Secure, role-based access" },
+      { icon: Users, text: "Onboard trusted platform admins" },
+      { icon: TrendingUp, text: "Scale operations with confidence" },
     ],
   },
 };

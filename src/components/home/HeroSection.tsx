@@ -34,9 +34,9 @@ export function HeroSection() {
           </span>
         </h1>
 
-        <p className="max-w-lg text-base leading-7 text-slate-300">
+        <p className="max-w-lg text-base leading-7 text-slate-200">
           Discover exclusive listings in Addis Ababa's most prestigious
-          neighbourhoods, from Bole to Old Airport.
+          neighbourhoods.
         </p>
       </div>
     </div>

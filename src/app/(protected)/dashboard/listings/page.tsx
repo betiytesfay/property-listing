@@ -12,6 +12,7 @@ import PropertyCell from "@/src/components/seller/PropertyCell";
 import StatusBadge from "@/src/components/seller/StatusBadge";
 import { PropertyCreationModal } from "@/src/components/seller/PropertyCreationModal";
 import { getSellerListings, type SellerListing } from "@/src/lib/api/dashboard";
+import { TrendingUp } from "lucide-react";
 
 export default function ListingPage() {
   const [listings, setListings] = useState<SellerListing[]>([]);
@@ -238,8 +239,9 @@ export default function ListingPage() {
       <section className="rounded-[28px] border border-slate-200 bg-white p-6 shadow-sm">
         <div className="flex flex-col gap-6 lg:flex-row lg:items-center lg:justify-between">
           <div>
-            <div className="inline-flex items-center rounded-full bg-[#002045]/5 px-3 py-1 text-xs font-semibold uppercase tracking-[0.2em] text-[#002045]">
-              Seller Workspace
+            <div className="inline-flex items-center gap-2 rounded-full bg-[#002045]/5 px-3 py-1 text-xs font-bold uppercase tracking-wider text-[#002045]">
+              <TrendingUp className="h-3.5 w-3.5" />
+              HabeshaHub Workspace
             </div>
             <h1 className="mt-4 text-3xl font-bold tracking-tight text-slate-900">
               Property Listings
@@ -284,9 +286,9 @@ export default function ListingPage() {
             />
           </div>
 
-          <div className="w-full sm:w-[180px] shrink-0">
-            <div className="flex items-center gap-2 rounded-lg border border-slate-200 px-3 py-2 bg-white hover:bg-slate-50 transition-all cursor-pointer">
-              <Filter className="h-3.5 w-3.5 text-slate-400 shrink-0" />
+          <div className="w-full sm:w-[180px] shrink-0 items-center gap-2.50">
+            
+              
               <select
                 value={statusFilter}
                 onChange={(e) => setStatusFilter(e.target.value)}
@@ -296,7 +298,7 @@ export default function ListingPage() {
                 <option value="active">Active</option>
                 <option value="pending">Pending</option>
               </select>
-            </div>
+           
           </div>
         </div>
       </section>

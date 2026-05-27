@@ -155,13 +155,9 @@ export default function SellerOverviewPage() {
       <section className="rounded-[32px] border border-slate-200 bg-white p-6 sm:p-8 shadow-sm">
         <div className="flex flex-col gap-6 lg:flex-row lg:items-center lg:justify-between">
           <div className="max-w-2xl">
-            <div className="inline-flex items-center gap-2 rounded-full bg-[#002045]/5 px-3 py-1 text-xs font-bold uppercase tracking-wider text-[#002045]">
-              <TrendingUp className="h-3.5 w-3.5" />
-              Habesha Property Hub Workspace
+            <div className="text-3xl font-bold tracking-tight text-slate-900">
+              HabeshaHub Workspace
             </div>
-            <h1 className="mt-4 text-3xl font-extrabold tracking-tight text-slate-900 sm:text-4xl">
-              Welcome Back
-            </h1>
             <p className="mt-2 text-sm leading-relaxed text-slate-500">
               Monitor intelligence analytics, track real-time marketplace values, and process incoming property assets.
             </p>
@@ -183,17 +179,17 @@ export default function SellerOverviewPage() {
       </section>
 
          
-      <section className="rounded-[24px] border border-slate-800 bg-gradient-to-br from-[] to-[#001229] p-6 sm:p-8 text-white shadow-md relative overflow-hidden">
+      <section className="rounded-[24px] border border-slate-800 bg-gradient-to-br from-[] to-[#e9c349]
+      -6 p-4 text-sm font-medium
+       text-white shadow-md relative overflow-hidden">
         <div className="absolute right-0 top-0 translate-x-10 -translate-y-10 w-72 h-72 bg-blue-500/10 rounded-full blur-3xl pointer-events-none" />
-        <p className="text-xs font-bold uppercase tracking-wider text-blue-300">
+        <p className="text-xs font-bold uppercase tracking-wider">
           Aggregated Portfolio Value
         </p>
         <h2 className="mt-3 text-3xl sm:text-4xl font-black tracking-tight text-white">
           ETB {metrics.portfolioValue.toLocaleString()}
         </h2>
-        <p className="mt-2 max-w-xl text-xs text-blue-100/70 leading-relaxed">
-          The cumulative valuation parameters of all standard marketplace assets managed under this deployment domain.
-        </p>
+       
       </section>
 
 

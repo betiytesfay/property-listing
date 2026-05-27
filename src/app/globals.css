@@ -37,8 +37,7 @@
   --auth-primary: #002045;
   --auth-primary-hover: #1a365d;
   --auth-primary-soft: #d6e3ff;
-  --auth-secondary: #735c00;
-  --auth-secondary-soft: #fed65b;
+  --auth-secondary-soft: #fdc700;
   --auth-accent: #e9c349;
   --auth-surface: #f8f9fa;
   --auth-surface-muted: #f3f4f5;
@@ -52,7 +51,7 @@
 
   /* Text */
   --text-primary: #0f172a;
-  --text-secondary: #2d2e30;
+  --text-secondary: #e6eaf3;
   --text-muted: #64748b;
 
   /* States */
@@ -94,21 +93,19 @@ body {
 }
 
 /* Typography */
-h1,
+
+
 h2,
-h3,
 h4,
-h5,
-h6 {
+h5
+{
   margin: 0;
-  color: var(--text-secondary);
-  font-weight: 600;
+  color: var(--text-primary);
+  font-weight: 700;
   letter-spacing: -0.02em;
+
 }
 
-p {
-  color: var(--text-secondary);
-}
 
 /* Links */
 a {
@@ -118,7 +115,7 @@ a {
 }
 
 a:hover {
-  color: var(--primary);
+  color: var(--auth-accent);
 }
 
 /* Form Elements */

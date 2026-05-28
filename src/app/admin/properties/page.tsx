@@ -1,13 +1,22 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import PropertyTable from '../../../components/admin/PropertyTable';
 import FilterBar from '../../../components/admin/FilterBar';
-import { properties } from '../../../data/dummyProperties';
+import usePropertyStore from '@/src/store/adminPropertyStore';
 import { Property } from '../../../types';
 
 export default function PropertiesPage() {
-  const [filteredProperties, setFilteredProperties] = useState<Property[]>(properties);
+  const { properties, isLoading, fetchProperties } = usePropertyStore();
+  const [filteredProperties, setFilteredProperties] = useState<Property[]>([]);
+
+  useEffect(() => {
+    fetchProperties();
+  }, [fetchProperties]);
+
+  useEffect(() => {
+    setFilteredProperties(properties);
+  }, [properties]);
 
   const handleFilterChange = (filters: any) => {
     let filtered = [...properties];
@@ -30,6 +39,17 @@ export default function PropertiesPage() {
 
     setFilteredProperties(filtered);
   };
+
+  if (isLoading) {
+    return (
+      <div className="flex items-center justify-center h-96">
+        <div className="text-center">
+          <div className="animate-spin rounded-full h-10 w-10 border-2 border-orange-600 border-t-transparent mx-auto" />
+          <p className="mt-4 text-sm text-gray-500">Loading properties...</p>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div>

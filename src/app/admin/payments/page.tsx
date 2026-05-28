@@ -13,8 +13,8 @@ export default function PaymentsPage() {
     fetchOrders();
   }, [fetchOrders]);
 
-  const pendingPayments = orders.filter(o => o.paymentStatus === 'pending' || o.status === 'pending');
-  const completedPayments = orders.filter(o => o.paymentStatus === 'paid' || o.status === 'completed');
+  const pendingPayments = orders.filter(o => o.status === 'pending');
+  const completedPayments = orders.filter(o => o.status === 'completed');
 
   const handleMarkAsPaid = async (id: string) => {
     await updateOrderStatus(id, 'completed');

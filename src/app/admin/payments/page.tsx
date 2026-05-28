@@ -1,18 +1,36 @@
 'use client';
 
-import { useState } from 'react';
-import { orders, getPendingPayments } from '../../../data/dummyProperties';
+import { useState, useEffect } from 'react';
+import { useAdminOrderStore } from '@/src/features/auth/store/adminOrderStore';
 import StatusBadge from '../../../components/admin/StatusBadge';
 import { Search, DollarSign, CheckCircle, Clock } from 'lucide-react';
 
 export default function PaymentsPage() {
+  const { orders, fetchOrders, updateOrderStatus, isLoading } = useAdminOrderStore();
   const [searchTerm, setSearchTerm] = useState('');
-  const pendingPayments = getPendingPayments();
-  const completedPayments = orders.filter(o => o.paymentStatus === 'paid');
 
-  const handleMarkAsPaid = (id: string) => {
+  useEffect(() => {
+    fetchOrders();
+  }, [fetchOrders]);
+
+  const pendingPayments = orders.filter(o => o.paymentStatus === 'pending' || o.status === 'pending');
+  const completedPayments = orders.filter(o => o.paymentStatus === 'paid' || o.status === 'completed');
+
+  const handleMarkAsPaid = async (id: string) => {
+    await updateOrderStatus(id, 'completed');
     alert(`Payment ${id} marked as paid!`);
   };
+
+  if (isLoading) {
+    return (
+      <div className="flex items-center justify-center h-96">
+        <div className="text-center">
+          <div className="animate-spin rounded-full h-10 w-10 border-2 border-orange-600 border-t-transparent mx-auto" />
+          <p className="mt-4 text-sm text-gray-500">Loading payments...</p>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div>
@@ -48,7 +66,9 @@ export default function PaymentsPage() {
       {/* Pending Payments Table */}
       <div className="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden mb-8">
         <div className="px-6 py-4 border-b border-gray-200 bg-yellow-50">
-          <h2 className="text-lg font-semibold flex items-center gap-2"><Clock className="w-5 h-5 text-yellow-600" /> Pending Payments</h2>
+          <h2 className="text-lg font-semibold flex items-center gap-2">
+            <Clock className="w-5 h-5 text-yellow-600" /> Pending Payments
+          </h2>
         </div>
         <div className="overflow-x-auto">
           <table className="w-full">
@@ -63,20 +83,31 @@ export default function PaymentsPage() {
               </tr>
             </thead>
             <tbody className="divide-y divide-gray-100">
-              {pendingPayments.map((order) => (
-                <tr key={order.id} className="hover:bg-gray-50">
-                  <td className="px-6 py-4 text-sm font-mono">{order.id}</td>
-                  <td className="px-6 py-4 text-sm">{order.propertyTitle}</td>
-                  <td className="px-6 py-4 text-sm">{order.customerName}</td>
-                  <td className="px-6 py-4 text-sm font-semibold">${order.amount.toLocaleString()}</td>
-                  <td className="px-6 py-4 text-sm text-gray-500">{new Date(order.createdAt).toLocaleDateString()}</td>
-                  <td className="px-6 py-4">
-                    <button onClick={() => handleMarkAsPaid(order.id)} className="flex items-center gap-1 px-3 py-1 bg-green-500 text-white rounded-lg text-sm hover:bg-green-600">
-                      <CheckCircle className="w-4 h-4" /> Mark Paid
-                    </button>
+              {pendingPayments.length === 0 ? (
+                <tr>
+                  <td colSpan={6} className="px-6 py-8 text-center text-gray-500">
+                    No pending payments
                   </td>
                 </tr>
-              ))}
+              ) : (
+                pendingPayments.map((order) => (
+                  <tr key={order.id} className="hover:bg-gray-50">
+                    <td className="px-6 py-4 text-sm font-mono">{order.id}</td>
+                    <td className="px-6 py-4 text-sm">{order.propertyTitle}</td>
+                    <td className="px-6 py-4 text-sm">{order.customerName}</td>
+                    <td className="px-6 py-4 text-sm font-semibold">${order.amount.toLocaleString()}</td>
+                    <td className="px-6 py-4 text-sm text-gray-500">{new Date(order.createdAt).toLocaleDateString()}</td>
+                    <td className="px-6 py-4">
+                      <button
+                        onClick={() => handleMarkAsPaid(order.id)}
+                        className="flex items-center gap-1 px-3 py-1 bg-green-500 text-white rounded-lg text-sm hover:bg-green-600 transition-colors"
+                      >
+                        <CheckCircle className="w-4 h-4" /> Mark Paid
+                      </button>
+                    </td>
+                  </tr>
+                ))
+              )}
             </tbody>
           </table>
         </div>
@@ -99,15 +130,25 @@ export default function PaymentsPage() {
               </tr>
             </thead>
             <tbody className="divide-y divide-gray-100">
-              {completedPayments.slice(0, 10).map((order) => (
-                <tr key={order.id} className="hover:bg-gray-50">
-                  <td className="px-6 py-4 text-sm font-mono">{order.id}</td>
-                  <td className="px-6 py-4 text-sm">{order.propertyTitle}</td>
-                  <td className="px-6 py-4 text-sm font-semibold">${order.amount.toLocaleString()}</td>
-                  <td className="px-6 py-4 text-sm text-gray-500">{new Date(order.createdAt).toLocaleDateString()}</td>
-                  <td className="px-6 py-4"><StatusBadge status="completed" size="sm" /></td>
+              {completedPayments.length === 0 ? (
+                <tr>
+                  <td colSpan={5} className="px-6 py-8 text-center text-gray-500">
+                    No completed payments
+                  </td>
                 </tr>
-              ))}
+              ) : (
+                completedPayments.slice(0, 10).map((order) => (
+                  <tr key={order.id} className="hover:bg-gray-50">
+                    <td className="px-6 py-4 text-sm font-mono">{order.id}</td>
+                    <td className="px-6 py-4 text-sm">{order.propertyTitle}</td>
+                    <td className="px-6 py-4 text-sm font-semibold">${order.amount.toLocaleString()}</td>
+                    <td className="px-6 py-4 text-sm text-gray-500">{new Date(order.createdAt).toLocaleDateString()}</td>
+                    <td className="px-6 py-4">
+                      <StatusBadge status="completed" size="sm" />
+                    </td>
+                  </tr>
+                ))
+              )}
             </tbody>
           </table>
         </div>

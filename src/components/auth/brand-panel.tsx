@@ -1,4 +1,5 @@
 import Image from "next/image";
+import Link from "next/link";
 import { AUTH_HERO_IMAGE, BRAND_NAME } from "@/src/lib/auth-constants";
 import { ShieldCheck, TrendingUp, Users } from "lucide-react";
 
@@ -63,9 +64,14 @@ export function BrandPanel({ variant }: BrandPanelProps) {
       
       {/* Text container - adjusted bottom spacing for reduced height */}
       <div className="absolute bottom-24 left-10 right-10 !text-white">
-        <p className="mb-3 text-xs font-semibold uppercase tracking-[0.2em] !text-white">
-          {BRAND_NAME}
-        </p>
+        <div className="mb-3">
+          <Link
+            href="/"
+            className="text-2xl font-black tracking-tight text-white sm:text-3xl"
+          >
+            Habesha<span className="text-amber-400">Hub</span>
+          </Link>
+        </div>
         <h2 className="max-w-lg text-3xl font-bold leading-tight tracking-tight !text-white xl:text-4xl">
           {content.headline}
         </h2>

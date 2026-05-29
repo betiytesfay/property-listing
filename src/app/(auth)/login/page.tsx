@@ -3,8 +3,8 @@ import { AuthSplitLayout } from "@/src/components/auth/auth-split-layout";
 import { LoginForm } from "@/src/components/auth/login-form";
 
 export const metadata: Metadata = {
-  title: "Sign in | Habesha Property Hub",
-  description: "Sign in to your seller account on Habesha Property Hub.",
+  title: "Sign in | HabeshaHub",
+  description: "Sign in to your seller account on HabeshaHub.",
 };
 
 export default function LoginPage() {

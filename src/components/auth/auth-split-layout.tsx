@@ -1,4 +1,5 @@
 import type { ReactNode } from "react";
+import Link from "next/link";
 import { Footer } from "@/src/components/layout/Footer";
 import { Navbar } from "@/src/components/layout/Navbar";
 import { BrandPanel, type BrandPanelVariant } from "@/src/components/auth/brand-panel";
@@ -39,7 +40,14 @@ export function AuthSplitLayout({ children, variant }: AuthSplitLayoutProps) {
       <DatabaseStatusBanner />
 
       <section className="border-b border-auth-outline/40 bg-auth-primary px-6 py-8 lg:hidden">
-        <p className="text-xs font-semibold uppercase tracking-[0.2em] text-amber-300">Habesha Property Hub</p>
+        <div className="mb-2">
+          <Link
+            href="/"
+            className="text-2xl font-black tracking-tight text-white sm:text-3xl"
+          >
+            Habesha<span className="text-amber-400">Hub</span>
+          </Link>
+        </div>
         <h2 className="mt-3 text-xl font-bold leading-snug text-white">{mobile.headline}</h2>
         <p className="mt-2 text-sm leading-relaxed text-white/90">{mobile.subline}</p>
       </section>

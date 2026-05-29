@@ -1,8 +1,9 @@
+// Backup of the conflicting dashboard layout. Moved to src/app/(admin)/admin/overview/layout.tsx to resolve route conflict.
 import type { ReactNode } from "react";
 import { Footer } from "@/src/components/layout/Footer";
 import { Navbar } from "@/src/components/layout/Navbar";
 
-export default function AdminDashboardLayout({ children }: { children: ReactNode }) {
+export default function AdminDashboardLayoutBackup({ children }: { children: ReactNode }) {
   return (
     <>
       <Navbar />

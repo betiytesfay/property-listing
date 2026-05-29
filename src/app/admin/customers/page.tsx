@@ -2,26 +2,23 @@
 
 import { useEffect } from 'react';
 import { Mail, Phone, Calendar, DollarSign, Home, Users } from 'lucide-react';
-import { useAdminCustomerStore } from '@/src/features/auth/store/adminCustomerStore';
 import StatusBadge from '@/src/components/admin/StatusBadge';
 
+// ✅ IMPORT MOCK DATA
+import { mockCustomers } from '@/src/mocks/customers';
+
 export default function AdminCustomersPage() {
-  const { customers, fetchCustomers, isLoading } = useAdminCustomerStore();
+  const customers = mockCustomers;
+  const isLoading = false;
 
   useEffect(() => {
-    fetchCustomers();
+    // nothing to fetch anymore
+    console.log('Using mock customers:', customers);
   }, []);
-
-  if (isLoading) {
-    return (
-      <div className="flex items-center justify-center h-96">
-        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-amber-600"></div>
-      </div>
-    );
-  }
 
   return (
     <div className="space-y-6">
+
       {/* Header */}
       <div>
         <h1 className="text-3xl font-bold text-gray-900">Customers</h1>
@@ -30,6 +27,7 @@ export default function AdminCustomersPage() {
 
       {/* Stats */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+
         <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
           <div className="flex items-center justify-between">
             <div>
@@ -41,6 +39,7 @@ export default function AdminCustomersPage() {
             </div>
           </div>
         </div>
+
         <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
           <div className="flex items-center justify-between">
             <div>
@@ -54,6 +53,7 @@ export default function AdminCustomersPage() {
             </div>
           </div>
         </div>
+
         <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
           <div className="flex items-center justify-between">
             <div>
@@ -67,15 +67,19 @@ export default function AdminCustomersPage() {
             </div>
           </div>
         </div>
+
       </div>
 
       {/* Customers Table */}
       <div className="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden">
+
         <div className="px-6 py-4 border-b border-gray-200">
           <h2 className="text-lg font-semibold text-gray-900">All Customers</h2>
         </div>
+
         <div className="overflow-x-auto">
           <table className="w-full">
+
             <thead className="bg-gray-50">
               <tr>
                 <th className="text-left px-6 py-3 text-xs font-medium text-gray-500">Customer</th>
@@ -86,9 +90,12 @@ export default function AdminCustomersPage() {
                 <th className="text-left px-6 py-3 text-xs font-medium text-gray-500">Total Spent</th>
               </tr>
             </thead>
+
             <tbody className="divide-y divide-gray-100">
               {customers.map((customer) => (
                 <tr key={customer.id} className="hover:bg-gray-50 transition-colors">
+
+                  {/* Customer */}
                   <td className="px-6 py-4">
                     <div className="flex items-center gap-3">
                       <div className="w-10 h-10 rounded-full bg-amber-100 flex items-center justify-center text-amber-600 font-semibold">
@@ -100,12 +107,15 @@ export default function AdminCustomersPage() {
                       </div>
                     </div>
                   </td>
+
+                  {/* Contact */}
                   <td className="px-6 py-4">
                     <div className="space-y-1">
                       <div className="flex items-center gap-2 text-sm text-gray-600">
                         <Mail className="w-3 h-3" />
                         {customer.email}
                       </div>
+
                       {customer.phone && (
                         <div className="flex items-center gap-2 text-sm text-gray-600">
                           <Phone className="w-3 h-3" />
@@ -114,32 +124,48 @@ export default function AdminCustomersPage() {
                       )}
                     </div>
                   </td>
+
+                  {/* Type */}
                   <td className="px-6 py-4">
-                    <span className={`text-xs px-2 py-1 rounded-full font-medium ${customer.type === 'buyer' ? 'bg-blue-100 text-blue-700' :
-                        customer.type === 'seller' ? 'bg-purple-100 text-purple-700' :
-                          'bg-green-100 text-green-700'
-                      }`}>
+                    <span
+                      className={`text-xs px-2 py-1 rounded-full font-medium ${customer.type === 'buyer'
+                          ? 'bg-blue-100 text-blue-700'
+                          : customer.type === 'seller'
+                            ? 'bg-purple-100 text-purple-700'
+                            : 'bg-green-100 text-green-700'
+                        }`}
+                    >
                       {customer.type}
                     </span>
                   </td>
+
+                  {/* Joined */}
                   <td className="px-6 py-4">
                     <div className="flex items-center gap-2 text-sm text-gray-600">
                       <Calendar className="w-3 h-3" />
                       {new Date(customer.joinedAt).toLocaleDateString()}
                     </div>
                   </td>
+
+                  {/* Properties */}
                   <td className="px-6 py-4 text-sm text-gray-900">
                     {customer.propertiesCount}
                   </td>
+
+                  {/* Spent */}
                   <td className="px-6 py-4 text-sm font-semibold text-gray-900">
                     ${customer.totalSpent.toLocaleString()}
                   </td>
+
                 </tr>
               ))}
             </tbody>
+
           </table>
         </div>
+
       </div>
+
     </div>
   );
 }

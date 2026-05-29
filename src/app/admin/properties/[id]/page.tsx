@@ -52,19 +52,31 @@ export default function PropertyDetailPage() {
             </div>
 
             {/* Details */}
-            <div>
-              <h2 className="text-lg font-semibold mb-3">Details</h2>
+            <div className="border border-gray-200 rounded-2xl p-5">
+              <h2 className="text-lg font-semibold mb-4">Details</h2>
               <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-                <div className="flex items-center gap-2"><Bed className="w-5 h-5 text-gray-400" /><span>{property.bedrooms} Bedrooms</span></div>
-                <div className="flex items-center gap-2"><Bath className="w-5 h-5 text-gray-400" /><span>{property.bathrooms} Bathrooms</span></div>
-                <div className="flex items-center gap-2"><Square className="w-5 h-5 text-gray-400" /><span>{property.area} m²</span></div>
-                <div className="flex items-center gap-2"><DollarSign className="w-5 h-5 text-gray-400" /><span>{property.furnished ? 'Furnished' : 'Unfurnished'}</span></div>
+                <div className="border border-gray-200 rounded-2xl p-4 flex items-center gap-2 bg-gray-50">
+                  <Bed className="w-5 h-5 text-gray-400" />
+                  <span>{property.bedrooms} Bedrooms</span>
+                </div>
+                <div className="border border-gray-200 rounded-2xl p-4 flex items-center gap-2 bg-gray-50">
+                  <Bath className="w-5 h-5 text-gray-400" />
+                  <span>{property.bathrooms} Bathrooms</span>
+                </div>
+                <div className="border border-gray-200 rounded-2xl p-4 flex items-center gap-2 bg-gray-50">
+                  <Square className="w-5 h-5 text-gray-400" />
+                  <span>{property.area} m²</span>
+                </div>
+                <div className="border border-gray-200 rounded-2xl p-4 flex items-center gap-2 bg-gray-50">
+                  <DollarSign className="w-5 h-5 text-gray-400" />
+                  <span>{property.furnished ? 'Furnished' : 'Unfurnished'}</span>
+                </div>
               </div>
             </div>
 
             {/* Equipment */}
             {property.equipment && property.equipment.length > 0 && (
-              <div>
+              <div className="border border-gray-200 rounded-2xl p-5">
                 <h2 className="text-lg font-semibold mb-2">Equipment</h2>
                 <div className="flex flex-wrap gap-2">
                   {property.equipment.map((item, i) => (

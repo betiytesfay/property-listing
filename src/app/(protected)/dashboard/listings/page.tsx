@@ -1,8 +1,17 @@
 "use client";
+/// <reference types="react" />
 
-import { useEffect, useMemo, useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
+
+declare global {
+  namespace JSX {
+    interface IntrinsicElements {
+      [elemName: string]: any;
+    }
+  }
+}
 import Link from "next/link";
-import { Download, Plus, Search, Home, Filter, Loader2, CreditCard, Trash2, CheckCircle2, X, AlertTriangle } from "lucide-react";
+import { Download, Plus, Search, Home, Filter, Loader2, CreditCard, Trash2, CheckCircle2, X, AlertTriangle, Edit } from "lucide-react";
 import { useMutation } from "@tanstack/react-query";
 import { apiClient } from "@/src/lib/api/client";
 
@@ -25,7 +34,6 @@ export default function ListingPage() {
   const [isLoading, setIsLoading] = useState(false);
   const [fetchError, setFetchError] = useState<string | null>(null);
 
-  // Custom Inline Modal UI States (Replacing native window popups)
   const [propertyToDelete, setPropertyToDelete] = useState<{ id: string; title: string } | null>(null);
   const [showDeleteSuccess, setShowDeleteSuccess] = useState(false);
   const [deletedPropertyName, setDeletedPropertyName] = useState("");
@@ -48,13 +56,12 @@ export default function ListingPage() {
     fetchListings();
   }, [page, limit]);
 
-  // Chapa Payment Initialization Mutation
   const initiatePaymentMutation = useMutation({
     mutationFn: async (propertyId: string) => {
       const response = await apiClient.post(`/payments/properties/${propertyId}/pay`);
       return response.data;
     },
-    onSuccess: (data) => {
+    onSuccess: (data: any) => {
       if (data?.checkout_url) {
         window.location.href = data.checkout_url;
       } else {
@@ -68,24 +75,18 @@ export default function ListingPage() {
     },
   });
 
-  
   const deletePropertyMutation = useMutation({
     mutationFn: async (propertyId: string) => {
-     
       const response = await apiClient.delete(`/api/v1/properties/${propertyId}`);
       return response.data;
     },
-    onSuccess: (_, propertyId) => {
-      // Find item details before dropping state to display in confirmation overlay
-      const matchingItem = listings.find((item) => item.property_id === propertyId);
+    onSuccess: (_: any, propertyId: string) => {
+      const matchingItem = listings.find((item: SellerListing) => item.property_id === propertyId);
       const targetName = matchingItem?.title ?? "Property Listing";
-
-      // Instantly wipe from active viewing array layout to keep UI statistics in balance
-      setListings((prev) => prev.filter((item) => item.property_id !== propertyId));
-      
+      setListings((prev: SellerListing[]) => prev.filter((item: SellerListing) => item.property_id !== propertyId));
       setDeletedPropertyName(targetName);
-      setPropertyToDelete(null); // Close confirmation gate
-      setShowDeleteSuccess(true); // Open success overlay
+      setPropertyToDelete(null);
+      setShowDeleteSuccess(true);
     },
     onError: (err: any) => {
       console.error("Backend delete action failed:", err);
@@ -94,14 +95,12 @@ export default function ListingPage() {
     },
   });
 
-  // 3. Statistics Calculations (Always completely balanced because they derive from state directly)
   const totalCount = total;
-  const activeListings = useMemo(() => listings.filter((item) => item.is_active).length, [listings]);
-  const pendingListings = useMemo(() => listings.filter((item) => !item.listing_fee_paid).length, [listings]);
+  const activeListings = useMemo(() => listings.filter((item: SellerListing) => item.is_active).length, [listings]);
+  const pendingListings = useMemo(() => listings.filter((item: SellerListing) => !item.listing_fee_paid).length, [listings]);
 
-  // Search and visual table filter dataset mapping
   const filteredListings = useMemo(() => {
-    return listings.filter((item) => {
+    return listings.filter((item: SellerListing) => {
       const searchValue = `${item.title} ${item.address} ${item.category}`.toLowerCase();
       const matchesSearch = searchValue.includes(search.toLowerCase());
       const matchesStatus =
@@ -110,7 +109,6 @@ export default function ListingPage() {
           : statusFilter === "pending"
           ? !item.listing_fee_paid
           : item.is_active;
-
       return matchesSearch && matchesStatus;
     });
   }, [listings, search, statusFilter]);
@@ -132,7 +130,7 @@ export default function ListingPage() {
         const d = new Date(dateStr);
         return isNaN(d.getTime()) ? "N/A" : d.toLocaleDateString();
       };
-      const rows = filteredListings.map((listing) => {
+      const rows = filteredListings.map((listing: SellerListing) => {
         if (!listing) return ["", "", "0", "", "Unknown", "N/A"];
         return [
           escapeCsvValue(listing.title ?? "Untitled"),
@@ -218,6 +216,14 @@ export default function ListingPage() {
               </button>
             )}
 
+            <Link
+              href={`/dashboard/listings/${row.property_id}`}
+              className="inline-flex items-center justify-center h-9 w-9 rounded-xl border border-slate-200 bg-white text-slate-500 hover:text-blue-600 hover:border-blue-200 hover:bg-blue-50/50 transition shadow-sm"
+              title="Edit property"
+            >
+              <Edit className="h-4 w-4" />
+            </Link>
+
             <button
               type="button"
               disabled={initiatePaymentMutation.isPending || deletePropertyMutation.isPending}
@@ -235,7 +241,6 @@ export default function ListingPage() {
 
   return (
     <div className="space-y-6">
-      {/* Header section */}
       <section className="rounded-[28px] border border-slate-200 bg-white p-6 shadow-sm">
         <div className="flex flex-col gap-6 lg:flex-row lg:items-center lg:justify-between">
           <div>
@@ -273,37 +278,32 @@ export default function ListingPage() {
         <PropertyCreationModal isOpen={isOpen} onClose={() => setIsOpen(false)} />
       </section>
 
-      {/* Filter bar */}
       <section className="rounded-xl border border-slate-200 bg-white p-2 shadow-sm">
         <div className="flex flex-col gap-2 sm:flex-row sm:items-center">
           <div className="flex flex-1 items-center gap-2.5 rounded-lg bg-slate-50 px-3 py-2 transition-all focus-within:border-[#002045]/20 focus-within:bg-white focus-within:ring-1 focus-within:ring-[#002045]">
             <Search className="h-4 w-4 text-slate-400 shrink-0" />
             <input
               value={search}
-              onChange={(e) => setSearch(e.target.value)}
+              onChange={(e: React.ChangeEvent<HTMLInputElement>) => setSearch(e.target.value)}
               placeholder="Search listings, categories, addresses..."
               className="w-full bg-transparent text-sm text-slate-800 outline-none placeholder:text-slate-400"
             />
           </div>
 
           <div className="w-full sm:w-[180px] shrink-0 items-center gap-2.50">
-            
-              
-              <select
-                value={statusFilter}
-                onChange={(e) => setStatusFilter(e.target.value)}
-                className="w-full bg-transparent text-sm font-medium text-slate-700 outline-none cursor-pointer appearance-none"
-              >
-                <option value="all">All Statuses</option>
-                <option value="active">Active</option>
-                <option value="pending">Pending</option>
-              </select>
-           
+            <select
+              value={statusFilter}
+              onChange={(e: React.ChangeEvent<HTMLSelectElement>) => setStatusFilter(e.target.value)}
+              className="w-full bg-transparent text-sm font-medium text-slate-700 outline-none cursor-pointer appearance-none"
+            >
+              <option value="all">All Statuses</option>
+              <option value="active">Active</option>
+              <option value="pending">Pending</option>
+            </select>
           </div>
         </div>
       </section>
 
-      {/* Stats Cards */}
       <section className="grid gap-4 md:grid-cols-3">
         <div className="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm">
           <p className="text-sm font-medium text-slate-500">Total Listings</p>
@@ -319,7 +319,6 @@ export default function ListingPage() {
         </div>
       </section>
 
-      {/* Table section */}
       <section className="overflow-hidden rounded-[28px] border border-slate-200 bg-white shadow-sm">
         {fetchError ? (
           <div className="flex min-h-[300px] items-center justify-center p-8 text-center">
@@ -353,12 +352,12 @@ export default function ListingPage() {
           </div>
         ) : (
           <>
-            <DataTable columns={columns} data={filteredListings} rowKey="property_id" />
+            <DataTable columns={columns as any} data={filteredListings as any} rowKey="property_id" />
             <Pagination
               showing={filteredListings.length}
               total={totalCount}
-              onPrev={() => setPage((current) => Math.max(0, current - 1))}
-              onNext={() => setPage((current) => current + 1)}
+              onPrev={() => setPage((current: number) => Math.max(0, current - 1))}
+              onNext={() => setPage((current: number) => current + 1)}
               canPrev={page > 0}
               canNext={(page + 1) * limit < totalCount}
             />
@@ -366,7 +365,6 @@ export default function ListingPage() {
         )}
       </section>
 
-      {/* CUSTOM CONFIRMATION MODAL  */}
       {propertyToDelete && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-slate-900/40 backdrop-blur-sm animate-fade-in">
           <div className="w-full max-w-md rounded-2xl bg-white p-6 shadow-xl border border-slate-100 mx-4">
@@ -385,7 +383,7 @@ export default function ListingPage() {
             <div className="mt-6 flex items-center justify-end gap-3 border-t border-slate-100 pt-4">
               <button
                 type="button"
-                disabled={deletePropertyMutation.isPending}
+                disabled={deletePropertyMutation?.isPending}
                 onClick={() => setPropertyToDelete(null)}
                 className="rounded-xl border border-slate-200 bg-white px-4 py-2.5 text-sm font-semibold text-slate-700 transition hover:bg-slate-50 disabled:opacity-50"
               >
@@ -393,11 +391,11 @@ export default function ListingPage() {
               </button>
               <button
                 type="button"
-                disabled={deletePropertyMutation.isPending}
-                onClick={() => deletePropertyMutation.mutate(propertyToDelete.id)}
+                disabled={deletePropertyMutation?.isPending}
+                onClick={() => propertyToDelete && deletePropertyMutation?.mutate(propertyToDelete.id)}
                 className="inline-flex items-center justify-center gap-2 rounded-xl bg-red-600 px-4 py-2.5 text-sm font-semibold text-white transition hover:bg-red-700 shadow-sm disabled:opacity-50 min-w-[100px]"
               >
-                {deletePropertyMutation.isPending ? (
+                {deletePropertyMutation?.isPending ? (
                   <Loader2 className="h-4 w-4 animate-spin" />
                 ) : (
                   "Delete Listing"
@@ -408,7 +406,6 @@ export default function ListingPage() {
         </div>
       )}
 
-      {/* Global Soft-Delete Success Notification Overlay */}
       {showDeleteSuccess && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-slate-900/40 backdrop-blur-sm">
           <div className="w-full max-w-md scale-100 rounded-2xl bg-white p-6 shadow-xl border border-slate-100 mx-4">

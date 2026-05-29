@@ -48,7 +48,7 @@ export function BrandPanel({ variant }: BrandPanelProps) {
   const content = COPY[variant];
 
   return (
-    <aside className="relative hidden overflow-hidden lg:block lg:w-1/2 lg:max-h-[100vh] lg:my-4 lg:shadow-2xl">
+    <aside className="relative hidden overflow-hidden lg:block lg:w-1/2">
       <Image
         src={AUTH_HERO_IMAGE}
         alt="Luxury modern villa in Ethiopia at golden hour"

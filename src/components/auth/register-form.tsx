@@ -107,16 +107,27 @@ export function RegisterForm() {
                 setValue("acceptTerms", checked === true, { shouldValidate: true });
               }}
             />
-            <Label htmlFor="acceptTerms" className="text-sm font-normal text-gray-600">
-              I agree to the{" "}
-              <button type="button" className="font-medium text-amber-700 hover:underline">
-                Terms &amp; Conditions
-              </button>{" "}
-              and{" "}
-              <button type="button" className="font-medium text-amber-700 hover:underline">
-                Privacy Policy
-              </button>
-            </Label>
+            <Label
+  htmlFor="acceptTerms"
+  className="text-sm font-normal text-gray-600 normal-case"
+>
+  I agree to the{" "}
+  <button
+    type="button"
+    className="font-medium text-amber-700 hover:underline normal-case"
+  >
+    terms and conditions
+  </button>{" "}
+  and{" "}
+  <button
+    type="button"
+    className="font-medium text-amber-700 hover:underline normal-case"
+  >
+    privacy policy
+  </button>
+  .
+</Label>
+
           </div>
           {errors.acceptTerms?.message && (
             <p className="text-xs text-red-600">{errors.acceptTerms.message}</p>

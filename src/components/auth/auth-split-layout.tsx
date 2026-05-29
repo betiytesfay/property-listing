@@ -4,6 +4,7 @@ import { Footer } from "@/src/components/layout/Footer";
 import { Navbar } from "@/src/components/layout/Navbar";
 import { BrandPanel, type BrandPanelVariant } from "@/src/components/auth/brand-panel";
 import { DatabaseStatusBanner } from "@/src/features/auth/components/database-status-banner";
+import { ArrowLeft } from "lucide-react";
 
 export type AuthPageVariant = BrandPanelVariant | "forgotPassword";
 
@@ -58,7 +59,16 @@ export function AuthSplitLayout({ children, variant }: AuthSplitLayoutProps) {
             variant === "forgotPassword" ? "login" : variant === "adminRegister" ? "adminRegister" : variant
           }
         />
-        <section className="flex w-full flex-1 items-center justify-center bg-slate-50 px-6 py-10 lg:w-1/2 lg:px-12 lg:py-16">
+        <section className="relative flex w-full flex-1 items-center justify-center bg-slate-50 px-6 py-10 lg:w-1/2 lg:px-12 lg:py-16">
+          <div className="absolute top-6 left-6 lg:top-8 lg:left-12">
+            <Link
+              href="/"
+              className="group flex items-center gap-2 text-sm font-semibold text-slate-600 transition-colors hover:text-amber-500"
+            >
+              <ArrowLeft size={16} className="transition-transform group-hover:-translate-x-1" />
+              Back to home
+            </Link>
+          </div>
           {children}
         </section>
       </main>

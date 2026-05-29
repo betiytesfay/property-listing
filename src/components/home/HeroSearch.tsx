@@ -53,6 +53,7 @@ export function HeroSearch() {
 
   return (
     <button
+    title="Search Properties"
       onClick={handleSearch}
       className="
         flex items-center justify-center gap-2

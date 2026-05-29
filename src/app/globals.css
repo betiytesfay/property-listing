@@ -39,6 +39,7 @@
   --auth-primary-soft: #d6e3ff;
   --auth-secondary-soft: #fdc700;
   --auth-accent: #e9c349;
+  --auth-secondary-hover : #b89519;
   --auth-surface: #f8f9fa;
   --auth-surface-muted: #f3f4f5;
   --auth-card: #ffffff;
@@ -114,9 +115,7 @@ a {
   transition: color 0.2s ease;
 }
 
-a:hover {
-  color: var(--auth-accent);
-}
+
 
 /* Form Elements */
 button,
@@ -150,21 +149,26 @@ select:focus {
   box-shadow: 0 0 0 4px rgba(37, 99, 235, 0.12);
 }
 
+
 button {
-
-
   cursor: pointer;
-  transition: transform 0.15s ease, box-shadow 0.2s ease;
+  border: none;
+  border-radius: 12px;
+
+  transition:
+    background-color 0.2s ease,
+    transform 0.15s ease,
+    box-shadow 0.2s ease;
 }
 
 button:hover {
+  /* background: var( --auth-secondary-hover); */
   box-shadow: var(--shadow-md);
 }
 
 button:active {
   transform: translateY(1px);
 }
-
 /* Selection */
 ::selection {
   background: var(--primary-soft);

@@ -37,7 +37,7 @@ export function AuthSplitLayout({ children, variant }: AuthSplitLayoutProps) {
 
   return (
     <div className="flex min-h-screen flex-col bg-auth-surface text-auth-on-surface">
-      <Navbar />
+  
       <DatabaseStatusBanner />
 
       <section className="border-b border-auth-outline/40 bg-auth-primary px-6 py-8 lg:hidden">
@@ -73,7 +73,7 @@ export function AuthSplitLayout({ children, variant }: AuthSplitLayoutProps) {
         </section>
       </main>
 
-      <Footer />
+ 
     </div>
   );
 }

@@ -19,14 +19,18 @@ export const PhoneInput = forwardRef<HTMLInputElement, PhoneInputProps>(
     return (
       <section className="space-y-2">
         <Label htmlFor={fieldId}>{label}</Label>
+
         <div className="flex">
+          {/* Country Code - NO rounding on right side */}
           <div
-            className="flex h-12 items-center gap-2 rounded-l-lg border border-r-0 border-auth-outline bg-auth-surface-muted px-4 text-sm text-auth-on-surface-muted"
+            className="flex h-12 items-center gap-2 rounded-l-lg rounded-r-none border border-r-0 border-auth-outline bg-auth-surface-muted px-4 text-sm text-auth-on-surface-muted"
             aria-hidden
           >
             <span className="text-lg">🇪🇹</span>
             <span className="font-medium">+251</span>
           </div>
+
+          {/* Input - FORCE no left rounding, right rounded */}
           <Input
             ref={ref}
             id={fieldId}
@@ -36,13 +40,17 @@ export const PhoneInput = forwardRef<HTMLInputElement, PhoneInputProps>(
             autoComplete="tel-national"
             placeholder="911 234 567"
             aria-invalid={Boolean(error)}
-            className={cn("rounded-l-none", error && "border-auth-error", className)}
+            className={cn(
+              "h-12 !rounded-l-none rounded-r-lg", // ← ! forces left radius to 0
+              error && "border-auth-error",
+              className
+            )}
             {...props}
           />
         </div>
-        {hint && !error ? (
-          <p className="text-xs text-auth-on-surface-muted">{hint}</p>
-        ) : null}
+
+        
+
         <FormError message={error} />
       </section>
     );

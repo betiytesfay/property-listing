@@ -33,7 +33,7 @@ export const registerSchema = z
       .regex(/[0-9]/, "Include at least one number"),
     confirmPassword: z.string().min(1, "Please confirm your password"),
     acceptTerms: z.boolean().refine((value) => value === true, {
-      message: "You must accept the terms and conditions",
+      message: "You must accept the Terms & Conditions and Privacy Policy.",
     }),
   })
   .refine((data) => data.password === data.confirmPassword, {

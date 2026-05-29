@@ -6,13 +6,13 @@ import { ADMIN_ROUTES } from "@/src/features/auth/constants/routes";
 import { useCurrentUser } from "@/src/features/auth/hooks/use-current-user";
 import { isAdmin } from "@/src/features/auth/utils/roles";
 
-export default function AdminDashboardPage() {
+export default function AdminOverviewPage() {
   const { user } = useCurrentUser();
 
   return (
     <div className="mx-auto max-w-7xl space-y-10 px-4 py-10 sm:px-6 lg:px-8">
       <header className="space-y-2">
-        <p className="text-xs font-bold uppercase tracking-[0.2em] text-amber-600">Admin dashboard</p>
+        <p className="text-xs font-bold uppercase tracking-[0.2em] text-amber-600">Admin overview</p>
         <h1 className="text-3xl font-bold text-slate-900 sm:text-4xl">
           Welcome{user?.fullName ? `, ${user.fullName}` : ""}
         </h1>

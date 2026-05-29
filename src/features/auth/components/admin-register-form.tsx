@@ -78,10 +78,15 @@ export function AdminRegisterForm() {
     <div className="flex h-full w-full items-center justify-center">
       <div className="w-full max-w-md">
         <div className="mb-5 text-center">
-          <div className="mb-1 text-xs font-semibold uppercase tracking-wide text-amber-700">
-            Habesha Property Hub
+          <div className="mb-3">
+            <Link
+              href="/"
+              className="text-2xl font-black tracking-tight text-slate-900 sm:text-3xl"
+            >
+              Habesha<span className="text-amber-400">Hub</span>
+            </Link>
           </div>
-          <h1 className="text-2xl font-semibold text-gray-900">Register administrator</h1>
+          <h1 className="text-2xl font-black tracking-tight text-slate-900 sm:text-3xl">Register administrator</h1>
           <p className="mt-1 text-sm text-gray-500">
             Create a new admin account for platform management.
           </p>

@@ -2,7 +2,6 @@ import { NextRequest, NextResponse } from 'next/server';
 import { cookies } from 'next/headers';
 import { userFromAccessToken } from '@/src/features/auth/utils/jwt';
 
-// GET /api/orders - Get all orders (admin only)
 export async function GET(request: NextRequest) {
   try {
     const cookieStore = await cookies();
@@ -14,10 +13,9 @@ export async function GET(request: NextRequest) {
 
     const user = userFromAccessToken(token);
     if (!user || user.role !== 'admin' as any) {
-      return NextResponse.json({ error: 'Forbidden - Admin access required' }, { status: 403 });
+      return NextResponse.json({ error: 'Forbidden' }, { status: 403 });
     }
 
-    // TODO: Fetch from database
     const mockOrders = [
       {
         id: 'ORD001',
@@ -60,42 +58,6 @@ export async function GET(request: NextRequest) {
     return NextResponse.json(mockOrders);
   } catch (error) {
     console.error('Error fetching orders:', error);
-    return NextResponse.json({ error: 'Internal server error' }, { status: 500 });
-  }
-}
-
-// PUT /api/orders/[id] - Update order status
-export async function PUT(
-  request: NextRequest,
-  { params }: { params: { id: string } }
-) {
-  try {
-    const cookieStore = await cookies();
-    const token = cookieStore.get('access_token')?.value;
-
-    if (!token) {
-      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
-    }
-
-    const user = userFromAccessToken(token);
-    if (!user || user.role !== 'admin' as any) {
-      return NextResponse.json({ error: 'Forbidden - Admin access required' }, { status: 403 });
-    }
-
-    const { id } = params;
-    const body = await request.json();
-    const { status } = body;
-
-    // TODO: Update in database
-
-    return NextResponse.json({
-      id,
-      status,
-      updatedAt: new Date().toISOString(),
-      message: 'Order updated successfully'
-    });
-  } catch (error) {
-    console.error('Error updating order:', error);
     return NextResponse.json({ error: 'Internal server error' }, { status: 500 });
   }
 }

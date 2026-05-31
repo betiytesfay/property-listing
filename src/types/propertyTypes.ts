@@ -1,4 +1,4 @@
-// ✅ ONE Property interface — matches backend exactly
+
 export interface Property {
   property_id: string;
   owner_id: string;
@@ -17,7 +17,7 @@ export interface Property {
   updated_at: string;
 }
 
-// ✅ Backend paginated response
+
 export interface PropertyResponse {
   total: number;
   skip: number;

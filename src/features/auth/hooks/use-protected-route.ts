@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect } from "react";
-import { usePathname, useRouter, useSearchParams } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import {
   AUTH_ROUTES,
   REDIRECT_QUERY_PARAM,
@@ -18,7 +18,6 @@ export function useProtectedRoute(options: UseProtectedRouteOptions = {}) {
   const { user, isAuthenticated, isHydrated } = useAuth();
   const router = useRouter();
   const pathname = usePathname();
-  const searchParams = useSearchParams();
 
   const redirectTo = options.redirectTo ?? AUTH_ROUTES.login;
 
@@ -34,6 +33,8 @@ export function useProtectedRoute(options: UseProtectedRouteOptions = {}) {
     }
 
     if (!isAuthenticated) {
+      // ✅ Get search params safely from window (only runs in browser)
+      const searchParams = new URLSearchParams(window.location.search);
       const query = searchParams.toString();
       const current = query ? `${pathname}?${query}` : pathname;
       const loginUrl = `${redirectTo}?${REDIRECT_QUERY_PARAM}=${encodeURIComponent(current)}`;
@@ -51,7 +52,6 @@ export function useProtectedRoute(options: UseProtectedRouteOptions = {}) {
     pathname,
     redirectTo,
     router,
-    searchParams,
   ]);
 
   return {

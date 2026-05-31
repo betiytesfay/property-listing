@@ -32,7 +32,7 @@ export function RecentListingsSection({ properties }: RecentListingsSectionProps
 
         <div className="grid gap-4 sm:grid-cols-2">
           {recentGrid.map((property) => (
-            <CompactPropertyCard key={property.id} property={property} />
+            <CompactPropertyCard key={property.property_id} property={property} />
           ))}
         </div>
       </div>

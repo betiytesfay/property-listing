@@ -33,7 +33,12 @@ export default function AdminShell({ children }: { children: React.ReactNode }) 
         <AdminSidebar sidebarOpen={sidebarOpen} setSidebarOpen={setSidebarOpen} />
 
         <div className="flex-1 flex flex-col overflow-hidden">
-          <AdminHeader user={displayUser} />
+          {/* ✅ Fixed: Added sidebarOpen and setSidebarOpen props */}
+          <AdminHeader
+            user={displayUser}
+            sidebarOpen={sidebarOpen}
+            setSidebarOpen={setSidebarOpen}
+          />
 
           <main className="flex-1 overflow-y-auto p-6">
             <div className="mb-6 rounded-lg border border-amber-300 bg-amber-50 p-4 text-sm text-amber-900">
@@ -64,11 +69,14 @@ export default function AdminShell({ children }: { children: React.ReactNode }) 
       <AdminSidebar sidebarOpen={sidebarOpen} setSidebarOpen={setSidebarOpen} />
 
       <div className="flex-1 flex flex-col overflow-hidden">
+        {/* ✅ Fixed: Added sidebarOpen and setSidebarOpen props */}
         <AdminHeader
           user={{
             name: user.fullName ?? user.email,
             email: user.email,
           }}
+          sidebarOpen={sidebarOpen}
+          setSidebarOpen={setSidebarOpen}
         />
 
         <main className="flex-1 overflow-y-auto p-6">{children}</main>

@@ -45,7 +45,7 @@ export default function AdminCustomersPage() {
             <div>
               <p className="text-sm text-gray-500">Buyers</p>
               <p className="text-2xl font-bold text-gray-900">
-                {customers.filter(c => c.type === 'buyer' || c.type === 'both').length}
+                {customers.filter(c => c.type === 'buyer').length}
               </p>
             </div>
             <div className="w-12 h-12 bg-green-100 rounded-lg flex items-center justify-center">
@@ -59,7 +59,7 @@ export default function AdminCustomersPage() {
             <div>
               <p className="text-sm text-gray-500">Sellers</p>
               <p className="text-2xl font-bold text-gray-900">
-                {customers.filter(c => c.type === 'seller' || c.type === 'both').length}
+                {customers.filter(c => c.type === 'seller').length}
               </p>
             </div>
             <div className="w-12 h-12 bg-purple-100 rounded-lg flex items-center justify-center">
@@ -129,10 +129,10 @@ export default function AdminCustomersPage() {
                   <td className="px-6 py-4">
                     <span
                       className={`text-xs px-2 py-1 rounded-full font-medium ${customer.type === 'buyer'
-                          ? 'bg-blue-100 text-blue-700'
-                          : customer.type === 'seller'
-                            ? 'bg-purple-100 text-purple-700'
-                            : 'bg-green-100 text-green-700'
+                        ? 'bg-blue-100 text-blue-700'
+                        : customer.type === 'seller'
+                          ? 'bg-purple-100 text-purple-700'
+                          : 'bg-green-100 text-green-700'
                         }`}
                     >
                       {customer.type}

@@ -1,5 +1,5 @@
 import { create } from "zustand";
-import type { PropertyFilters } from "../types/propertyTypes";
+import type { PropertyFilters } from "../types/propertyTypes";  // ✅ Changed from propertyTypes to property
 
 interface PropertyState {
   filters: PropertyFilters;
@@ -10,13 +10,10 @@ interface PropertyState {
 }
 
 const defaultFilters: PropertyFilters = {
-  status: "all",
-  city: "",
+  listing_type: "all",
   minPrice: undefined,
   maxPrice: undefined,
-  bedrooms: undefined,
-  bathrooms: undefined,
-  furnished: "all",
+
 };
 
 export const usePropertyStore = create<PropertyState>((set) => ({

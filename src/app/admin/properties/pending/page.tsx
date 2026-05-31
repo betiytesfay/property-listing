@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from 'react';
 import usePropertyStore from '@/src/store/adminPropertyStore';
-import type { Property } from '@/src/types/propertyTypes'; // ✅ correct import
+import type { Property } from '@/src/store/adminPropertyStore';
 import { CheckCircle, XCircle } from 'lucide-react';
 
 export default function PendingPropertiesPage() {
@@ -14,23 +14,47 @@ export default function PendingPropertiesPage() {
   }, [fetchProperties]);
 
   useEffect(() => {
-    // ✅ is_active === false means pending/inactive (no adminStatus in backend)
-    const pending = properties.filter(p => !p.is_active);
+    // ✅ Filter properties where is_active is false AND property_id exists
+    const pending = properties.filter(p => p.is_active === false && p.property_id);
     setPendingProperties(pending);
   }, [properties]);
 
-  const handleApprove = (id: string) => {
-    // TODO: Connect to your API endpoint
-    // await fetch(`/api/admin/properties/${id}/approve`, { method: 'POST' })
-    setPendingProperties(prev => prev.filter(p => p.property_id !== id)); // ✅ property_id
-    alert(`Property ${id} approved!`);
+  const handleApprove = async (id: string) => {
+    if (!id) return; // ✅ Guard clause
+    try {
+      const response = await fetch(`/api/properties/${id}`, {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ is_active: true }),
+      });
+
+      if (response.ok) {
+        setPendingProperties(prev => prev.filter(p => p.property_id !== id));
+        alert(`Property ${id} approved!`);
+        fetchProperties();
+      }
+    } catch (error) {
+      console.error('Failed to approve property:', error);
+      alert('Failed to approve property');
+    }
   };
 
-  const handleReject = (id: string) => {
-    // TODO: Connect to your API endpoint
-    // await fetch(`/api/admin/properties/${id}/reject`, { method: 'POST' })
-    setPendingProperties(prev => prev.filter(p => p.property_id !== id)); // ✅ property_id
-    alert(`Property ${id} rejected!`);
+  const handleReject = async (id: string) => {
+    if (!id) return; // ✅ Guard clause
+    try {
+      const response = await fetch(`/api/properties/${id}`, {
+        method: 'DELETE',
+      });
+
+      if (response.ok) {
+        setPendingProperties(prev => prev.filter(p => p.property_id !== id));
+        alert(`Property ${id} rejected!`);
+        fetchProperties();
+      }
+    } catch (error) {
+      console.error('Failed to reject property:', error);
+      alert('Failed to reject property');
+    }
   };
 
   if (isLoading) {
@@ -75,48 +99,52 @@ export default function PendingPropertiesPage() {
               </thead>
               <tbody className="divide-y divide-gray-100">
                 {pendingProperties.map((property) => (
-                  <tr key={property.property_id} className="hover:bg-gray-50"> {/* ✅ property_id */}
+                  <tr key={property.property_id} className="hover:bg-gray-50">
                     <td className="px-6 py-4">
                       <p className="text-sm font-medium">{property.title}</p>
-                      {/* ✅ removed bedrooms/area — not in backend */}
                       <p className="text-xs text-gray-400">
                         {property.listing_fee_paid ? 'Fee Paid' : 'Fee Unpaid'}
                       </p>
                     </td>
-                    {/* ✅ address instead of city */}
                     <td className="px-6 py-4 text-sm text-gray-600">{property.address}</td>
                     <td className="px-6 py-4">
-                      {/* ✅ price is a string now */}
                       <p className="text-sm font-semibold">
-                        ${Number(property.price).toLocaleString()}
+                        {Number(property.price).toLocaleString()} ETB
                       </p>
                       <p className="text-xs text-gray-400">
                         {property.listing_type === 'FOR_RENT' ? '/month' : ''}
                       </p>
                     </td>
-                    {/* ✅ listing_type instead of status */}
                     <td className="px-6 py-4">
                       <span className={`px-2 py-1 text-xs rounded-full ${property.listing_type === 'FOR_RENT'
-                          ? 'bg-blue-50 text-blue-600'
-                          : 'bg-green-50 text-green-600'
+                        ? 'bg-blue-50 text-blue-600'
+                        : 'bg-green-50 text-green-600'
                         }`}>
                         {property.listing_type === 'FOR_RENT' ? 'For Rent' : 'For Sale'}
                       </span>
                     </td>
-                    {/* ✅ category instead of sellerName */}
                     <td className="px-6 py-4 text-sm text-gray-600">{property.category}</td>
                     <td className="px-6 py-4">
                       <div className="flex items-center gap-3">
-                        {/* ✅ property_id instead of id */}
                         <button
-                          onClick={() => handleApprove(property.property_id)}
-                          className="p-1 rounded hover:bg-green-50"
+                          onClick={() => {
+                            if (property.property_id) {
+                              handleApprove(property.property_id);
+                            }
+                          }}
+                          className="p-1 rounded hover:bg-green-50 transition-colors"
+                          title="Approve"
                         >
                           <CheckCircle className="w-5 h-5 text-green-500" />
                         </button>
                         <button
-                          onClick={() => handleReject(property.property_id)}
-                          className="p-1 rounded hover:bg-red-50"
+                          onClick={() => {
+                            if (property.property_id) {
+                              handleReject(property.property_id);
+                            }
+                          }}
+                          className="p-1 rounded hover:bg-red-50 transition-colors"
+                          title="Reject"
                         >
                           <XCircle className="w-5 h-5 text-red-500" />
                         </button>

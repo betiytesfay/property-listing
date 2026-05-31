@@ -28,7 +28,7 @@ export function FeaturedEstatesSection({ properties }: FeaturedEstatesSectionPro
 
       <div className="grid gap-6 lg:grid-cols-3">
         {properties.map((property) => (
-          <FeaturedPropertyCard key={property.id} property={property} />
+          <FeaturedPropertyCard key={property.property_id} property={property} />
         ))}
       </div>
     </section>

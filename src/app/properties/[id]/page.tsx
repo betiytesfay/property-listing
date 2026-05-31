@@ -5,16 +5,12 @@ import { useParams } from "next/navigation";
 import PropertyImageGallery from "./components/PropertyImageGallery";
 import PropertyHeader from "./components/PropertyHeader";
 import PropertySidebar from "./components/PropertySidebar";
-import PropertyDetailsGrid from "./components/PropertyDetailsGrid";
-import PropertyEquipment from "./components/PropertyEquipment";
 import PropertyDescription from "./components/PropertyDescription";
+import PropertyEquipment from "./components/PropertyEquipment";
 import PropertyMapWrapper from "./components/PropertyMapWrapper";
 import RelatedListings from "./components/RelatedListings";
 
-import {
-  getPropertyById,
-  getRelatedProperties
-} from "../../../lib/mock/properties";
+import { getPropertyById, getRelatedProperties } from "../../../lib/mock/properties";
 
 export default function Page() {
   const params = useParams();
@@ -23,40 +19,57 @@ export default function Page() {
   const property = getPropertyById(id);
 
   if (!property) {
-    return <p className="p-6">Property not found</p>;
+    return (
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        <p className="text-center text-gray-500">Property not found</p>
+      </div>
+    );
   }
+
+  // Format price from string to number
+  const formattedPrice = parseFloat(property.price);
+
+  // ✅ Added the missing function
+  const getStatusValue = () => {
+    return property.listing_type === "FOR_SALE" ? "sell" : "rent";
+  };
+
+  // Check if property has location data
+  const hasLocation = property.latitude && property.longitude;
+  const mapUrl = hasLocation
+    ? `https://maps.google.com/?q=${property.latitude},${property.longitude}`
+    : null;
 
   return (
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
 
-        {/* Left column */}
         <div className="lg:col-span-2 space-y-8">
 
-          <PropertyImageGallery images={property.images ?? []} />
+          <PropertyImageGallery images={property.media_urls ?? []} />
 
           <PropertyHeader
             title={property.title}
-            location={`${property.city}${property.neighborhood ? ", " + property.neighborhood : ""}`}
-            bedrooms={property.details?.bedrooms ?? property.bedrooms}
-            bathrooms={property.details?.bathrooms ?? property.bathrooms}
-            area={property.area}
+            location={property.address}
+            bedrooms={0}
+            bathrooms={0}
+            area={0}
           />
 
           <PropertyDescription description={property.description} />
 
-          <PropertyEquipment equipment={property.equipment ?? []} />
+          <PropertyEquipment equipment={[]} />
 
-          {property.googleMapUrl && (
-            <PropertyMapWrapper url={property.googleMapUrl} />
+          {hasLocation && mapUrl && (
+            <PropertyMapWrapper url={mapUrl} />
           )}
         </div>
 
-        {/* Sidebar */}
+
         <div className="lg:col-span-1">
           <PropertySidebar
-            price={property.price}
-            status={property.status}
+            price={formattedPrice}
+            status={getStatusValue()}
             agent={{
               name: "Abenezer Tadesse",
               avatar: "/agents/abenezer.jpg",
@@ -67,8 +80,8 @@ export default function Page() {
       </div>
 
       <RelatedListings
-        currentId={property.id}
-        listings={getRelatedProperties(property.id)}
+        currentId={property.property_id}
+        listings={getRelatedProperties(property.property_id)}
       />
     </div>
   );

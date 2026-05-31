@@ -1,10 +1,12 @@
-'use client'
+// src/app/admin/properties/add/page.tsx
 
-import { useForm, useController } from 'react-hook-form'
-import { zodResolver } from '@hookform/resolvers/zod'
-import { z } from 'zod'
-import { useRouter } from 'next/navigation'
-import usePropertyStore from '../../../../store/adminPropertyStore'
+'use client';
+
+import { useForm, useController } from 'react-hook-form';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { z } from 'zod';
+import { useRouter } from 'next/navigation';
+import usePropertyStore from '../../../../store/adminPropertyStore';
 
 const propertySchema = z.object({
   title: z.string().min(3, 'Title must be at least 3 characters'),
@@ -18,13 +20,13 @@ const propertySchema = z.object({
   media_urls: z.array(z.string()).default([]),
   listing_fee_paid: z.boolean().default(false),
   is_active: z.boolean().default(true),
-})
+});
 
-type PropertyFormData = z.infer<typeof propertySchema>
+type PropertyFormData = z.infer<typeof propertySchema>;
 
 export default function AddProperty() {
-  const router = useRouter()
-  const { addProperty, isLoading } = usePropertyStore()
+  const router = useRouter();
+  const { addProperty, isLoading } = usePropertyStore();
 
   const {
     register,
@@ -42,30 +44,30 @@ export default function AddProperty() {
       latitude: '',
       longitude: '',
     },
-  })
+  });
 
-  // ✅ Correctly handles media_urls as an array
   const { field: mediaUrlsField } = useController({
     name: 'media_urls',
     control,
-  })
+  });
 
-  const onSubmit = async (data: PropertyFormData) => {
+  // Fix: Make sure this returns Promise<void> or void
+  const onSubmit = async (data: PropertyFormData): Promise<void> => {
     try {
-      await addProperty(data)
-      router.push('/admin/properties')
+      await addProperty(data);
+      router.push('/admin/properties');
     } catch (error) {
-      console.error('Failed to add property:', error)
+      console.error('Failed to add property:', error);
     }
-  }
+  };
 
   return (
     <div className="max-w-4xl mx-auto">
       <h1 className="text-3xl font-bold text-gray-900 mb-6">Add New Property</h1>
 
+      {/* Fix: Explicitly type the onSubmit handler */}
       <form onSubmit={handleSubmit(onSubmit)} className="bg-white rounded-lg shadow p-6 space-y-6">
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-
           {/* Title */}
           <div className="md:col-span-2">
             <label className="block text-sm font-medium text-gray-700 mb-1">Title</label>
@@ -142,7 +144,6 @@ export default function AddProperty() {
               <option value="LAND">Land</option>
               <option value="INDUSTRIAL">Industrial</option>
             </select>
-            {errors.category && <p className="text-red-500 text-sm mt-1">{errors.category.message}</p>}
           </div>
 
           {/* Listing Type */}
@@ -155,10 +156,9 @@ export default function AddProperty() {
               <option value="FOR_SALE">For Sale</option>
               <option value="FOR_RENT">For Rent</option>
             </select>
-            {errors.listing_type && <p className="text-red-500 text-sm mt-1">{errors.listing_type.message}</p>}
           </div>
 
-          {/* ✅ Media URLs — properly handled as array */}
+          {/* Media URLs */}
           <div className="md:col-span-2">
             <label className="block text-sm font-medium text-gray-700 mb-1">
               Media URLs <span className="text-gray-400 text-xs">(comma separated)</span>
@@ -171,11 +171,10 @@ export default function AddProperty() {
                   .split(',')
                   .map(url => url.trim())
                   .filter(Boolean);
-                mediaUrlsField.onChange(urls); // ✅ sets the full array
+                mediaUrlsField.onChange(urls);
               }}
               className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
             />
-            {/* ✅ Preview URLs */}
             {mediaUrlsField.value.length > 0 && (
               <div className="mt-2 flex flex-wrap gap-2">
                 {mediaUrlsField.value.map((url, i) => (
@@ -196,7 +195,7 @@ export default function AddProperty() {
             <input
               type="checkbox"
               {...register('listing_fee_paid')}
-              className="w-4 h-4 text-blue-600"
+              className="w-4 h-4 text-blue-600 rounded"
             />
             <label className="text-sm font-medium text-gray-700">Listing Fee Paid</label>
           </div>
@@ -206,14 +205,13 @@ export default function AddProperty() {
             <input
               type="checkbox"
               {...register('is_active')}
-              className="w-4 h-4 text-blue-600"
+              className="w-4 h-4 text-blue-600 rounded"
             />
             <label className="text-sm font-medium text-gray-700">Active Listing</label>
           </div>
-
         </div>
 
-        {/* Submit */}
+        {/* Submit Buttons */}
         <div className="flex justify-end gap-4 pt-4">
           <button
             type="button"
@@ -232,5 +230,5 @@ export default function AddProperty() {
         </div>
       </form>
     </div>
-  )
+  );
 }

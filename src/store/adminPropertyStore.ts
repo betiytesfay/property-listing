@@ -1,102 +1,113 @@
+// src/store/adminPropertyStore.ts
+
 import { create } from 'zustand';
-import axios from 'axios';
-import useAuthStore from './authStore';
-import type { Property, PropertyResponse } from '@/src/types/propertyTypes'; // ✅ import from types
 
-interface PropertyState {
+// This matches your backend and form schema
+export interface Property {
+  property_id?: string;  // Optional for new properties
+  title: string;
+  description: string;
+  price: string;
+  address: string;
+  latitude: string;
+  longitude: string;
+  category: "RESIDENTIAL" | "COMMERCIAL" | "LAND" | "INDUSTRIAL";
+  listing_type: "FOR_SALE" | "FOR_RENT";
+  media_urls: string[];
+  listing_fee_paid: boolean;
+  is_active: boolean;
+  created_at?: string;
+  updated_at?: string;
+}
+
+interface AdminPropertyStore {
   properties: Property[];
-  total: number;
   isLoading: boolean;
-
+  error: string | null;
   fetchProperties: () => Promise<void>;
-  addProperty: (property: Partial<Property>) => Promise<void>;
+  addProperty: (property: Omit<Property, 'property_id' | 'created_at' | 'updated_at'>) => Promise<void>;
   updateProperty: (id: string, property: Partial<Property>) => Promise<void>;
   deleteProperty: (id: string) => Promise<void>;
 }
 
-const API_BASE = 'http://localhost:8000/api/v1/properties';
-
-const getAuthHeader = () => {
-  const token = useAuthStore.getState().token; // ✅ token not accessToken
-  return { Authorization: `Bearer ${token}` };
-};
-
-const usePropertyStore = create<PropertyState>((set) => ({
+const usePropertyStore = create<AdminPropertyStore>((set, get) => ({
   properties: [],
-  total: 0,
   isLoading: false,
+  error: null,
 
   fetchProperties: async () => {
-    set({ isLoading: true });
+    set({ isLoading: true, error: null });
     try {
-      const response = await axios.get<PropertyResponse>(API_BASE, {
-        headers: getAuthHeader(),
-      });
-
-      set({
-        properties: response.data.data,
-        total: response.data.total,
-        isLoading: false,
-      });
+      const response = await fetch('/api/admin/properties');
+      if (!response.ok) throw new Error('Failed to fetch properties');
+      const data = await response.json();
+      set({ properties: data, isLoading: false });
     } catch (error) {
-      set({ isLoading: false });
-      throw error;
+      set({ error: (error as Error).message, isLoading: false });
     }
   },
 
   addProperty: async (property) => {
-    set({ isLoading: true });
+    set({ isLoading: true, error: null });
     try {
-      const response = await axios.post<Property>(API_BASE, property, {
-        headers: getAuthHeader(),
+      const response = await fetch('/api/admin/properties', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(property),
       });
 
+      if (!response.ok) throw new Error('Failed to add property');
+
+      const newProperty = await response.json();
       set((state) => ({
-        properties: [response.data, ...state.properties],
-        total: state.total + 1,
+        properties: [...state.properties, newProperty],
         isLoading: false,
       }));
     } catch (error) {
-      set({ isLoading: false });
+      set({ error: (error as Error).message, isLoading: false });
       throw error;
     }
   },
 
   updateProperty: async (id, property) => {
-    set({ isLoading: true });
+    set({ isLoading: true, error: null });
     try {
-      const response = await axios.put<Property>(
-        `${API_BASE}/${id}`,
-        property,
-        { headers: getAuthHeader() }
-      );
+      const response = await fetch(`/api/admin/properties/${id}`, {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(property),
+      });
 
+      if (!response.ok) throw new Error('Failed to update property');
+
+      const updatedProperty = await response.json();
       set((state) => ({
         properties: state.properties.map((p) =>
-          p.property_id === id ? response.data : p
+          p.property_id === id ? updatedProperty : p
         ),
         isLoading: false,
       }));
     } catch (error) {
-      set({ isLoading: false });
+      set({ error: (error as Error).message, isLoading: false });
       throw error;
     }
   },
 
   deleteProperty: async (id) => {
-    set({ isLoading: true });
+    set({ isLoading: true, error: null });
     try {
-      await axios.delete(`${API_BASE}/${id}`, {
-        headers: getAuthHeader(),
+      const response = await fetch(`/api/admin/properties/${id}`, {
+        method: 'DELETE',
       });
+
+      if (!response.ok) throw new Error('Failed to delete property');
 
       set((state) => ({
         properties: state.properties.filter((p) => p.property_id !== id),
-        total: state.total - 1,
         isLoading: false,
       }));
     } catch (error) {
-      set({ isLoading: false });
+      set({ error: (error as Error).message, isLoading: false });
       throw error;
     }
   },

@@ -5,10 +5,10 @@ import { userFromAccessToken } from '@/src/features/auth/utils/jwt';
 // GET /api/properties/[id] - Get single property
 export async function GET(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
-    const { id } = params;
+    const { id } = await params;
 
     // TODO: Fetch from database
     const mockProperty = {
@@ -39,7 +39,7 @@ export async function GET(
 // PUT /api/properties/[id] - Update property
 export async function PUT(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
     const cookieStore = await cookies();
@@ -54,7 +54,7 @@ export async function PUT(
       return NextResponse.json({ error: 'Invalid token' }, { status: 401 });
     }
 
-    const { id } = params;
+    const { id } = await params;
     const body = await request.json();
 
     // TODO: Check if user owns the property OR is admin
@@ -70,7 +70,7 @@ export async function PUT(
 // DELETE /api/properties/[id] - Delete property
 export async function DELETE(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
     const cookieStore = await cookies();
@@ -85,9 +85,8 @@ export async function DELETE(
       return NextResponse.json({ error: 'Invalid token' }, { status: 401 });
     }
 
-    const { id } = params;
+    const { id } = await params;
 
-   
     return NextResponse.json({ message: 'Property deleted successfully' });
   } catch (error) {
     console.error('Error deleting property:', error);

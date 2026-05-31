@@ -1,6 +1,6 @@
 'use client'
 
-import { useForm } from 'react-hook-form'
+import { useForm, useController } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { z } from 'zod'
 import { useRouter } from 'next/navigation'
@@ -9,15 +9,15 @@ import usePropertyStore from '../../../../store/adminPropertyStore'
 const propertySchema = z.object({
   title: z.string().min(3, 'Title must be at least 3 characters'),
   description: z.string().min(10, 'Description must be at least 10 characters'),
-  price: z.number().min(1, 'Price must be greater than 0'),
-  location: z.string().min(3, 'Location is required'),
-  bedrooms: z.number().min(0),
-  bathrooms: z.number().min(0),
-  area: z.number().min(1, 'Area is required'),
-  type: z.enum(['apartment', 'house', 'condo', 'land']),
-  status: z.enum(['available', 'sold', 'rented', 'pending']),
-  images: z.array(z.string()).default([]),
-  featured: z.boolean().default(false),
+  price: z.string().min(1, 'Price is required'),
+  address: z.string().min(3, 'Address is required'),
+  latitude: z.string().default(''),
+  longitude: z.string().default(''),
+  category: z.enum(['RESIDENTIAL', 'COMMERCIAL', 'LAND', 'INDUSTRIAL']),
+  listing_type: z.enum(['FOR_SALE', 'FOR_RENT']),
+  media_urls: z.array(z.string()).default([]),
+  listing_fee_paid: z.boolean().default(false),
+  is_active: z.boolean().default(true),
 })
 
 type PropertyFormData = z.infer<typeof propertySchema>
@@ -29,16 +29,25 @@ export default function AddProperty() {
   const {
     register,
     handleSubmit,
+    control,
     formState: { errors },
   } = useForm<PropertyFormData>({
     resolver: zodResolver(propertySchema),
     defaultValues: {
-      type: 'apartment',
-      status: 'available',
-      featured: false,
-      bedrooms: 0,
-      bathrooms: 0,
+      category: 'RESIDENTIAL',
+      listing_type: 'FOR_SALE',
+      listing_fee_paid: false,
+      is_active: true,
+      media_urls: [],
+      latitude: '',
+      longitude: '',
     },
+  })
+
+  // ✅ Correctly handles media_urls as an array
+  const { field: mediaUrlsField } = useController({
+    name: 'media_urls',
+    control,
   })
 
   const onSubmit = async (data: PropertyFormData) => {
@@ -56,6 +65,7 @@ export default function AddProperty() {
 
       <form onSubmit={handleSubmit(onSubmit)} className="bg-white rounded-lg shadow p-6 space-y-6">
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+
           {/* Title */}
           <div className="md:col-span-2">
             <label className="block text-sm font-medium text-gray-700 mb-1">Title</label>
@@ -79,94 +89,128 @@ export default function AddProperty() {
 
           {/* Price */}
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">Price ($)</label>
+            <label className="block text-sm font-medium text-gray-700 mb-1">Price (ETB)</label>
             <input
-              type="number"
-              {...register('price', { valueAsNumber: true })}
+              type="text"
+              {...register('price')}
+              placeholder="e.g. 15000"
               className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
             />
             {errors.price && <p className="text-red-500 text-sm mt-1">{errors.price.message}</p>}
           </div>
 
-          {/* Location */}
+          {/* Address */}
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">Location</label>
+            <label className="block text-sm font-medium text-gray-700 mb-1">Address</label>
             <input
-              {...register('location')}
+              {...register('address')}
+              placeholder="e.g. Bole, Addis Ababa"
               className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
             />
-            {errors.location && <p className="text-red-500 text-sm mt-1">{errors.location.message}</p>}
+            {errors.address && <p className="text-red-500 text-sm mt-1">{errors.address.message}</p>}
           </div>
 
-          {/* Bedrooms */}
+          {/* Latitude */}
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">Bedrooms</label>
+            <label className="block text-sm font-medium text-gray-700 mb-1">Latitude</label>
             <input
-              type="number"
-              {...register('bedrooms', { valueAsNumber: true })}
-              className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-            />
-          </div>
-
-          {/* Bathrooms */}
-          <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">Bathrooms</label>
-            <input
-              type="number"
-              step="0.5"
-              {...register('bathrooms', { valueAsNumber: true })}
+              {...register('latitude')}
+              placeholder="e.g. 9.0054"
               className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
             />
           </div>
 
-          {/* Area */}
+          {/* Longitude */}
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">Area (sq ft)</label>
+            <label className="block text-sm font-medium text-gray-700 mb-1">Longitude</label>
             <input
-              type="number"
-              {...register('area', { valueAsNumber: true })}
+              {...register('longitude')}
+              placeholder="e.g. 38.7636"
               className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
             />
-            {errors.area && <p className="text-red-500 text-sm mt-1">{errors.area.message}</p>}
           </div>
 
-          {/* Type */}
+          {/* Category */}
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">Property Type</label>
+            <label className="block text-sm font-medium text-gray-700 mb-1">Category</label>
             <select
-              {...register('type')}
+              {...register('category')}
               className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
             >
-              <option value="apartment">Apartment</option>
-              <option value="house">House</option>
-              <option value="condo">Condo</option>
-              <option value="land">Land</option>
+              <option value="RESIDENTIAL">Residential</option>
+              <option value="COMMERCIAL">Commercial</option>
+              <option value="LAND">Land</option>
+              <option value="INDUSTRIAL">Industrial</option>
             </select>
+            {errors.category && <p className="text-red-500 text-sm mt-1">{errors.category.message}</p>}
           </div>
 
-          {/* Status */}
+          {/* Listing Type */}
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">Status</label>
+            <label className="block text-sm font-medium text-gray-700 mb-1">Listing Type</label>
             <select
-              {...register('status')}
+              {...register('listing_type')}
               className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
             >
-              <option value="available">Available</option>
-              <option value="sold">Sold</option>
-              <option value="rented">Rented</option>
-              <option value="pending">Pending</option>
+              <option value="FOR_SALE">For Sale</option>
+              <option value="FOR_RENT">For Rent</option>
             </select>
+            {errors.listing_type && <p className="text-red-500 text-sm mt-1">{errors.listing_type.message}</p>}
           </div>
 
-          {/* Featured */}
+          {/* ✅ Media URLs — properly handled as array */}
+          <div className="md:col-span-2">
+            <label className="block text-sm font-medium text-gray-700 mb-1">
+              Media URLs <span className="text-gray-400 text-xs">(comma separated)</span>
+            </label>
+            <input
+              type="text"
+              placeholder="https://image1.jpg, https://image2.jpg"
+              onChange={(e) => {
+                const urls = e.target.value
+                  .split(',')
+                  .map(url => url.trim())
+                  .filter(Boolean);
+                mediaUrlsField.onChange(urls); // ✅ sets the full array
+              }}
+              className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+            />
+            {/* ✅ Preview URLs */}
+            {mediaUrlsField.value.length > 0 && (
+              <div className="mt-2 flex flex-wrap gap-2">
+                {mediaUrlsField.value.map((url, i) => (
+                  <img
+                    key={i}
+                    src={url}
+                    alt={`preview ${i}`}
+                    className="w-16 h-16 object-cover rounded-lg border"
+                    onError={(e) => (e.currentTarget.style.display = 'none')}
+                  />
+                ))}
+              </div>
+            )}
+          </div>
+
+          {/* Listing Fee Paid */}
           <div className="flex items-center gap-2">
             <input
               type="checkbox"
-              {...register('featured')}
+              {...register('listing_fee_paid')}
               className="w-4 h-4 text-blue-600"
             />
-            <label className="text-sm font-medium text-gray-700">Featured Property</label>
+            <label className="text-sm font-medium text-gray-700">Listing Fee Paid</label>
           </div>
+
+          {/* Is Active */}
+          <div className="flex items-center gap-2">
+            <input
+              type="checkbox"
+              {...register('is_active')}
+              className="w-4 h-4 text-blue-600"
+            />
+            <label className="text-sm font-medium text-gray-700">Active Listing</label>
+          </div>
+
         </div>
 
         {/* Submit */}

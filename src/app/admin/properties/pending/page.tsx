@@ -1,9 +1,8 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import PropertyTable from '../../../../components/admin/PropertyTable';
 import usePropertyStore from '@/src/store/adminPropertyStore';
-import { Property } from '../../../../types';
+import type { Property } from '@/src/types/propertyTypes'; // ✅ correct import
 import { CheckCircle, XCircle } from 'lucide-react';
 
 export default function PendingPropertiesPage() {
@@ -15,21 +14,22 @@ export default function PendingPropertiesPage() {
   }, [fetchProperties]);
 
   useEffect(() => {
-    const pending = properties.filter(p => p.adminStatus === 'pending');
+    // ✅ is_active === false means pending/inactive (no adminStatus in backend)
+    const pending = properties.filter(p => !p.is_active);
     setPendingProperties(pending);
   }, [properties]);
 
   const handleApprove = (id: string) => {
     // TODO: Connect to your API endpoint
     // await fetch(`/api/admin/properties/${id}/approve`, { method: 'POST' })
-    setPendingProperties(prev => prev.filter(p => p.id !== id));
+    setPendingProperties(prev => prev.filter(p => p.property_id !== id)); // ✅ property_id
     alert(`Property ${id} approved!`);
   };
 
   const handleReject = (id: string) => {
     // TODO: Connect to your API endpoint
     // await fetch(`/api/admin/properties/${id}/reject`, { method: 'POST' })
-    setPendingProperties(prev => prev.filter(p => p.id !== id));
+    setPendingProperties(prev => prev.filter(p => p.property_id !== id)); // ✅ property_id
     alert(`Property ${id} rejected!`);
   };
 
@@ -48,7 +48,9 @@ export default function PendingPropertiesPage() {
     <div>
       <div className="mb-8">
         <h1 className="text-2xl font-bold">Pending Approvals</h1>
-        <p className="text-sm text-gray-500">Review properties waiting for approval ({pendingProperties.length} items)</p>
+        <p className="text-sm text-gray-500">
+          Review properties waiting for approval ({pendingProperties.length} items)
+        </p>
       </div>
 
       {pendingProperties.length === 0 ? (
@@ -64,37 +66,58 @@ export default function PendingPropertiesPage() {
               <thead className="bg-gray-50">
                 <tr>
                   <th className="text-left px-6 py-3 text-xs font-medium text-gray-500">Property</th>
-                  <th className="text-left px-6 py-3 text-xs font-medium text-gray-500">Location</th>
+                  <th className="text-left px-6 py-3 text-xs font-medium text-gray-500">Address</th>
                   <th className="text-left px-6 py-3 text-xs font-medium text-gray-500">Price</th>
                   <th className="text-left px-6 py-3 text-xs font-medium text-gray-500">Type</th>
-                  <th className="text-left px-6 py-3 text-xs font-medium text-gray-500">Seller</th>
+                  <th className="text-left px-6 py-3 text-xs font-medium text-gray-500">Category</th>
                   <th className="text-left px-6 py-3 text-xs font-medium text-gray-500">Actions</th>
                 </tr>
               </thead>
               <tbody className="divide-y divide-gray-100">
                 {pendingProperties.map((property) => (
-                  <tr key={property.id} className="hover:bg-gray-50">
+                  <tr key={property.property_id} className="hover:bg-gray-50"> {/* ✅ property_id */}
                     <td className="px-6 py-4">
                       <p className="text-sm font-medium">{property.title}</p>
-                      <p className="text-xs text-gray-400">{property.bedrooms} bed • {property.area} m²</p>
+                      {/* ✅ removed bedrooms/area — not in backend */}
+                      <p className="text-xs text-gray-400">
+                        {property.listing_fee_paid ? 'Fee Paid' : 'Fee Unpaid'}
+                      </p>
                     </td>
-                    <td className="px-6 py-4 text-sm text-gray-600">{property.city}</td>
+                    {/* ✅ address instead of city */}
+                    <td className="px-6 py-4 text-sm text-gray-600">{property.address}</td>
                     <td className="px-6 py-4">
-                      <p className="text-sm font-semibold">${property.price.toLocaleString()}</p>
-                      <p className="text-xs text-gray-400">{property.status === 'rent' ? '/month' : ''}</p>
+                      {/* ✅ price is a string now */}
+                      <p className="text-sm font-semibold">
+                        ${Number(property.price).toLocaleString()}
+                      </p>
+                      <p className="text-xs text-gray-400">
+                        {property.listing_type === 'FOR_RENT' ? '/month' : ''}
+                      </p>
                     </td>
+                    {/* ✅ listing_type instead of status */}
                     <td className="px-6 py-4">
-                      <span className={`px-2 py-1 text-xs rounded-full ${property.status === 'rent' ? 'bg-blue-50 text-blue-600' : 'bg-green-50 text-green-600'}`}>
-                        {property.status === 'rent' ? 'For Rent' : 'For Sale'}
+                      <span className={`px-2 py-1 text-xs rounded-full ${property.listing_type === 'FOR_RENT'
+                          ? 'bg-blue-50 text-blue-600'
+                          : 'bg-green-50 text-green-600'
+                        }`}>
+                        {property.listing_type === 'FOR_RENT' ? 'For Rent' : 'For Sale'}
                       </span>
                     </td>
-                    <td className="px-6 py-4 text-sm text-gray-600">{property.sellerName}</td>
+                    {/* ✅ category instead of sellerName */}
+                    <td className="px-6 py-4 text-sm text-gray-600">{property.category}</td>
                     <td className="px-6 py-4">
                       <div className="flex items-center gap-3">
-                        <button onClick={() => handleApprove(property.id)} className="p-1 rounded hover:bg-green-50">
+                        {/* ✅ property_id instead of id */}
+                        <button
+                          onClick={() => handleApprove(property.property_id)}
+                          className="p-1 rounded hover:bg-green-50"
+                        >
                           <CheckCircle className="w-5 h-5 text-green-500" />
                         </button>
-                        <button onClick={() => handleReject(property.id)} className="p-1 rounded hover:bg-red-50">
+                        <button
+                          onClick={() => handleReject(property.property_id)}
+                          className="p-1 rounded hover:bg-red-50"
+                        >
                           <XCircle className="w-5 h-5 text-red-500" />
                         </button>
                       </div>

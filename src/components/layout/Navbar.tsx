@@ -118,8 +118,12 @@ export function Navbar() {
     setIsLoggingOut(true);
     try {
       await logout();
-      router.replace("/");
-      router.refresh();
+      // Force redirect to home
+      window.location.href = "/"; // Use this instead of router
+    } catch (error) {
+      console.error("Logout error:", error);
+      // Force redirect even if logout fails
+      window.location.href = "/";
     } finally {
       setIsLoggingOut(false);
     }

@@ -1,39 +1,58 @@
+"use client";
+
+import { useParams } from "next/navigation";
+
 import PropertyImageGallery from "./components/PropertyImageGallery";
 import PropertyHeader from "./components/PropertyHeader";
 import PropertySidebar from "./components/PropertySidebar";
 import PropertyDetailsGrid from "./components/PropertyDetailsGrid";
 import PropertyEquipment from "./components/PropertyEquipment";
 import PropertyDescription from "./components/PropertyDescription";
-import PropertyMapWrapper from "./components/PropertyMapWrapper"; // ✅ use wrapper
+import PropertyMapWrapper from "./components/PropertyMapWrapper";
 import RelatedListings from "./components/RelatedListings";
 
-import { properties } from "@/src/data/dummyProperties";
-import type { Property } from "@/src/types/propertyTypes";
+import {
+  getPropertyById,
+  getRelatedProperties
+} from "../../../lib/mock/properties";
 
 export default function Page() {
-  const property: Property = properties[0];
+  const params = useParams();
+  const id = params?.id as string;
+
+  const property = getPropertyById(id);
+
+  if (!property) {
+    return <p className="p-6">Property not found</p>;
+  }
 
   return (
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-        {/* Left column – main content */}
+
+        {/* Left column */}
         <div className="lg:col-span-2 space-y-8">
-          <PropertyImageGallery images={property.images} />
+
+          <PropertyImageGallery images={property.images ?? []} />
+
           <PropertyHeader
             title={property.title}
             location={`${property.city}${property.neighborhood ? ", " + property.neighborhood : ""}`}
-            bedrooms={property.details?.bedrooms ?? 0}
-            bathrooms={property.details?.bathrooms ?? 0}
+            bedrooms={property.details?.bedrooms ?? property.bedrooms}
+            bathrooms={property.details?.bathrooms ?? property.bathrooms}
             area={property.area}
           />
+
           <PropertyDescription description={property.description} />
-          <PropertyDetailsGrid details={property.details!} />
+
           <PropertyEquipment equipment={property.equipment ?? []} />
-          {/* ✅ Use the client wrapper here */}
-          {property.googleMapUrl && <PropertyMapWrapper url={property.googleMapUrl} />}
+
+          {property.googleMapUrl && (
+            <PropertyMapWrapper url={property.googleMapUrl} />
+          )}
         </div>
 
-        {/* Right column – sticky sidebar */}
+        {/* Sidebar */}
         <div className="lg:col-span-1">
           <PropertySidebar
             price={property.price}
@@ -47,7 +66,10 @@ export default function Page() {
         </div>
       </div>
 
-      <RelatedListings currentId={property.id} listings={properties.slice(1, 4)} />
+      <RelatedListings
+        currentId={property.id}
+        listings={getRelatedProperties(property.id)}
+      />
     </div>
   );
 }

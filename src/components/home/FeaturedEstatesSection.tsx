@@ -10,6 +10,7 @@ interface FeaturedEstatesSectionProps {
 }
 
 export function FeaturedEstatesSection({ properties }: FeaturedEstatesSectionProps) {
+  console.log(properties)
   return (
     <section className="space-y-8">
       <SectionHeader

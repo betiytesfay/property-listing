@@ -31,7 +31,13 @@ export function useLogin() {
           password: values.password,
         });
 
+        console.log("Raw tokens:", tokens); // DEBUG
+
         const user = userFromAccessToken(tokens.access_token);
+        console.log("Extracted user object:", user); // DEBUG
+        console.log("User role:", user?.role); // DEBUG
+        console.log("User role type:", typeof user?.role); // DEBUG
+
         if (!user) {
           throw new Error("Invalid authentication response");
         }
@@ -45,13 +51,23 @@ export function useLogin() {
           Boolean(values.rememberMe)
         );
 
+        // Determine redirect based on user role
+        const userRole = user.role?.toUpperCase();
+
+        const redirectFromQuery = searchParams.get(REDIRECT_QUERY_PARAM);
+
         const redirectTo =
-          searchParams.get(REDIRECT_QUERY_PARAM) ?? DEFAULT_LOGIN_REDIRECT;
+          userRole === "ADMIN"
+            ? "/admin/dashboard"
+            : redirectFromQuery || "/dashboard";
+
+        console.log("Final redirect to:", redirectTo);
 
         router.replace(redirectTo);
         router.refresh();
         return true;
       } catch (err) {
+        console.error("Login error:", err); // DEBUG
         setError(getErrorMessage(err, "Unable to sign in. Check your credentials."));
         return false;
       } finally {

@@ -2,19 +2,16 @@
 
 import { create } from "zustand";
 import { authService } from "@/src/features/auth/services/auth.service";
-import type { AuthSession, AuthState, AuthUser, TokenResponse } from "@/src/features/auth/types/auth.types";
-import { clearAuthCookie, setAuthCookie } from "@/src/features/auth/utils/cookies";
+import type {
+  AuthSession,
+  AuthState,
+  TokenResponse,
+} from "@/src/features/auth/types/auth.types";
+
+import { setAuthCookie, clearAuthCookie } from "@/src/features/auth/utils/cookies";
 import { isTokenExpired, userFromAccessToken } from "@/src/features/auth/utils/jwt";
-import {
-  clearTokens,
-  readTokens,
-  saveTokens,
-} from "@/src/features/auth/utils/session-storage";
-import {
-  clearUserProfile,
-  readUserProfile,
-  saveUserProfile,
-} from "@/src/features/auth/utils/user-profile";
+import { clearTokens, readTokens, saveTokens } from "@/src/features/auth/utils/session-storage";
+import { clearUserProfile, readUserProfile, saveUserProfile } from "@/src/features/auth/utils/user-profile";
 
 interface AuthActions {
   setSession: (session: AuthSession, rememberMe?: boolean) => void;
@@ -27,11 +24,9 @@ interface AuthActions {
 
 export type AuthStore = AuthState & AuthActions;
 
-function buildSession(tokens: TokenResponse, rememberMe = false): AuthSession | null {
+function buildSession(tokens: TokenResponse): AuthSession | null {
   const user = userFromAccessToken(tokens.access_token);
-  if (!user) {
-    return null;
-  }
+  if (!user) return null;
 
   return {
     user,
@@ -48,8 +43,14 @@ export const useAuthStore = create<AuthStore>((set, get) => ({
   isHydrated: false,
   isLoading: false,
 
+  // -----------------------
+  // LOADING
+  // -----------------------
   setLoading: (isLoading) => set({ isLoading }),
 
+  // -----------------------
+  // LOGIN / SET SESSION
+  // -----------------------
   setSession: (session, rememberMe = false) => {
     saveTokens(session.accessToken, session.refreshToken, rememberMe);
     setAuthCookie(rememberMe);
@@ -67,6 +68,9 @@ export const useAuthStore = create<AuthStore>((set, get) => ({
     });
   },
 
+  // -----------------------
+  // CLEAR SESSION (LOCAL ONLY)
+  // -----------------------
   clearSession: () => {
     clearTokens();
     clearAuthCookie();
@@ -81,6 +85,9 @@ export const useAuthStore = create<AuthStore>((set, get) => ({
     });
   },
 
+  // -----------------------
+  // RESTORE SESSION
+  // -----------------------
   restoreSession: async () => {
     set({ isLoading: true });
 
@@ -94,14 +101,19 @@ export const useAuthStore = create<AuthStore>((set, get) => ({
 
       if (!isTokenExpired(accessToken)) {
         const user = userFromAccessToken(accessToken);
+
         if (user) {
           const profile = readUserProfile();
+
           set({
-            user: profile?.fullName ? { ...user, fullName: profile.fullName } : user,
+            user: profile?.fullName
+              ? { ...user, fullName: profile.fullName }
+              : user,
             accessToken,
             refreshToken,
             isAuthenticated: true,
           });
+
           return;
         }
       }
@@ -112,6 +124,9 @@ export const useAuthStore = create<AuthStore>((set, get) => ({
     }
   },
 
+  // -----------------------
+  // REFRESH TOKEN
+  // -----------------------
   refreshSession: async () => {
     const { refreshToken } = get();
     const tokenToUse = refreshToken ?? readTokens().refreshToken;
@@ -122,15 +137,23 @@ export const useAuthStore = create<AuthStore>((set, get) => ({
     }
 
     try {
-      const tokens = await authService.refresh({ refresh_token: tokenToUse });
+      const tokens = await authService.refresh({
+        refresh_token: tokenToUse,
+      });
+
       const session = buildSession(tokens);
+
       if (!session) {
         get().clearSession();
         return null;
       }
 
-      const rememberMe = typeof window !== "undefined" && window.localStorage.getItem("hp_remember_me") === "true";
+      const rememberMe =
+        typeof window !== "undefined" &&
+        window.localStorage.getItem("hp_remember_me") === "true";
+
       get().setSession(session, rememberMe);
+
       return tokens.access_token;
     } catch {
       get().clearSession();
@@ -138,17 +161,24 @@ export const useAuthStore = create<AuthStore>((set, get) => ({
     }
   },
 
+  // -----------------------
+  // LOGOUT (IMPORTANT)
+  // -----------------------
   logout: async () => {
-    const refreshToken = get().refreshToken ?? readTokens().refreshToken;
+    const refreshToken =
+      get().refreshToken ?? readTokens().refreshToken;
 
-    if (refreshToken) {
-      try {
-        await authService.logout({ refresh_token: refreshToken });
-      } catch {
-        // Clear local session even if server logout fails
+    try {
+      if (refreshToken) {
+        await authService.logout({
+          refresh_token: refreshToken,
+        });
       }
+    } catch {
+      // even if backend fails → still logout locally
     }
 
+    // ALWAYS clear local session
     get().clearSession();
   },
 }));

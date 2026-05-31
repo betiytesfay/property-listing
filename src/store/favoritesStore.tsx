@@ -18,25 +18,24 @@ function readFavorites(): Property[] {
 function writeFavorites(items: Property[]) {
   try {
     localStorage.setItem(STORAGE_KEY, JSON.stringify(items));
-    // notify other hooks
     window.dispatchEvent(new CustomEvent("favorites-changed", { detail: items }));
-  } catch {}
+  } catch { }
 }
 
 export function addFavorite(property: Property) {
   const items = readFavorites();
-  if (items.find((p) => p.id === property.id)) return;
+  if (items.find((p) => p.property_id === property.property_id)) return; // ✅ property_id
   items.unshift(property);
   writeFavorites(items);
 }
 
 export function removeFavorite(id: string) {
-  const items = readFavorites().filter((p) => p.id !== id);
+  const items = readFavorites().filter((p) => p.property_id !== id); // ✅ property_id
   writeFavorites(items);
 }
 
 export function isFavorite(id: string) {
-  return readFavorites().some((p) => p.id === id);
+  return readFavorites().some((p) => p.property_id === id); // ✅ property_id
 }
 
 export function useFavorites() {
@@ -63,6 +62,6 @@ export function useFavorites() {
     favorites,
     add: (p: Property) => addFavorite(p),
     remove: (id: string) => removeFavorite(id),
-    isFavorite: (id: string) => favorites.some((f) => f.id === id),
+    isFavorite: (id: string) => favorites.some((f) => f.property_id === id), // ✅ property_id
   };
 }

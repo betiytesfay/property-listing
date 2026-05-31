@@ -1,98 +1,123 @@
 ﻿import { useQuery, type UseQueryResult } from "@tanstack/react-query";
 import api from "./api";
-import type { Property, PropertyFeedResponse, PropertyFilters } from "../types/propertyTypes";
+import type { Property, PropertyResponse } from "../types/propertyTypes"; // ✅ updated type
 
+// ✅ Updated mock data to match backend shape
 const MOCK_PROPERTIES: Property[] = [
   {
-    id: "fallback-1",
+    property_id: "fallback-1",
+    owner_id: "owner-001",
     title: "Luxury 3-Bedroom Apartment",
     description: "An upscale apartment with premium finishes and city views.",
-    city: "Addis Ababa",
-    subCity: "Bole",
-    featured: true,
-    price: 12500000,
-    bedrooms: 3,
-    bathrooms: 2,
-    area: 165,
-    furnished: true,
-    status: "sale",
-    imageUrl: "https://images.unsplash.com/photo-1560185127-6c7b2d8d81e9?auto=format&fit=crop&w=1400&q=80",
+    category: "RESIDENTIAL",
+    listing_type: "FOR_SALE",
+    price: "12500000",
+    address: "Bole, Addis Ababa",
+    latitude: "9.0054",
+    longitude: "38.7636",
+    media_urls: ["https://images.unsplash.com/photo-1560185127-6c7b2d8d81e9?auto=format&fit=crop&w=1400&q=80"],
+    listing_fee_paid: true,
+    is_active: true,
+    created_at: "2024-01-15T10:00:00Z",
+    updated_at: "2024-01-15T10:00:00Z",
   },
   {
-    id: "fallback-2",
+    property_id: "fallback-2",
+    owner_id: "owner-002",
     title: "Modern Studio Apartment",
     description: "Compact living with stylish amenities near the city center.",
-    city: "Addis Ababa",
-    subCity: "Kazanchis",
-    featured: true,
-    price: 4200000,
-    bedrooms: 1,
-    bathrooms: 1,
-    area: 65,
-    furnished: false,
-    status: "rent",
-    imageUrl: "https://images.unsplash.com/photo-1505693416388-ac5ce068fe85?auto=format&fit=crop&w=1400&q=80",
+    category: "RESIDENTIAL",
+    listing_type: "FOR_RENT",
+    price: "4200000",
+    address: "Kazanchis, Addis Ababa",
+    latitude: "9.0200",
+    longitude: "38.7614",
+    media_urls: ["https://images.unsplash.com/photo-1505693416388-ac5ce068fe85?auto=format&fit=crop&w=1400&q=80"],
+    listing_fee_paid: true,
+    is_active: true,
+    created_at: "2024-01-16T10:00:00Z",
+    updated_at: "2024-01-16T10:00:00Z",
   },
   {
-    id: "fallback-3",
+    property_id: "fallback-3",
+    owner_id: "owner-003",
     title: "Family House with Garden",
     description: "A family-ready home with an open plan living area and private garden.",
-    city: "Bahir Dar",
-    subCity: "Lake View",
-    featured: true,
-    price: 22000000,
-    bedrooms: 4,
-    bathrooms: 3,
-    area: 280,
-    furnished: true,
-    status: "sale",
-    imageUrl: "https://images.unsplash.com/photo-1494526585095-c41746248156?auto=format&fit=crop&w=1400&q=80",
+    category: "RESIDENTIAL",
+    listing_type: "FOR_SALE",
+    price: "22000000",
+    address: "Lake View, Bahir Dar",
+    latitude: "11.5742",
+    longitude: "37.3614",
+    media_urls: ["https://images.unsplash.com/photo-1494526585095-c41746248156?auto=format&fit=crop&w=1400&q=80"],
+    listing_fee_paid: true,
+    is_active: true,
+    created_at: "2024-01-17T10:00:00Z",
+    updated_at: "2024-01-17T10:00:00Z",
   },
   {
-    id: "fallback-4",
+    property_id: "fallback-4",
+    owner_id: "owner-004",
     title: "Cozy 2-Bedroom Townhouse",
     description: "Affordable townhouse offering comfortable living and easy access to amenities.",
-    city: "Gondar",
-    subCity: "Mekina",
-    featured: false,
-    price: 6800000,
-    bedrooms: 2,
-    bathrooms: 2,
-    area: 120,
-    furnished: false,
-    status: "sale",
-    imageUrl: "https://images.unsplash.com/photo-1512917774080-9991f1c4c750?auto=format&fit=crop&w=1400&q=80",
+    category: "RESIDENTIAL",
+    listing_type: "FOR_SALE",
+    price: "6800000",
+    address: "Mekina, Gondar",
+    latitude: "12.6030",
+    longitude: "37.4521",
+    media_urls: ["https://images.unsplash.com/photo-1512917774080-9991f1c4c750?auto=format&fit=crop&w=1400&q=80"],
+    listing_fee_paid: false,
+    is_active: true,
+    created_at: "2024-01-18T10:00:00Z",
+    updated_at: "2024-01-18T10:00:00Z",
   },
   {
-    id: "fallback-5",
+    property_id: "fallback-5",
+    owner_id: "owner-005",
     title: "Bright Rental Apartment",
     description: "Fresh rental space with plenty of natural light and modern finishes.",
-    city: "Dire Dawa",
-    subCity: "Kebena",
-    featured: false,
-    price: 3100000,
-    bedrooms: 2,
-    bathrooms: 1,
-    area: 90,
-    furnished: true,
-    status: "rent",
-    imageUrl: "https://images.unsplash.com/photo-1494526585095-c41746248156?auto=format&fit=crop&w=1400&q=80",
+    category: "RESIDENTIAL",
+    listing_type: "FOR_RENT",
+    price: "3100000",
+    address: "Kebena, Dire Dawa",
+    latitude: "9.5931",
+    longitude: "41.8661",
+    media_urls: ["https://images.unsplash.com/photo-1494526585095-c41746248156?auto=format&fit=crop&w=1400&q=80"],
+    listing_fee_paid: true,
+    is_active: true,
+    created_at: "2024-01-19T10:00:00Z",
+    updated_at: "2024-01-19T10:00:00Z",
   },
 ];
 
+// ✅ Updated filter to use new field names
 function applyFilters(properties: Property[], filters: PropertyFilters): Property[] {
   return properties.filter((property) => {
-    if (filters.featured !== undefined && property.featured !== filters.featured) return false;
-    if (filters.status && filters.status !== "all" && property.status !== filters.status) return false;
-    if (filters.city && property.city !== filters.city) return false;
-    if (filters.minPrice !== undefined && property.price < filters.minPrice) return false;
-    if (filters.maxPrice !== undefined && property.price > filters.maxPrice) return false;
-    if (filters.bedrooms !== undefined && property.bedrooms !== filters.bedrooms) return false;
-    if (filters.bathrooms !== undefined && property.bathrooms !== filters.bathrooms) return false;
-    if (filters.furnished !== undefined && filters.furnished !== "all" && property.furnished !== filters.furnished) return false;
-    if (filters.keyword && !property.title.toLowerCase().includes(filters.keyword.toLowerCase()) && !property.description.toLowerCase().includes(filters.keyword.toLowerCase())) return false;
+    if (filters.listing_type && filters.listing_type !== "all" && property.listing_type !== filters.listing_type) return false;
+    if (filters.category && property.category !== filters.category) return false;
+    if (filters.address && !property.address.toLowerCase().includes(filters.address.toLowerCase())) return false;
+    if (filters.minPrice !== undefined && Number(property.price) < filters.minPrice) return false;
+    if (filters.maxPrice !== undefined && Number(property.price) > filters.maxPrice) return false;
+    if (filters.is_active !== undefined && property.is_active !== filters.is_active) return false;
+    if (filters.keyword &&
+      !property.title.toLowerCase().includes(filters.keyword.toLowerCase()) &&
+      !property.description.toLowerCase().includes(filters.keyword.toLowerCase())
+    ) return false;
     return true;
   });
+}
+
+export interface PropertyFilters {
+  listing_type?: "FOR_SALE" | "FOR_RENT" | "all";
+  category?: "RESIDENTIAL" | "COMMERCIAL" | "LAND" | "INDUSTRIAL";
+  address?: string;
+  minPrice?: number;
+  maxPrice?: number;
+  is_active?: boolean;
+  keyword?: string;
+  page?: number;
+  limit?: number;
 }
 
 export const propertyQueryKeys = {
@@ -101,43 +126,43 @@ export const propertyQueryKeys = {
   detail: (id: string) => [...propertyQueryKeys.all, "detail", id] as const,
 };
 
-export async function fetchProperties(filters: PropertyFilters = {}): Promise<PropertyFeedResponse> {
+// ✅ Updated to match backend response shape
+export async function fetchProperties(filters: PropertyFilters = {}): Promise<PropertyResponse> {
   const params: Record<string, string | number | boolean> = {
-    page: filters.page ?? 1,
+    skip: ((filters.page ?? 1) - 1) * (filters.limit ?? 10),
+    limit: filters.limit ?? 10,
   };
 
-  if (filters.status && filters.status !== "all") params.status = filters.status;
-  if (filters.city) params.city = filters.city;
+  if (filters.listing_type && filters.listing_type !== "all") params.listing_type = filters.listing_type;
+  if (filters.category) params.category = filters.category;
   if (filters.minPrice !== undefined) params.minPrice = filters.minPrice;
   if (filters.maxPrice !== undefined) params.maxPrice = filters.maxPrice;
-  if (filters.bedrooms !== undefined) params.bedrooms = filters.bedrooms;
-  if (filters.bathrooms !== undefined) params.bathrooms = filters.bathrooms;
-  if (filters.furnished !== undefined && filters.furnished !== "all") params.furnished = filters.furnished;
-  if (filters.featured !== undefined) params.featured = filters.featured;
-  if (filters.limit !== undefined) params.limit = filters.limit;
+  if (filters.is_active !== undefined) params.is_active = filters.is_active;
 
   try {
-    const response = await api.get<PropertyFeedResponse>("/properties", { params });
+    const response = await api.get<PropertyResponse>("/properties", { params });
     return response.data;
   } catch (error) {
     const filtered = applyFilters(MOCK_PROPERTIES, filters);
-    const paged = filters.limit !== undefined ? filtered.slice(0, filters.limit) : filtered;
+    const limit = filters.limit ?? filtered.length;
+    const paged = filtered.slice(0, limit);
     return {
-      properties: paged,
-      page: 1,
+      data: paged,        // ✅ data not properties
       total: filtered.length,
+      skip: 0,
+      limit,
     };
   }
 }
 
 export async function getFeaturedProperties(limit = 3): Promise<Property[]> {
-  const response = await fetchProperties({ featured: true, limit, page: 1 });
-  return response.properties.slice(0, limit);
+  const response = await fetchProperties({ is_active: true, limit, page: 1 });
+  return response?.data?.slice(0, limit) || []; // ✅ data not properties
 }
 
 export async function getRecentProperties(limit = 4): Promise<Property[]> {
   const response = await fetchProperties({ page: 1, limit });
-  return response.properties.slice(0, limit);
+  return response?.data?.slice(0, limit) || []; // ✅ data not properties
 }
 
 export async function fetchPropertyById(id: string): Promise<Property> {
@@ -145,14 +170,14 @@ export async function fetchPropertyById(id: string): Promise<Property> {
     const response = await api.get<Property>(`/properties/${id}`);
     return response.data;
   } catch (error) {
-    const fallback = MOCK_PROPERTIES.find((item) => item.id === id);
+    const fallback = MOCK_PROPERTIES.find((item) => item.property_id === id); // ✅ property_id not id
     if (fallback) return fallback;
     throw error;
   }
 }
 
-export function useProperties(filters: PropertyFilters = {}): UseQueryResult<PropertyFeedResponse, Error> {
-  return useQuery<PropertyFeedResponse, Error>({
+export function useProperties(filters: PropertyFilters = {}): UseQueryResult<PropertyResponse, Error> {
+  return useQuery<PropertyResponse, Error>({
     queryKey: propertyQueryKeys.lists(filters),
     queryFn: () => fetchProperties(filters),
     placeholderData: (previousData) => previousData,

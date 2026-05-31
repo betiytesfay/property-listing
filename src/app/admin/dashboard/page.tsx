@@ -22,13 +22,14 @@ export default function AdminDashboardPage() {
     fetchCustomers();
     fetchOrders();
     fetchStats();
-  }, [fetchProperties, fetchCustomers, fetchOrders, fetchStats]);
+  }, []);
 
   const isLoading =
     propertiesLoading || customersLoading || ordersLoading || statsLoading;
 
+  // backend filter (property_id, adminStatus comes from backend or derived)
   const pendingProperties = (properties || [])
-    .filter(p => p.adminStatus === 'pending')
+    .filter((p: any) => p.adminStatus === 'pending')
     .slice(0, 5);
 
   const recentCustomers = (customers || []).slice(0, 4);
@@ -58,11 +59,11 @@ export default function AdminDashboardPage() {
 
       {/* Stats */}
       <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-4">
-        <StatCard title="Total properties" value={stats?.totalProperties ?? properties.length} icon={Home} />
-        <StatCard title="Available" value={properties.filter(p => p.status === 'available').length} icon={Building} />
-        <StatCard title="Customers" value={stats?.totalCustomers ?? customers.length} icon={Users} />
-        <StatCard title="Orders" value={stats?.totalOrders ?? orders.length} icon={ShoppingBag} />
-        <StatCard title="Pending" value={stats?.pendingApprovals ?? pendingProperties.length} icon={Clock} />
+        <StatCard title="Total properties" value={properties.length} icon={Home} />
+        <StatCard title="Available" value={properties.filter(p => p.is_active).length} icon={Building} />
+        <StatCard title="Customers" value={customers.length} icon={Users} />
+        <StatCard title="Orders" value={orders.length} icon={ShoppingBag} />
+        <StatCard title="Pending" value={pendingProperties.length} icon={Clock} />
       </div>
 
       {/* Revenue */}
@@ -82,7 +83,7 @@ export default function AdminDashboardPage() {
       {/* Pending + Customers */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
 
-        {/* Pending */}
+        {/* Pending Properties */}
         <div className="bg-white border rounded-xl p-4">
           <h2 className="font-semibold">Pending approvals</h2>
 
@@ -90,13 +91,17 @@ export default function AdminDashboardPage() {
             {pendingProperties.length === 0 ? (
               <p className="text-sm text-gray-500">No pending approvals</p>
             ) : (
-              pendingProperties.map(p => (
-                <div key={p.id} className="flex justify-between">
+              pendingProperties.map((p: any) => (
+                <div key={p.property_id} className="flex justify-between">
                   <div>
                     <p className="font-medium">{p.title}</p>
-                    <p className="text-sm text-gray-500">{p.location}</p>
+                    <p className="text-sm text-gray-500">{p.address}</p>
+                    <p className="text-xs text-gray-400">
+                      ID: {p.property_id}
+                    </p>
                   </div>
-                  <StatusBadge status={p.adminStatus} />
+
+                  <StatusBadge status={p.adminStatus ?? 'pending'} />
                 </div>
               ))
             )}
@@ -108,7 +113,7 @@ export default function AdminDashboardPage() {
           <h2 className="font-semibold">New customers</h2>
 
           <div className="mt-3 space-y-3">
-            {recentCustomers.map(c => (
+            {recentCustomers.map((c: any) => (
               <div key={c.id} className="flex items-center justify-between">
                 <div>
                   <p className="font-medium">{c.name}</p>
@@ -130,7 +135,7 @@ export default function AdminDashboardPage() {
         <div className="mt-3 overflow-x-auto">
           <table className="w-full text-sm">
             <tbody>
-              {recentOrders.map(o => (
+              {recentOrders.map((o: any) => (
                 <tr key={o.id} className="border-t">
                   <td className="py-2">{o.customerName}</td>
                   <td>{o.propertyTitle}</td>

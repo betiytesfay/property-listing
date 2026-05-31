@@ -50,5 +50,6 @@ export const config = {
     "/reset-password",
     "/dashboard/:path*",
     "/seller/:path*",
+    "/admin/:path*"
   ],
 };

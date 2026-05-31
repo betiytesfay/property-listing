@@ -6,7 +6,7 @@ interface StatCardProps {
   icon: LucideIcon;
   change?: string;
   changeType?: 'up' | 'down';
-  color?: 'white' | 'orange' | 'blue';
+  color?: 'white' | 'orange' | 'blue' | 'green' | 'purple' | 'yellow' | 'red';
 }
 
 export default function StatCard({ title, value, icon: Icon, change, changeType, color = 'white' }: StatCardProps) {
@@ -14,6 +14,10 @@ export default function StatCard({ title, value, icon: Icon, change, changeType,
     white: 'bg-white border-gray-200',
     orange: 'bg-orange text-white border-orange',
     blue: 'bg-dark-blue text-white border-dark-blue',
+    green: 'bg-green text-white border-green',
+    purple: 'bg-purple text-white border-purple',
+    yellow: 'bg-yellow text-white border-yellow',
+    red: 'bg-red text-white border-red',
   };
 
   const textColor = color === 'white' ? 'text-gray-800' : 'text-white';

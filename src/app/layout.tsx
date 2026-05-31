@@ -20,7 +20,9 @@ export default function RootLayout({
         className="flex min-h-full flex-col font-sans antialiased"
       >
         <QueryProvider>
-          <AuthProvider>{children}</AuthProvider>
+          <AuthProvider>
+            {children}
+          </AuthProvider>
         </QueryProvider>
       </body>
     </html>

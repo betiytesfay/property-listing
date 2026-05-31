@@ -9,6 +9,7 @@ interface RecentListingsSectionProps {
 }
 
 export function RecentListingsSection({ properties }: RecentListingsSectionProps) {
+  console.log(properties)
   // Split: first 4 compact cards in a 2-col grid
   const recentGrid = properties.slice(0, 4);
 

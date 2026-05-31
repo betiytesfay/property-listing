@@ -1,18 +1,5 @@
 @import "tailwindcss";
 
-@theme {
-  --color-auth-primary: var(--auth-primary);
-  --color-auth-primary-hover: var(--auth-primary-hover);
-  --color-auth-secondary: var(--auth-secondary);
-  --color-auth-accent: var(--auth-accent);
-  --color-auth-surface: var(--auth-surface);
-  --color-auth-surface-muted: var(--auth-surface-muted);
-  --color-auth-card: var(--auth-card);
-  --color-auth-on-surface: var(--auth-on-surface);
-  --color-auth-on-surface-muted: var(--auth-on-surface-muted);
-  --color-auth-outline: var(--auth-outline);
-  --color-auth-error: var(--auth-error);
-}
 
 :root {
   /* Base Colors */
@@ -82,13 +69,10 @@ html {
 body {
   min-height: 100vh;
   margin: 0;
-
   background: var(--background);
   color: var(--text-primary);
-
   font-family: var(--font-geist-sans), system-ui, sans-serif;
   line-height: 1.6;
-
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
 }
@@ -135,14 +119,9 @@ select {
   border: 1px solid var(--border);
   background: var(--surface);
   color: var(--text-primary);
-
   border-radius: 12px;
   padding: 0.75rem 1rem;
-
-  transition:
-    border-color 0.2s ease,
-    box-shadow 0.2s ease,
-    background-color 0.2s ease;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
 }
 
 input:focus,
@@ -154,8 +133,6 @@ select:focus {
 }
 
 button {
-
-
   cursor: pointer;
   transition: transform 0.15s ease, box-shadow 0.2s ease;
 }
@@ -191,4 +168,81 @@ button:active {
 
 ::-webkit-scrollbar-thumb:hover {
   background: #94a3b8;
+}
+
+/* Orange accent utilities */
+.bg-orange {
+  background-color: #f97316;
+}
+
+.bg-orange\/10 {
+  background-color: rgba(249, 115, 22, 0.1);
+}
+
+.text-orange {
+  color: #f97316;
+}
+
+.border-orange {
+  border-color: #f97316;
+}
+
+.hover\:bg-orange:hover {
+  background-color: #f97316;
+}
+
+.hover\:bg-orange\/20:hover {
+  background-color: rgba(249, 115, 22, 0.2);
+}
+
+.focus\:ring-orange:focus {
+  --tw-ring-color: #f97316;
+}
+
+.bg-dark-blue {
+  background-color: #1e3a5f;
+}
+
+.text-dark-blue {
+  color: #1e3a5f;
+}
+
+/* Mobile Responsive Fixes */
+html,
+body {
+  max-width: 100%;
+  overflow-x: hidden;
+  background-color: #f3f4f6;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+/* Prevent black background on mobile */
+@media (max-width: 768px) {
+  body {
+    background-color: #f9fafb;
+  }
+}
+
+/* Better touch targets on mobile */
+@media (max-width: 768px) {
+
+  button,
+  a,
+  [role="button"] {
+    min-height: 44px;
+    min-width: 44px;
+  }
+}
+
+/* Smooth scrolling */
+html {
+  scroll-behavior: smooth;
+}
+
+/* Prevent text size adjustment on orientation change */
+html {
+  -webkit-text-size-adjust: 100%;
 }

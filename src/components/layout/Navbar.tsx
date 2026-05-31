@@ -200,7 +200,7 @@ export function Navbar() {
                 className="flex items-center gap-2 rounded-full border border-slate-200 bg-white px-4 py-2.5 text-sm font-semibold text-slate-700 hover:bg-slate-50"
               >
                 <User size={16} />
-                <span className="max-w-[120px] truncate">
+                <span className="max-w-30 truncate">
                   {user.email.split("@")[0]}
                 </span>
               </Link>

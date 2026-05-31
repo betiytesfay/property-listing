@@ -33,7 +33,7 @@ export default function DashboardPage() {
 
   // Show dashboard for authenticated users
   return (
-    <div className="min-h-screen bg-gradient-to-b from-slate-50 to-white">
+    <div className="min-h-screen bg-linear-to-b from-slate-50 to-white">
       <div className="mx-auto max-w-7xl space-y-8 px-4 py-8 sm:px-6 lg:px-8">
         {/* Header Section */}
         <div className="bg-white rounded-2xl shadow-sm border border-slate-200 p-6 md:p-8">
@@ -49,7 +49,7 @@ export default function DashboardPage() {
                 Manage your property listings, track inquiries, and grow your presence on Habesha Property Hub.
               </p>
             </div>
-            <div className="flex-shrink-0">
+            <div className="shrink-0">
               <div className="bg-amber-50 rounded-xl px-4 py-2 text-center">
                 <p className="text-xs text-amber-700">Account Status</p>
                 <p className="text-sm font-semibold text-amber-800">Active Seller</p>
@@ -107,7 +107,7 @@ export default function DashboardPage() {
           </div>
 
           {/* Add Listing Card */}
-          <div className="group bg-gradient-to-br from-amber-50 to-white rounded-xl shadow-sm border border-amber-200 overflow-hidden hover:shadow-md transition-all duration-200">
+          <div className="group bg-linear-to-br from-amber-50 to-white rounded-xl shadow-sm border border-amber-200 overflow-hidden hover:shadow-md transition-all duration-200">
             <div className="p-6">
               <div className="bg-amber-600 rounded-xl w-12 h-12 flex items-center justify-center mb-4">
                 <PlusCircle className="h-6 w-6 text-white" />
@@ -151,7 +151,7 @@ export default function DashboardPage() {
         </div>
 
         {/* Tips Section */}
-        <div className="bg-gradient-to-r from-blue-50 to-indigo-50 rounded-xl p-6 border border-blue-100">
+        <div className="bg-linear-to-r from-blue-50 to-indigo-50 rounded-xl p-6 border border-blue-100">
           <h4 className="font-semibold text-slate-900 mb-2">💡 Pro Tip</h4>
           <p className="text-sm text-slate-600">
             Add high-quality photos and detailed descriptions to make your property listings stand out.

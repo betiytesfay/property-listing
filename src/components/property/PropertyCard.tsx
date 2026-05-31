@@ -16,7 +16,7 @@ function formatPrice(price: string): string {
 
 function ImagePlaceholder({ title }: { title: string }) {
   return (
-    <div className="flex h-full w-full items-center justify-center bg-gradient-to-br from-slate-100 to-slate-200">
+    <div className="flex h-full w-full items-center justify-center bg-linear-to-br from-slate-100 to-slate-200">
       <div className="text-center">
         <span className="text-3xl">🏢</span>
         <p className="mt-1 text-xs text-slate-400 line-clamp-1 px-2">{title}</p>
@@ -129,11 +129,11 @@ export function FeaturedPropertyCard({ property }: PropertyCardProps) {
               className="h-full w-full object-cover opacity-80 transition-transform duration-500 group-hover:scale-105"
             />
           ) : (
-            <div className="flex h-full w-full items-center justify-center bg-gradient-to-br from-slate-700 to-slate-900">
+            <div className="flex h-full w-full items-center justify-center bg-linear-to-br from-slate-700 to-slate-900">
               <span className="text-6xl opacity-30">🏠</span>
             </div>
           )}
-          <div className="absolute inset-0 bg-gradient-to-t from-slate-900 via-slate-900/30 to-transparent" />
+          <div className="absolute inset-0 bg-linear-to-t from-slate-900 via-slate-900/30 to-transparent" />
         </div>
 
         <div className="absolute left-4 top-4 flex gap-2">
@@ -158,7 +158,7 @@ export function FeaturedPropertyCard({ property }: PropertyCardProps) {
                 <StatChip icon="🏢" value={property.category} label="" />
               </div>
             </div>
-            <div className="flex-shrink-0 text-right">
+            <div className="shrink-0 text-right">
               <p className="text-2xl font-black text-white">
                 {formatPrice(property.price)} {/* ✅ */}
               </p>
@@ -175,7 +175,7 @@ export function CompactPropertyCard({ property }: PropertyCardProps) {
   return (
     <Link href={`/properties/${property.property_id}`} className="group block"> {/* ✅ */}
       <div className="flex gap-4 rounded-xl border border-slate-200 bg-white p-3 shadow-sm transition-all hover:shadow-md hover:-translate-y-0.5">
-        <div className="relative h-20 w-24 flex-shrink-0 overflow-hidden rounded-lg bg-slate-100">
+        <div className="relative h-20 w-24 shrink-0 overflow-hidden rounded-lg bg-slate-100">
           {property.media_urls?.[0] ? ( // ✅
             <img
               src={property.media_urls[0]}

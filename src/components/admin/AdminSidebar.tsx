@@ -86,11 +86,11 @@ export default function Sidebar({ sidebarOpen, setSidebarOpen }: SidebarProps) {
                 href={item.href}
                 onClick={() => setSidebarOpen(false)} // Close sidebar on mobile when clicking a link
                 className={`flex items-center gap-3 px-4 py-3 rounded-lg transition-colors ${isActive
-                    ? 'bg-orange-500 text-white'
-                    : 'text-gray-300 hover:bg-orange-500/20 hover:text-white'
+                  ? 'bg-orange-500 text-white'
+                  : 'text-gray-300 hover:bg-orange-500/20 hover:text-white'
                   }`}
               >
-                <Icon className="w-5 h-5 flex-shrink-0" />
+                <Icon className="w-5 h-5 shrink-0" />
                 <span className="truncate">{item.name}</span>
               </Link>
             );

@@ -6,7 +6,7 @@ export function HeroSection() {
      
       <div className="absolute inset-0">
         <img
-          src="/images/hero-bg.jpg"
+          src="https://plus.unsplash.com/premium_photo-1679856789424-f4dc3c855845?w=600&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MTMzfHxob3VzaW5nfGVufDB8fDB8fHww"
           alt="Luxury property in Ethiopia"
           className="h-full w-full object-cover"
         />
@@ -34,9 +34,9 @@ export function HeroSection() {
           </span>
         </h1>
 
-        <p className="max-w-lg text-base leading-7 text-slate-300">
+        <p className="max-w-lg text-base leading-7 text-slate-200">
           Discover exclusive listings in Addis Ababa's most prestigious
-          neighbourhoods, from Bole to Old Airport.
+          neighbourhoods.
         </p>
       </div>
     </div>

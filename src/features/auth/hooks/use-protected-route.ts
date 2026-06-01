@@ -1,16 +1,18 @@
 "use client";
 
 import { useEffect } from "react";
-import { usePathname, useRouter } from "next/navigation";
+import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import {
   AUTH_ROUTES,
   REDIRECT_QUERY_PARAM,
 } from "@/src/features/auth/constants/routes";
 import { useAuth } from "@/src/features/auth/hooks/use-auth";
+import { getUnauthorizedRedirectPath } from "@/src/features/auth/utils/redirect";
+import type { UserRole } from "@/src/features/auth/types/auth.types";
 
 interface UseProtectedRouteOptions {
   /** Required roles; omit to allow any authenticated user */
-  roles?: Array<"OWNER" | "ADMIN">;
+  roles?: UserRole[];
   redirectTo?: string;
 }
 
@@ -18,6 +20,7 @@ export function useProtectedRoute(options: UseProtectedRouteOptions = {}) {
   const { user, isAuthenticated, isHydrated } = useAuth();
   const router = useRouter();
   const pathname = usePathname();
+  const searchParams = useSearchParams();
 
   const redirectTo = options.redirectTo ?? AUTH_ROUTES.login;
 
@@ -33,8 +36,6 @@ export function useProtectedRoute(options: UseProtectedRouteOptions = {}) {
     }
 
     if (!isAuthenticated) {
-      // ✅ Get search params safely from window (only runs in browser)
-      const searchParams = new URLSearchParams(window.location.search);
       const query = searchParams.toString();
       const current = query ? `${pathname}?${query}` : pathname;
       const loginUrl = `${redirectTo}?${REDIRECT_QUERY_PARAM}=${encodeURIComponent(current)}`;
@@ -43,7 +44,7 @@ export function useProtectedRoute(options: UseProtectedRouteOptions = {}) {
     }
 
     if (!hasRequiredRole) {
-      router.replace("/");
+    router.replace(getUnauthorizedRedirectPath(user?.role));
     }
   }, [
     hasRequiredRole,
@@ -52,6 +53,8 @@ export function useProtectedRoute(options: UseProtectedRouteOptions = {}) {
     pathname,
     redirectTo,
     router,
+    searchParams,
+    user?.role,
   ]);
 
   return {

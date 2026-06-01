@@ -2,12 +2,10 @@
 
 import { useState } from "react";
 import Link from "next/link";
-import { Controller, useForm } from "react-hook-form";
+import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { InputField } from "@/src/components/auth/input-field";
-import { PasswordInput } from "@/src/components/auth/password-input";
-import { PasswordStrengthIndicator } from "@/src/components/auth/password-strength-indicator";
-import { PhoneInput } from "@/src/components/auth/phone-input";
+import { RegistrationFormFields } from "@/src/features/auth/components/registration-form-fields";
+import { toRegistrationFieldHandlers } from "@/src/features/auth/utils/registration-form-bridge";
 import { Checkbox } from "@/src/components/ui/checkbox";
 import { Label } from "@/src/components/ui/label";
 import { AuthFormAlert } from "@/src/features/auth/components/auth-form-alert";
@@ -71,10 +69,15 @@ export function RegisterForm() {
       <div className="w-full max-w-md">
         {/* Header - reduced spacing */}
         <div className="mb-5 text-center">
-          <div className="mb-1 text-xs font-semibold uppercase tracking-wide text-amber-700">
-            Habesha Property Hub
+          <div className="mb-3">
+            <Link
+              href="/"
+              className="text-2xl font-black tracking-tight text-slate-900 sm:text-3xl"
+            >
+              Habesha<span className="text-amber-400">Hub</span>
+            </Link>
           </div>
-          <h1 className="text-2xl font-semibold text-gray-900">Create an account</h1>
+          <h1 className="text-2xl font-black tracking-tight text-slate-900 sm:text-3xl">Create an account</h1>
           <p className="mt-1 text-sm text-gray-500">List and manage your properties with ease.</p>
         </div>
 
@@ -88,71 +91,11 @@ export function RegisterForm() {
             />
           )}
 
-          {/* Fields - more compact */}
-          <div className="space-y-3">
-            <InputField
-              label="Full name"
-              placeholder="Your full name"
-              autoComplete="name"
-              error={errors.fullName?.message}
-              {...register("fullName", { onChange: clearMessages })}
-            />
-            <InputField
-              label="Email"
-              type="email"
-              autoComplete="email"
-              placeholder="name@example.com"
-              error={errors.email?.message}
-              {...register("email", { onChange: clearMessages })}
-            />
-            <Controller
-              name="phone"
-              control={control}
-              render={({ field }) => (
-                <PhoneInput
-                  error={errors.phone?.message}
-                  {...field}
-                  onChange={(e) => {
-                    clearMessages();
-                    field.onChange(e);
-                  }}
-                />
-              )}
-            />
-            <Controller
-              name="password"
-              control={control}
-              render={({ field }) => (
-                <PasswordInput
-                  label="Password"
-                  autoComplete="new-password"
-                  error={errors.password?.message}
-                  {...field}
-                  onChange={(e) => {
-                    clearMessages();
-                    field.onChange(e);
-                  }}
-                />
-              )}
-            />
-            <PasswordStrengthIndicator password={password} />
-            <Controller
-              name="confirmPassword"
-              control={control}
-              render={({ field }) => (
-                <PasswordInput
-                  label="Confirm password"
-                  autoComplete="new-password"
-                  error={errors.confirmPassword?.message}
-                  {...field}
-                  onChange={(e) => {
-                    clearMessages();
-                    field.onChange(e);
-                  }}
-                />
-              )}
-            />
-          </div>
+          <RegistrationFormFields
+            {...toRegistrationFieldHandlers(register, control, errors)}
+            password={password}
+            onFieldChange={clearMessages}
+          />
 
           {/* Terms */}
           <div className="flex items-start gap-2">
@@ -164,16 +107,27 @@ export function RegisterForm() {
                 setValue("acceptTerms", checked === true, { shouldValidate: true });
               }}
             />
-            <Label htmlFor="acceptTerms" className="text-sm font-normal text-gray-600">
-              I agree to the{" "}
-              <button type="button" className="font-medium text-amber-700 hover:underline">
-                Terms &amp; Conditions
-              </button>{" "}
-              and{" "}
-              <button type="button" className="font-medium text-amber-700 hover:underline">
-                Privacy Policy
-              </button>
-            </Label>
+            <Label
+  htmlFor="acceptTerms"
+  className="text-sm font-normal text-gray-600 normal-case"
+>
+  I agree to the{" "}
+  <button
+    type="button"
+    className="font-medium text-amber-700 hover:underline normal-case"
+  >
+    terms and conditions
+  </button>{" "}
+  and{" "}
+  <button
+    type="button"
+    className="font-medium text-amber-700 hover:underline normal-case"
+  >
+    privacy policy
+  </button>
+  .
+</Label>
+
           </div>
           {errors.acceptTerms?.message && (
             <p className="text-xs text-red-600">{errors.acceptTerms.message}</p>

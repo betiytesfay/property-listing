@@ -53,7 +53,7 @@ export const useAuthStore = create<AuthStore>((set, get) => ({
   // -----------------------
   setSession: (session, rememberMe = false) => {
     saveTokens(session.accessToken, session.refreshToken, rememberMe);
-    setAuthCookie(rememberMe);
+      setAuthCookie(rememberMe, session.user.role);
 
     if (session.user.fullName) {
       saveUserProfile({ fullName: session.user.fullName });

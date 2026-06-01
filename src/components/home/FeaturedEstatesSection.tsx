@@ -3,6 +3,7 @@ import { FeaturedPropertyCard } from "../property/PropertyCard";
 import { SectionHeader } from "../ui/SectionHeader";
 import { Button } from "../ui/Button";
 import type { Property } from "../../types/propertyTypes";
+import { ArrowRight } from "lucide-react";
 
 
 interface FeaturedEstatesSectionProps {
@@ -18,11 +19,15 @@ export function FeaturedEstatesSection({ properties }: FeaturedEstatesSectionPro
         title="Premium properties you’ll love"
         description="Discover a curated collection of our top listings, handpicked for quality and value."
         action={
-          <Link href="/properties">
-            <Button variant="outline" className="text-slate-900">
-              Browse all listings
-            </Button>
-          </Link>
+         <Link href="/properties" className="inline-block group">
+  <Button 
+    variant="secondary"
+    className="rounded-full font-bold px-5 bg-[var(--auth-primary)] hover:bg-[var(--auth-primary-hover)] shadow-sm transition-all active:scale-95 flex items-center"
+  >
+    All listings 
+    <ArrowRight className="ml-2 transition-transform duration-200 group-hover:translate-x-1" size={16} /> 
+  </Button>
+</Link>
         }
       />
 

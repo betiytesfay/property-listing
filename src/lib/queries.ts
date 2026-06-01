@@ -1,6 +1,33 @@
-﻿import { useQuery, type UseQueryResult } from "@tanstack/react-query";
+﻿
+
+import { useQuery, type UseQueryResult } from "@tanstack/react-query";
 import api from "./api";
-import type { Property, PropertyResponse } from "../types/propertyTypes"; // ✅ updated type
+import type { Property, PropertyFeedResponse, PropertyFilters } from "../types/propertyTypes";
+
+interface BackendProperty {
+  property_id: string;
+  owner_id: string;
+  title: string;
+  description: string | null;
+  category: string;
+  listing_type: string;
+  price: string;
+  address: string;
+  latitude: string | null;
+  longitude: string | null;
+  media_urls: string[] | null;
+  listing_fee_paid: boolean;
+  is_active: boolean;
+  created_at: string;
+  updated_at: string;
+}
+
+interface BackendPropertyFeedResponse {
+  total: number;
+  skip: number;
+  limit: number;
+  data: BackendProperty[];
+}
 
 // ✅ Updated mock data to match backend shape
 const MOCK_PROPERTIES: Property[] = [
@@ -128,68 +155,84 @@ export const propertyQueryKeys = {
 
 // ✅ Updated to match backend response shape
 export async function fetchProperties(filters: PropertyFilters = {}): Promise<PropertyResponse> {
-  const params: Record<string, string | number | boolean> = {
-    skip: ((filters.page ?? 1) - 1) * (filters.limit ?? 10),
-    limit: filters.limit ?? 10,
-  };
+  export async function fetchProperties(filters: PropertyFilters = {}): Promise<PropertyFeedResponse> {
+    const limit = filters.limit ?? 12;
+    const page = filters.page ?? 1;
+    const skip = (page - 1) * limit;
 
-  if (filters.listing_type && filters.listing_type !== "all") params.listing_type = filters.listing_type;
-  if (filters.category) params.category = filters.category;
-  if (filters.minPrice !== undefined) params.minPrice = filters.minPrice;
-  if (filters.maxPrice !== undefined) params.maxPrice = filters.maxPrice;
-  if (filters.is_active !== undefined) params.is_active = filters.is_active;
-
-  try {
-    const response = await api.get<PropertyResponse>("/properties", { params });
-    return response.data;
-  } catch (error) {
-    const filtered = applyFilters(MOCK_PROPERTIES, filters);
-    const limit = filters.limit ?? filtered.length;
-    const paged = filtered.slice(0, limit);
-    return {
-      data: paged,        // ✅ data not properties
-      total: filtered.length,
-      skip: 0,
+    const params: Record<string, string | number | boolean> = {
+      skip: ((filters.page ?? 1) - 1) * (filters.limit ?? 10),
+      limit: filters.limit ?? 10,
+      skip,
       limit,
     };
+
+    if (filters.listing_type && filters.listing_type !== "all") params.listing_type = filters.listing_type;
+    if (filters.category) params.category = filters.category;
+    if (filters.minPrice !== undefined) params.minPrice = filters.minPrice;
+    if (filters.maxPrice !== undefined) params.maxPrice = filters.maxPrice;
+    if (filters.is_active !== undefined) params.is_active = filters.is_active;
+
+    try {
+      const response = await api.get<PropertyResponse>("/properties", { params });
+      return response.data;
+      const response = await api.get<BackendPropertyFeedResponse>("/properties", { params });
+      const rawList = response.data?.data ?? [];
+      return {
+        properties: rawList.map(mapBackendProperty),
+        page,
+        total: response.data?.total ?? 0,
+      };
+    } catch (error) {
+      const filtered = applyFilters(MOCK_PROPERTIES, filters);
+      const limit = filters.limit ?? filtered.length;
+      const paged = filtered.slice(0, limit);
+      return {
+        data: paged,        // ✅ data not properties
+        total: filtered.length,
+        skip: 0,
+        limit,
+      };
+    }
   }
-}
 
-export async function getFeaturedProperties(limit = 3): Promise<Property[]> {
-  const response = await fetchProperties({ is_active: true, limit, page: 1 });
-  return response?.data?.slice(0, limit) || []; // ✅ data not properties
-}
 
-export async function getRecentProperties(limit = 4): Promise<Property[]> {
-  const response = await fetchProperties({ page: 1, limit });
-  return response?.data?.slice(0, limit) || []; // ✅ data not properties
-}
-
-export async function fetchPropertyById(id: string): Promise<Property> {
-  try {
-    const response = await api.get<Property>(`/properties/${id}`);
-    return response.data;
-  } catch (error) {
-    const fallback = MOCK_PROPERTIES.find((item) => item.property_id === id); // ✅ property_id not id
-    if (fallback) return fallback;
-    throw error;
+  export async function getFeaturedProperties(limit = 3): Promise<Property[]> {
+    const response = await fetchProperties({ is_active: true, limit, page: 1 });
+    return response?.data?.slice(0, limit) || []; // ✅ data not properties
   }
-}
 
-export function useProperties(filters: PropertyFilters = {}): UseQueryResult<PropertyResponse, Error> {
-  return useQuery<PropertyResponse, Error>({
-    queryKey: propertyQueryKeys.lists(filters),
-    queryFn: () => fetchProperties(filters),
-    placeholderData: (previousData) => previousData,
-    staleTime: 1000 * 60 * 2,
-  });
-}
+  export async function getRecentProperties(limit = 4): Promise<Property[]> {
+    const response = await fetchProperties({ page: 1, limit });
+    return response?.data?.slice(0, limit) || []; // ✅ data not properties
+  }
 
-export function usePropertyById(id?: string): UseQueryResult<Property, Error> {
-  return useQuery<Property, Error>({
-    queryKey: propertyQueryKeys.detail(id ?? ""),
-    queryFn: () => fetchPropertyById(id ?? ""),
-    enabled: Boolean(id),
-    staleTime: 1000 * 60 * 5,
-  });
-}
+  export async function fetchPropertyById(id: string): Promise<Property> {
+    try {
+      const response = await api.get<BackendProperty | { data: BackendProperty }>(`/properties/${id}`);
+      const data = (response.data as any)?.data ? (response.data as any).data : response.data;
+      return mapBackendProperty(data as BackendProperty);
+    } catch (error) {
+      const fallback = MOCK_PROPERTIES.find((item) => item.property_id === id); // ✅ property_id not id
+      if (fallback) return fallback;
+      throw error;
+    }
+  }
+
+  export function useProperties(filters: PropertyFilters = {}): UseQueryResult<PropertyResponse, Error> {
+    return useQuery<PropertyResponse, Error>({
+      queryKey: propertyQueryKeys.lists(filters),
+      queryFn: () => fetchProperties(filters),
+      placeholderData: (previousData) => previousData,
+      staleTime: 1000 * 60 * 2,
+    });
+  }
+
+  export function usePropertyById(id?: string): UseQueryResult<Property, Error> {
+    return useQuery<Property, Error>({
+      queryKey: propertyQueryKeys.detail(id ?? ""),
+      queryFn: () => fetchPropertyById(id ?? ""),
+      enabled: Boolean(id),
+      staleTime: 1000 * 60 * 5,
+    });
+  }

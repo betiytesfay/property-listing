@@ -22,11 +22,20 @@ export function getErrorMessage(error: unknown, fallback = "Something went wrong
       return "Cannot reach the server. Make sure the backend is running on port 8000, then restart the Next.js dev server.";
     }
 
+    const detail = error.response?.data;
+
     if (error.response.status >= 500) {
+      if (typeof detail === "string") {
+        return detail;
+      }
+      if (detail && typeof detail === "object" && "detail" in detail) {
+        const apiDetail = (detail as Record<string, unknown>).detail;
+        if (typeof apiDetail === "string") {
+          return apiDetail;
+        }
+      }
       return "Server error. The API is reachable but failed—often because PostgreSQL is not running. Start the database (see property-management-be/SETUP.md) and try again.";
     }
-
-    const detail = error.response?.data;
 
     if (typeof detail === "string") {
       return detail;

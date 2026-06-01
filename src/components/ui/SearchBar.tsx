@@ -106,7 +106,7 @@ export function SearchBar({ onSearch }: SearchBarProps) {
         </div>
       )}
 
-      <div className="flex gap-2">
+      <div className="flex items-center gap-2">
         <input
           type="text"
           placeholder="Type or select from suggestions..."
@@ -119,7 +119,7 @@ export function SearchBar({ onSearch }: SearchBarProps) {
         <button
           onClick={handleSearch}
           disabled={keywords.length === 0}
-          className="rounded-full bg-amber-500 p-3 text-white hover:bg-amber-600 disabled:opacity-50"
+          className="rounded-full h-12 w-12 bg-amber-500  text-white hover:bg-amber-600 disabled:opacity-50 flex items-center justify-center"
         >
           <Search size={20} />
         </button>

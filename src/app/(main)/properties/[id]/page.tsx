@@ -16,7 +16,7 @@ interface Props {
 }
 
 export async function generateMetadata({ params }: Props) {
-  const { id } = await params;                          
+  const { id } = await params;
   const property = await getProperty(id);
   if (!property) return { title: "Property not found" };
   return {
@@ -26,7 +26,7 @@ export async function generateMetadata({ params }: Props) {
 }
 
 export default async function PropertyDetailPage({ params }: Props) {
-  const { id } = await params;                        
+  const { id } = await params;
   const property = await getProperty(id);
   if (!property) notFound();
 
@@ -43,7 +43,7 @@ export default async function PropertyDetailPage({ params }: Props) {
     <div className="min-h-screen bg-[#F7F5F0]">
       {/* Breadcrumb */}
       <div className="border-b border-stone-200 bg-white">
-        <div className="mx-auto max-w-screen-xl px-6 py-4 sm:px-10 lg:px-12">
+        <div className="mx-auto max-w-7xl px-6 py-4 sm:px-10 lg:px-12">
           <nav className="flex items-center gap-2 text-xs text-stone-400 font-sans">
             <a href="/properties" className="hover:text-stone-700 transition-colors">
               Listings
@@ -51,7 +51,7 @@ export default async function PropertyDetailPage({ params }: Props) {
             <span>/</span>
             <span className="text-stone-500">{property.address}</span>
             <span>/</span>
-            <span className="text-stone-600 font-medium truncate max-w-[240px]">
+            <span className="text-stone-600 font-medium truncate max-w-60">
               {property.title}
             </span>
           </nav>
@@ -59,7 +59,7 @@ export default async function PropertyDetailPage({ params }: Props) {
       </div>
 
       {/* Main layout */}
-      <div className="mx-auto max-w-screen-xl px-6 py-10 sm:px-10 lg:px-12">
+      <div className="mx-auto max-w-7xl px-6 py-10 sm:px-10 lg:px-12">
         <div className="flex flex-col gap-10 lg:flex-row lg:items-start">
 
           {/* Left column */}
@@ -74,7 +74,7 @@ export default async function PropertyDetailPage({ params }: Props) {
           </div>
 
           {/* Sticky sidebar */}
-          <aside className="w-full lg:w-[340px] xl:w-[360px] flex-shrink-0">
+          <aside className="w-full lg:w-85 xl:w-90 shrink-0">
             <div className="sticky top-6">
               <PropertySidebar property={property} />
             </div>

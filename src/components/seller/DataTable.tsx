@@ -1,7 +1,7 @@
 type Column<T> = {
   key: keyof T;
   label: string;
-  align?: "left" | "center";
+  align?: "left" | "center" | "right";
   render?: (value: T[keyof T], row: T) => React.ReactNode;
 };
 
@@ -24,9 +24,8 @@ export default function DataTable<T extends Record<string, unknown>>({
             {columns.map((col) => (
               <th
                 key={String(col.key)}
-                className={`px-4 py-3 text-xs font-semibold uppercase tracking-wider text-slate-400 ${
-                  col.align === "center" ? "text-center" : "text-left"
-                }`}
+                className={`px-4 py-3 text-xs font-semibold uppercase tracking-wider text-slate-400 ${col.align === "center" ? "text-center" : "text-left"
+                  }`}
               >
                 {col.label}
               </th>
@@ -43,9 +42,8 @@ export default function DataTable<T extends Record<string, unknown>>({
               {columns.map((col) => (
                 <td
                   key={String(col.key)}
-                  className={`px-4 py-4 text-sm text-slate-700 ${
-                    col.align === "center" ? "text-center" : "text-left"
-                  }`}
+                  className={`px-4 py-4 text-sm text-slate-700 ${col.align === "center" ? "text-center" : "text-left"
+                    }`}
                 >
                   {col.render
                     ? col.render(row[col.key], row)

@@ -1,5 +1,6 @@
 "use client";
 
+import { Suspense } from "react";  // ← ADD THIS
 import type { ReactNode } from "react";
 import { Navbar } from "@/src/components/layout/Navbar";
 import { OwnerGuard } from "@/src/features/auth/components/owner-guard";
@@ -22,7 +23,9 @@ export default function ProtectedSellerLayout({
             <SideNavigation />
 
             <main className="flex-1 p-8">
-              {children}
+              <Suspense fallback={<div className="flex justify-center p-10">Loading...</div>}>
+                {children}
+              </Suspense>
             </main>
           </div>
         </OwnerGuard>

@@ -6,6 +6,7 @@ import DataTable from "./DataTable";
 import Pagination from "./Pagination";
 import { DeleteModal } from "./DeleteModal";
 import AddNewPropertyModal from "./AddNewPropertyModal";
+import { CreatePropertyInput } from "@/src/lib/validations/property";
 
 interface ActiveListingProps {
   pageSize?: number;
@@ -16,15 +17,25 @@ interface ActiveListingProps {
   onRefresh: () => void;
 }
 
-export default function ActiveListing({ 
-  pageSize = 4, 
-  externalSearch, 
+interface ModalPropertyFormValues {
+  name: string;
+  type: string;
+  status: string;
+  location: string;
+  price: string;
+  description: string;
+}
+
+export default function ActiveListing({
+  pageSize = 4,
+  externalSearch,
   externalFilter,
   initialData,
   isLoadingExternal,
   onRefresh,
 }: ActiveListingProps) {
-  
+
+
   const {
     page,
     setPage,
@@ -44,34 +55,34 @@ export default function ActiveListing({
   // Client filtering pipeline combining data stream with external search states
   const filteredData = initialData.filter((property) => {
     // 1. Text Search execution against schema attributes
-    const matchesSearch = 
+    const matchesSearch =
       !externalSearch ||
       property.title?.toLowerCase().includes(externalSearch.toLowerCase()) ||
       property.address?.toLowerCase().includes(externalSearch.toLowerCase());
 
-   let matchesFilter = true;
+    let matchesFilter = true;
 
-if (externalFilter) {
-  if (externalFilter === "Published") {
-    matchesFilter =
-      property.is_active === true &&
-      property.listing_fee_paid === true;
-  }
+    if (externalFilter) {
+      if (externalFilter === "Published") {
+        matchesFilter =
+          property.is_active === true &&
+          property.listing_fee_paid === true;
+      }
 
-  else if (externalFilter === "Pending Payments") {
-    matchesFilter = property.listing_fee_paid === false;
-  }
+      else if (externalFilter === "Pending Payments") {
+        matchesFilter = property.listing_fee_paid === false;
+      }
 
-  else if (externalFilter === "Inactive Listings") {
-    matchesFilter =
-      property.is_active === false &&
-      property.listing_fee_paid === true;
-  }
+      else if (externalFilter === "Inactive Listings") {
+        matchesFilter =
+          property.is_active === false &&
+          property.listing_fee_paid === true;
+      }
 
-  else if (externalFilter === "Total Listings") {
-    matchesFilter = true;
-  }
-}
+      else if (externalFilter === "Total Listings") {
+        matchesFilter = true;
+      }
+    }
 
 
     return matchesSearch && matchesFilter;
@@ -88,8 +99,33 @@ if (externalFilter) {
     onRefresh();
   };
 
-  const wrappedHandleEdit = async (data: FormData) => {
-    await handleEdit(data);
+
+  const wrappedHandleEdit = async (data: ModalPropertyFormValues) => {
+    // Map ModalPropertyFormValues to CreatePropertyInput format
+    const mappedData: CreatePropertyInput = {
+      title: data.name,
+      category: data.type.toUpperCase() as any, // "Apartment" -> "RESIDENTIAL" etc
+      listing_type: "FOR_SALE", // Default or derive from somewhere
+      price: data.price,
+      address: data.location,
+      description: data.description,
+      latitude: "",
+      longitude: "",
+      images: [],
+    };
+
+    // Then convert to FormData
+    const formData = new FormData();
+    formData.append("title", mappedData.title);
+    formData.append("category", mappedData.category);
+    formData.append("listing_type", mappedData.listing_type);
+    formData.append("price", mappedData.price);
+    formData.append("address", mappedData.address);
+    formData.append("description", mappedData.description);
+    formData.append("latitude", mappedData.latitude);
+    formData.append("longitude", mappedData.longitude);
+
+    await handleEdit(formData);
     onRefresh();
   };
 
@@ -100,10 +136,10 @@ if (externalFilter) {
           Syncing property matrix database...
         </div>
       ) : (
-        <DataTable  
-        
-        columns={columns} 
-        data={paginatedData} rowKey="property_id" />
+        <DataTable
+
+          columns={columns}
+          data={paginatedData} rowKey="property_id" />
       )}
 
       {deleteTarget && (
@@ -113,7 +149,7 @@ if (externalFilter) {
           onDelete={wrappedHandleDelete}
         />
       )}
-      
+
       {editTarget && (
         <AddNewPropertyModal
           editData={editTarget}

@@ -17,6 +17,10 @@ const MOBILE_COPY: Record<BrandPanelVariant, { headline: string; subline: string
     headline: "Partner with the best in Ethiopia.",
     subline: "Create your account to start listing properties.",
   },
+  adminRegister: {
+    headline: "Admin Access Required",
+    subline: "Please authenticate with your administrator credentials.",
+  },
 };
 
 export function AuthLayout({ children, variant }: AuthLayoutProps) {

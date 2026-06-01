@@ -123,10 +123,10 @@ export function PropertyCreationForm({ onClose }: PropertyFormProps) {
 
       const { tier, ...propertyPayload } = data;
 
-      // Clean comma formatted string out into a native primitive float right before API submission
-      const cleanPrice = typeof propertyPayload.price === "string" 
-        ? parseFloat((propertyPayload.price as string).replace(/,/g, "")) 
-        : propertyPayload.price;
+
+      const cleanPrice = typeof propertyPayload.price === "string"
+        ? (propertyPayload.price as string).replace(/,/g, "")
+        : String(propertyPayload.price);
 
       const propertyResponse = await createProperty({
         ...propertyPayload,
@@ -172,14 +172,14 @@ export function PropertyCreationForm({ onClose }: PropertyFormProps) {
       setIsSubmitting(true);
       setSubmitError("");
       const fullFormValues = getValues();
-      
+
       const cleanPrice = typeof fullFormValues.price === "string"
-        ? parseFloat((fullFormValues.price as string).replace(/,/g, ""))
-        : fullFormValues.price;
+        ? (fullFormValues.price as string).replace(/,/g, "")
+        : String(fullFormValues.price);
 
       // Post as a regular listing or draft state depending on how your backend parses data payload
       await createProperty({ ...fullFormValues, price: cleanPrice, status: "DRAFT" } as any);
-      
+
       setSuccessMessage("Property saved carefully as draft ledger asset.");
       if (onClose) onClose();
       window.location.href = "/dashboard/listings";
@@ -198,9 +198,8 @@ export function PropertyCreationForm({ onClose }: PropertyFormProps) {
           {[1, 2, 3].map((step) => (
             <div
               key={step}
-              className={`flex-1 h-2 rounded-full transition-all duration-300 ${
-                step <= currentStep ? "bg-[#002045]" : "bg-slate-200"
-              }`}
+              className={`flex-1 h-2 rounded-full transition-all duration-300 ${step <= currentStep ? "bg-[#002045]" : "bg-slate-200"
+                }`}
             />
           ))}
         </div>
@@ -212,20 +211,20 @@ export function PropertyCreationForm({ onClose }: PropertyFormProps) {
       {/* Messages */}
       {submitError && (
         <div className="p-4 bg-red-50 border border-red-100 rounded-xl flex items-start gap-3">
-          <AlertCircle className="h-5 w-5 text-red-600 flex-shrink-0 mt-0.5" />
+          <AlertCircle className="h-5 w-5 text-red-600 shrink-0 mt-0.5" />
           <p className="text-red-700 text-sm font-medium">{submitError}</p>
         </div>
       )}
 
       {successMessage && (
         <div className="p-4 bg-emerald-50 border border-emerald-100 rounded-xl flex items-start gap-3">
-          <CheckCircle2 className="h-5 w-5 text-emerald-600 flex-shrink-0 mt-0.5" />
+          <CheckCircle2 className="h-5 w-5 text-emerald-600 shrink-0 mt-0.5" />
           <p className="text-emerald-700 text-sm font-medium">{successMessage}</p>
         </div>
       )}
 
       <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
-        
+
         {/* STEP 1: Core Parameters */}
         {currentStep === 1 && (
           <div className="bg-white rounded-2xl border border-slate-200 p-6 space-y-5 shadow-sm">
@@ -237,9 +236,8 @@ export function PropertyCreationForm({ onClose }: PropertyFormProps) {
                 {...register("title")}
                 type="text"
                 placeholder="e.g. Modern Villa in Bole"
-                className={`w-full px-4 py-2.5 text-sm rounded-xl border border-slate-200 focus:outline-none focus:border-[#002045] focus:ring-4 focus:ring-[#002045]/5 transition-all ${
-                  errors.title ? "border-red-300 bg-red-50/50" : ""
-                }`}
+                className={`w-full px-4 py-2.5 text-sm rounded-xl border border-slate-200 focus:outline-none focus:border-[#002045] focus:ring-4 focus:ring-[#002045]/5 transition-all ${errors.title ? "border-red-300 bg-red-50/50" : ""
+                  }`}
               />
               {errors.title && <p className="text-red-600 text-xs font-medium mt-1">{errors.title.message}</p>}
             </div>
@@ -253,9 +251,8 @@ export function PropertyCreationForm({ onClose }: PropertyFormProps) {
                   {["FOR_SALE", "FOR_RENT"].map((type) => (
                     <label key={type} className="flex-1 cursor-pointer">
                       <input {...register("listing_type")} type="radio" value={type} className="sr-only" />
-                      <div className={`py-2 px-3 rounded-lg text-center text-xs font-bold transition-all ${
-                        watchListingType === type ? "bg-[#002045] text-white shadow-sm" : "text-slate-600 hover:bg-slate-200"
-                      }`}>
+                      <div className={`py-2 px-3 rounded-lg text-center text-xs font-bold transition-all ${watchListingType === type ? "bg-[#002045] text-white shadow-sm" : "text-slate-600 hover:bg-slate-200"
+                        }`}>
                         {type === "FOR_SALE" ? "Sell" : "Rent"}
                       </div>
                     </label>
@@ -286,9 +283,8 @@ export function PropertyCreationForm({ onClose }: PropertyFormProps) {
               <input
                 type="text"
                 placeholder="0.00"
-                className={`w-full px-4 py-2.5 text-sm rounded-xl border border-slate-200 focus:outline-none focus:border-[#002045] focus:ring-4 focus:ring-[#002045]/5 transition-all ${
-                  errors.price ? "border-red-300 bg-red-50/50" : ""
-                }`}
+                className={`w-full px-4 py-2.5 text-sm rounded-xl border border-slate-200 focus:outline-none focus:border-[#002045] focus:ring-4 focus:ring-[#002045]/5 transition-all ${errors.price ? "border-red-300 bg-red-50/50" : ""
+                  }`}
                 {...register("price", {
                   required: "Price is required",
                   onChange: (e) => {
@@ -393,18 +389,17 @@ export function PropertyCreationForm({ onClose }: PropertyFormProps) {
               <h3 className="text-sm font-bold text-slate-800 uppercase tracking-wider mb-4">Select Listing Tier</h3>
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 {PAYMENT_TIERS.map((tier) => (
-                  <label 
-                    key={tier.id} 
-                    className={`flex items-start justify-between p-4 rounded-xl border-2 cursor-pointer transition ${
-                      watchTier === tier.id ? "border-[#002045] bg-slate-50/50" : "border-slate-200 hover:border-slate-300"
-                    }`}
+                  <label
+                    key={tier.id}
+                    className={`flex items-start justify-between p-4 rounded-xl border-2 cursor-pointer transition ${watchTier === tier.id ? "border-[#002045] bg-slate-50/50" : "border-slate-200 hover:border-slate-300"
+                      }`}
                   >
                     <div className="flex gap-3">
-                      <input 
-                        type="radio" 
+                      <input
+                        type="radio"
                         value={tier.id}
                         {...register("tier")}
-                        className="w-4 h-4 mt-0.5 text-[#002045] focus:ring-[#002045]" 
+                        className="w-4 h-4 mt-0.5 text-[#002045] focus:ring-[#002045]"
                       />
                       <div>
                         <p className="font-bold text-sm text-slate-800">{tier.name}</p>

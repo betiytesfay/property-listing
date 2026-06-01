@@ -44,7 +44,7 @@ export function useProtectedRoute(options: UseProtectedRouteOptions = {}) {
     }
 
     if (!hasRequiredRole) {
-    router.replace(getUnauthorizedRedirectPath(user?.role));
+      router.replace(getUnauthorizedRedirectPath(user?.role));
     }
   }, [
     hasRequiredRole,

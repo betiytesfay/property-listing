@@ -6,7 +6,7 @@ import { useEffect, useState } from "react";
 import { useSearchParams } from "next/navigation";
 import Link from "next/link";
 import { SearchBar } from "@/src/components/ui/SearchBar";
-
+export const dynamic = 'force-dynamic';
 interface SearchResult {
   id: string;
   title: string;

@@ -18,7 +18,7 @@ import {
   type ResetPasswordFormValues,
 } from "@/src/features/auth/schemas/auth.schemas";
 import { getErrorMessage } from "@/src/lib/api/errors";
-
+export const dynamic = 'force-dynamic';
 export function ResetPasswordForm() {
   const router = useRouter();
   const searchParams = useSearchParams();

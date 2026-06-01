@@ -3,17 +3,18 @@
 import { useEffect, useState } from "react";
 import Link from "next/link";
 import { useSearchParams } from "next/navigation";
-import { 
-  CheckCircle2, 
-  ArrowRight, 
-  Building2, 
-  ShieldCheck, 
+import {
+  CheckCircle2,
+  ArrowRight,
+  Building2,
+  ShieldCheck,
   Receipt,
   Sparkles,
   Loader2,
   XCircle
 } from "lucide-react";
 import { apiClient } from "@/src/lib/api/client";
+export const dynamic = 'force-dynamic';
 
 interface PaymentStatusResponse {
   id: string;
@@ -106,10 +107,9 @@ export default function PaymentSuccessPage() {
       <div className="absolute inset-0 bg-[radial-gradient(#e2e8f0_1px,transparent_1px)] [background-size:16px_16px] opacity-70 pointer-events-none" />
       <div className="absolute top-1/4 left-1/2 -translate-x-1/2 w-[500px] h-[500px] bg-emerald-500/5 rounded-full blur-3xl pointer-events-none" />
 
-      <div className={`w-full max-w-xl bg-white rounded-[32px] border border-slate-200/80 p-6 sm:p-10 shadow-xl transition-all duration-700 transform ${
-        animate ? "translate-y-0 opacity-100 scale-100" : "translate-y-8 opacity-0 scale-95"
-      }`}>
-        
+      <div className={`w-full max-w-xl bg-white rounded-[32px] border border-slate-200/80 p-6 sm:p-10 shadow-xl transition-all duration-700 transform ${animate ? "translate-y-0 opacity-100 scale-100" : "translate-y-8 opacity-0 scale-95"
+        }`}>
+
         <div className="flex flex-col items-center text-center">
           <div className="relative">
             <div className="absolute inset-0 rounded-full bg-emerald-500/10 animate-ping opacity-75 duration-1000" />
@@ -122,18 +122,17 @@ export default function PaymentSuccessPage() {
           </div>
 
           {/* Dynamically display status variant badge from server */}
-          <span className={`mt-6 inline-flex items-center rounded-full px-3 py-1 text-xs font-bold uppercase tracking-wider border ${
-            paymentData.status === "SUCCESS" || paymentData.status === "PENDING"
+          <span className={`mt-6 inline-flex items-center rounded-full px-3 py-1 text-xs font-bold uppercase tracking-wider border ${paymentData.status === "SUCCESS" || paymentData.status === "PENDING"
               ? "bg-emerald-50 text-emerald-700 border-emerald-100"
               : "bg-amber-50 text-amber-700 border-amber-100"
-          }`}>
+            }`}>
             Status: {paymentData.status}
           </span>
-          
+
           <h1 className="mt-4 text-2xl sm:text-3xl font-black tracking-tight text-slate-900">
             Payment Handshake Processed
           </h1>
-          
+
           <p className="mt-2.5 max-w-md text-sm text-slate-500 leading-relaxed">
             Your initialization instance lookup returned successfully. System configuration states are reflecting live gateway data parameters.
           </p>
@@ -181,7 +180,7 @@ export default function PaymentSuccessPage() {
             Go to Dashboard Overview
             <ArrowRight className="h-4 w-4" />
           </Link>
-          
+
           <Link
             href="/dashboard/listings"
             className="w-full inline-flex items-center justify-center gap-2 rounded-xl border border-slate-200 bg-white px-5 py-3.5 text-sm font-bold text-slate-700 hover:bg-slate-50 transition"

@@ -1,23 +1,29 @@
-﻿
-
-import { useQuery, type UseQueryResult } from "@tanstack/react-query";
+﻿import { useQuery, type UseQueryResult } from "@tanstack/react-query";
 import api from "./api";
-import type { Property, PropertyFeedResponse, PropertyFilters } from "../types/propertyTypes";
+import type {
+  Property,
+  PropertyFilters,
+  PropertyFeedResponse,
+} from "../types/propertyTypes";
 
 interface BackendProperty {
   property_id: string;
   owner_id: string;
   title: string;
-  description: string | null;
-  category: string;
-  listing_type: string;
+  description: string;
+
+  category: "RESIDENTIAL" | "COMMERCIAL" | "INDUSTRIAL" | "LAND";
+  listing_type: "FOR_SALE" | "FOR_RENT";
+
   price: string;
   address: string;
-  latitude: string | null;
-  longitude: string | null;
-  media_urls: string[] | null;
+  latitude: string;
+  longitude: string;
+
+  media_urls: string[];
   listing_fee_paid: boolean;
   is_active: boolean;
+
   created_at: string;
   updated_at: string;
 }
@@ -29,210 +35,213 @@ interface BackendPropertyFeedResponse {
   data: BackendProperty[];
 }
 
-// ✅ Updated mock data to match backend shape
-const MOCK_PROPERTIES: Property[] = [
-  {
-    property_id: "fallback-1",
-    owner_id: "owner-001",
-    title: "Luxury 3-Bedroom Apartment",
-    description: "An upscale apartment with premium finishes and city views.",
-    category: "RESIDENTIAL",
-    listing_type: "FOR_SALE",
-    price: "12500000",
-    address: "Bole, Addis Ababa",
-    latitude: "9.0054",
-    longitude: "38.7636",
-    media_urls: ["https://images.unsplash.com/photo-1560185127-6c7b2d8d81e9?auto=format&fit=crop&w=1400&q=80"],
-    listing_fee_paid: true,
-    is_active: true,
-    created_at: "2024-01-15T10:00:00Z",
-    updated_at: "2024-01-15T10:00:00Z",
-  },
-  {
-    property_id: "fallback-2",
-    owner_id: "owner-002",
-    title: "Modern Studio Apartment",
-    description: "Compact living with stylish amenities near the city center.",
-    category: "RESIDENTIAL",
-    listing_type: "FOR_RENT",
-    price: "4200000",
-    address: "Kazanchis, Addis Ababa",
-    latitude: "9.0200",
-    longitude: "38.7614",
-    media_urls: ["https://images.unsplash.com/photo-1505693416388-ac5ce068fe85?auto=format&fit=crop&w=1400&q=80"],
-    listing_fee_paid: true,
-    is_active: true,
-    created_at: "2024-01-16T10:00:00Z",
-    updated_at: "2024-01-16T10:00:00Z",
-  },
-  {
-    property_id: "fallback-3",
-    owner_id: "owner-003",
-    title: "Family House with Garden",
-    description: "A family-ready home with an open plan living area and private garden.",
-    category: "RESIDENTIAL",
-    listing_type: "FOR_SALE",
-    price: "22000000",
-    address: "Lake View, Bahir Dar",
-    latitude: "11.5742",
-    longitude: "37.3614",
-    media_urls: ["https://images.unsplash.com/photo-1494526585095-c41746248156?auto=format&fit=crop&w=1400&q=80"],
-    listing_fee_paid: true,
-    is_active: true,
-    created_at: "2024-01-17T10:00:00Z",
-    updated_at: "2024-01-17T10:00:00Z",
-  },
-  {
-    property_id: "fallback-4",
-    owner_id: "owner-004",
-    title: "Cozy 2-Bedroom Townhouse",
-    description: "Affordable townhouse offering comfortable living and easy access to amenities.",
-    category: "RESIDENTIAL",
-    listing_type: "FOR_SALE",
-    price: "6800000",
-    address: "Mekina, Gondar",
-    latitude: "12.6030",
-    longitude: "37.4521",
-    media_urls: ["https://images.unsplash.com/photo-1512917774080-9991f1c4c750?auto=format&fit=crop&w=1400&q=80"],
-    listing_fee_paid: false,
-    is_active: true,
-    created_at: "2024-01-18T10:00:00Z",
-    updated_at: "2024-01-18T10:00:00Z",
-  },
-  {
-    property_id: "fallback-5",
-    owner_id: "owner-005",
-    title: "Bright Rental Apartment",
-    description: "Fresh rental space with plenty of natural light and modern finishes.",
-    category: "RESIDENTIAL",
-    listing_type: "FOR_RENT",
-    price: "3100000",
-    address: "Kebena, Dire Dawa",
-    latitude: "9.5931",
-    longitude: "41.8661",
-    media_urls: ["https://images.unsplash.com/photo-1494526585095-c41746248156?auto=format&fit=crop&w=1400&q=80"],
-    listing_fee_paid: true,
-    is_active: true,
-    created_at: "2024-01-19T10:00:00Z",
-    updated_at: "2024-01-19T10:00:00Z",
-  },
-];
+function mapBackendProperty(p: BackendProperty): Property {
+  return {
+    property_id: p.property_id,
+    owner_id: p.owner_id,
+    title: p.title,
+    description: p.description,
 
-// ✅ Updated filter to use new field names
-function applyFilters(properties: Property[], filters: PropertyFilters): Property[] {
+    category: p.category,
+    listing_type: p.listing_type,
+
+    price: p.price,
+    address: p.address,
+    latitude: p.latitude,
+    longitude: p.longitude,
+
+    media_urls: p.media_urls,
+    listing_fee_paid: p.listing_fee_paid,
+    is_active: p.is_active,
+
+    created_at: p.created_at,
+    updated_at: p.updated_at,
+  };
+}
+
+
+const MOCK_PROPERTIES: Property[] = [];
+
+
+function applyFilters(
+  properties: Property[],
+  filters: PropertyFilters
+): Property[] {
   return properties.filter((property) => {
-    if (filters.listing_type && filters.listing_type !== "all" && property.listing_type !== filters.listing_type) return false;
-    if (filters.category && property.category !== filters.category) return false;
-    if (filters.address && !property.address.toLowerCase().includes(filters.address.toLowerCase())) return false;
-    if (filters.minPrice !== undefined && Number(property.price) < filters.minPrice) return false;
-    if (filters.maxPrice !== undefined && Number(property.price) > filters.maxPrice) return false;
-    if (filters.is_active !== undefined && property.is_active !== filters.is_active) return false;
-    if (filters.keyword &&
-      !property.title.toLowerCase().includes(filters.keyword.toLowerCase()) &&
-      !property.description.toLowerCase().includes(filters.keyword.toLowerCase())
-    ) return false;
+    if (
+      filters.listing_type &&
+      filters.listing_type !== "all" &&
+      property.listing_type !== filters.listing_type
+    )
+      return false;
+
+    if (filters.category && property.category !== filters.category)
+      return false;
+
+    if (
+      filters.address &&
+      !property.address.toLowerCase().includes(filters.address.toLowerCase())
+    )
+      return false;
+
+    if (
+      filters.minPrice !== undefined &&
+      Number(property.price) < filters.minPrice
+    )
+      return false;
+
+    if (
+      filters.maxPrice !== undefined &&
+      Number(property.price) > filters.maxPrice
+    )
+      return false;
+
+    if (
+      filters.is_active !== undefined &&
+      property.is_active !== filters.is_active
+    )
+      return false;
+
+    if (filters.keyword) {
+      const k = filters.keyword.toLowerCase();
+      if (
+        !property.title.toLowerCase().includes(k) &&
+        !(property.description ?? "").toLowerCase().includes(k)
+      )
+        return false;
+    }
+
     return true;
   });
 }
 
-export interface PropertyFilters {
-  listing_type?: "FOR_SALE" | "FOR_RENT" | "all";
-  category?: "RESIDENTIAL" | "COMMERCIAL" | "LAND" | "INDUSTRIAL";
-  address?: string;
-  minPrice?: number;
-  maxPrice?: number;
-  is_active?: boolean;
-  keyword?: string;
-  page?: number;
-  limit?: number;
-}
+/* -----------------------------
+   QUERY KEYS
+------------------------------ */
 
 export const propertyQueryKeys = {
   all: ["properties"] as const,
-  lists: (filters: PropertyFilters) => [...propertyQueryKeys.all, "list", filters] as const,
-  detail: (id: string) => [...propertyQueryKeys.all, "detail", id] as const,
+  lists: (filters: PropertyFilters) =>
+    [...propertyQueryKeys.all, "list", filters] as const,
+  detail: (id: string) =>
+    [...propertyQueryKeys.all, "detail", id] as const,
 };
 
-// ✅ Updated to match backend response shape
-export async function fetchProperties(filters: PropertyFilters = {}): Promise<PropertyResponse> {
-  export async function fetchProperties(filters: PropertyFilters = {}): Promise<PropertyFeedResponse> {
-    const limit = filters.limit ?? 12;
-    const page = filters.page ?? 1;
-    const skip = (page - 1) * limit;
+/* -----------------------------
+   FETCH PROPERTIES (MAIN)
+------------------------------ */
 
-    const params: Record<string, string | number | boolean> = {
-      skip: ((filters.page ?? 1) - 1) * (filters.limit ?? 10),
-      limit: filters.limit ?? 10,
-      skip,
-      limit,
-    };
+export async function fetchProperties(
+  filters: PropertyFilters = {}
+): Promise<PropertyFeedResponse> {
+  const page = filters.page ?? 1;
+  const limit = filters.limit ?? 10;
+  const skip = (page - 1) * limit;
 
-    if (filters.listing_type && filters.listing_type !== "all") params.listing_type = filters.listing_type;
-    if (filters.category) params.category = filters.category;
-    if (filters.minPrice !== undefined) params.minPrice = filters.minPrice;
-    if (filters.maxPrice !== undefined) params.maxPrice = filters.maxPrice;
-    if (filters.is_active !== undefined) params.is_active = filters.is_active;
+  const params: Record<string, string | number | boolean> = {
+    skip,
+    limit,
+  };
 
-    try {
-      const response = await api.get<PropertyResponse>("/properties", { params });
-      return response.data;
-      const response = await api.get<BackendPropertyFeedResponse>("/properties", { params });
-      const rawList = response.data?.data ?? [];
-      return {
-        properties: rawList.map(mapBackendProperty),
-        page,
-        total: response.data?.total ?? 0,
-      };
-    } catch (error) {
-      const filtered = applyFilters(MOCK_PROPERTIES, filters);
-      const limit = filters.limit ?? filtered.length;
-      const paged = filtered.slice(0, limit);
-      return {
-        data: paged,        // ✅ data not properties
-        total: filtered.length,
-        skip: 0,
-        limit,
-      };
-    }
-  }
+  if (filters.listing_type && filters.listing_type !== "all")
+    params.listing_type = filters.listing_type;
 
+  if (filters.category)
+    params.category = filters.category;
 
-  export async function getFeaturedProperties(limit = 3): Promise<Property[]> {
-    const response = await fetchProperties({ is_active: true, limit, page: 1 });
-    return response?.data?.slice(0, limit) || []; // ✅ data not properties
-  }
+  if (filters.minPrice !== undefined)
+    params.minPrice = filters.minPrice;
 
-  export async function getRecentProperties(limit = 4): Promise<Property[]> {
-    const response = await fetchProperties({ page: 1, limit });
-    return response?.data?.slice(0, limit) || []; // ✅ data not properties
-  }
+  if (filters.maxPrice !== undefined)
+    params.maxPrice = filters.maxPrice;
 
-  export async function fetchPropertyById(id: string): Promise<Property> {
-    try {
-      const response = await api.get<BackendProperty | { data: BackendProperty }>(`/properties/${id}`);
-      const data = (response.data as any)?.data ? (response.data as any).data : response.data;
-      return mapBackendProperty(data as BackendProperty);
-    } catch (error) {
-      const fallback = MOCK_PROPERTIES.find((item) => item.property_id === id); // ✅ property_id not id
-      if (fallback) return fallback;
-      throw error;
-    }
-  }
+  if (filters.is_active !== undefined)
+    params.is_active = filters.is_active;
 
-  export function useProperties(filters: PropertyFilters = {}): UseQueryResult<PropertyResponse, Error> {
-    return useQuery<PropertyResponse, Error>({
-      queryKey: propertyQueryKeys.lists(filters),
-      queryFn: () => fetchProperties(filters),
-      placeholderData: (previousData) => previousData,
-      staleTime: 1000 * 60 * 2,
-    });
-  }
+  const response = await api.get<BackendPropertyFeedResponse>(
+    "/properties",
+    { params }
+  );
 
-  export function usePropertyById(id?: string): UseQueryResult<Property, Error> {
-    return useQuery<Property, Error>({
-      queryKey: propertyQueryKeys.detail(id ?? ""),
-      queryFn: () => fetchPropertyById(id ?? ""),
-      enabled: Boolean(id),
-      staleTime: 1000 * 60 * 5,
-    });
-  }
+  const raw = response.data?.data ?? [];
+
+  return {
+    data: raw.map(mapBackendProperty),
+    total: response.data?.total ?? 0,
+    skip,
+    limit,
+  };
+}
+
+/* -----------------------------
+   FEATURED
+------------------------------ */
+
+export async function getFeaturedProperties(
+  limit = 3
+): Promise<Property[]> {
+  const res = await fetchProperties({
+    is_active: true,
+    limit,
+    page: 1,
+  });
+
+  return res.data.slice(0, limit);
+}
+
+/* -----------------------------
+   RECENT
+------------------------------ */
+
+export async function getRecentProperties(
+  limit = 4
+): Promise<Property[]> {
+  const res = await fetchProperties({
+    limit,
+    page: 1,
+  });
+
+  return res.data.slice(0, limit);
+}
+
+/* -----------------------------
+   BY ID
+------------------------------ */
+
+export async function fetchPropertyById(
+  id: string
+): Promise<Property> {
+  const response = await api.get<
+    BackendProperty | { data: BackendProperty }
+  >(`/properties/${id}`);
+
+  const data = (response.data as any)?.data ?? response.data;
+
+  return mapBackendProperty(data);
+}
+
+/* -----------------------------
+   REACT QUERY HOOKS
+------------------------------ */
+
+export function useProperties(
+  filters: PropertyFilters = {}
+): UseQueryResult<PropertyFeedResponse, Error> {
+  return useQuery({
+    queryKey: propertyQueryKeys.lists(filters),
+    queryFn: () => fetchProperties(filters),
+    placeholderData: (prev) => prev,
+    staleTime: 1000 * 60 * 2,
+  });
+}
+
+export function usePropertyById(
+  id?: string
+): UseQueryResult<Property, Error> {
+  return useQuery({
+    queryKey: propertyQueryKeys.detail(id ?? ""),
+    queryFn: () => fetchPropertyById(id ?? ""),
+    enabled: !!id,
+    staleTime: 1000 * 60 * 5,
+  });
+}

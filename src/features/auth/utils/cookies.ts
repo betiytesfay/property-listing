@@ -24,7 +24,7 @@ export function clearAuthCookie(): void {
 }
 
 export function hasAuthCookie(cookieHeader: string | undefined): boolean {
-
+  if (!cookieHeader) return false;
   return cookieHeader.split(";").some((part) => part.trim().startsWith(`${AUTH_COOKIE_NAME}=1`));
 }
 

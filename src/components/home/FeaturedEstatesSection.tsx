@@ -19,15 +19,15 @@ export function FeaturedEstatesSection({ properties }: FeaturedEstatesSectionPro
         title="Premium properties you’ll love"
         description="Discover a curated collection of our top listings, handpicked for quality and value."
         action={
-         <Link href="/properties" className="inline-block group">
-  <Button 
-    variant="secondary"
-    className="rounded-full font-bold px-5 bg-[var(--auth-primary)] hover:bg-[var(--auth-primary-hover)] shadow-sm transition-all active:scale-95 flex items-center"
-  >
-    All listings 
-    <ArrowRight className="ml-2 transition-transform duration-200 group-hover:translate-x-1" size={16} /> 
-  </Button>
-</Link>
+          <Link href="/properties" className="inline-block group">
+            <Button
+              variant="secondary"
+              className="rounded-full font-bold px-5 bg-(--auth-primary) hover:bg-(--auth-primary-hover) shadow-sm transition-all active:scale-95 flex items-center"
+            >
+              All listings
+              <ArrowRight className="ml-2 transition-transform duration-200 group-hover:translate-x-1" size={16} />
+            </Button>
+          </Link>
         }
       />
 

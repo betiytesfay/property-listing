@@ -42,7 +42,7 @@ export function useListingsColumns({
     {
       key: "status",
       label: "Status",
-      render: (value: string) => <StatusBadge status={value} />,
+      render: (value: "Published" | "Pending Payment" | "Draft") => <StatusBadge status={value} />,
     },
     {
       key: "views",

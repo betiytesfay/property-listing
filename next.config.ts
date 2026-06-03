@@ -1,6 +1,6 @@
 import type { NextConfig } from "next";
 
-const apiProxyTarget = process.env.API_PROXY_TARGET ?? "http://localhost:8000";
+const apiProxyTarget = process.env.API_PROXY_TARGET;
 
 const nextConfig: NextConfig = {
   images: {

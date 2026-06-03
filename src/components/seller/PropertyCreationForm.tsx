@@ -177,7 +177,6 @@ export function PropertyCreationForm({ onClose }: PropertyFormProps) {
         ? (fullFormValues.price as string).replace(/,/g, "")
         : String(fullFormValues.price);
 
-      // Post as a regular listing or draft state depending on how your backend parses data payload
       await createProperty({ ...fullFormValues, price: cleanPrice, status: "DRAFT" } as any);
 
       setSuccessMessage("Property saved carefully as draft ledger asset.");
@@ -426,7 +425,7 @@ export function PropertyCreationForm({ onClose }: PropertyFormProps) {
               </div>
 
               <div className="p-4 bg-slate-50 border border-slate-200 rounded-xl flex gap-3 text-xs text-slate-600">
-                <Shield className="w-4 h-4 text-[#002045] flex-shrink-0 mt-0.5" />
+                <Shield className="w-4 h-4 text-[#002045] shrink-0 mt-0.5" />
                 <p>Secure authorization via Chapa. Accepts Telebirr, CBE Birr, and international cards.</p>
               </div>
             </div>
